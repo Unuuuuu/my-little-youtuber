@@ -24,16 +24,21 @@ const Main = () => {
   const successAudioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
+    if (failAudioRef.current === null || successAudioRef.current === null) {
+      return;
+    }
+
     switch (status) {
       case "PENDING":
-        failAudioRef.current?.load();
-        successAudioRef.current?.load();
+        failAudioRef.current.load();
+        successAudioRef.current.load();
         break;
       case "FAILED":
-        failAudioRef.current?.play();
+        failAudioRef.current.volume = 0.25;
+        failAudioRef.current.play();
         break;
       case "SUCCEEDED":
-        successAudioRef.current?.play();
+        successAudioRef.current.play();
         break;
     }
   }, [status]);
