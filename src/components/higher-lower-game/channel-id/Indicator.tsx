@@ -90,7 +90,7 @@ const Indicator = () => {
         </Box>
       </Grow>
       <Box sx={indicatorCss.item}>
-        <Typography component="span" sx={{ fontWeight: 600 }}>
+        <Typography component="span" fontWeight={500}>
           VS
         </Typography>
         <Grow in={status === "SUCCEEDED"}>

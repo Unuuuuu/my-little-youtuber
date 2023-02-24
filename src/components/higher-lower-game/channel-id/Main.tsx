@@ -7,10 +7,10 @@ import YouTubeModal from "./YouTubeModal";
 import { Fade } from "@mui/material";
 import CountUp from "react-countup";
 import Indicator from "./Indicator";
-import YouTubeIcon from "@mui/icons-material/YouTube";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
 import { useEffect, useRef } from "react";
+import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 
 const Main = () => {
   const theme = useTheme();
@@ -74,7 +74,6 @@ const Main = () => {
               flexGrow: 1,
               display: "flex",
               flexDirection: "column",
-              textAlign: "center",
             },
             index === 0 && {
               flexDirection: "column-reverse",
@@ -148,26 +147,29 @@ const Main = () => {
           </Box>
           <Box
             sx={{
+              position: "relative",
               flexBasis: 32,
               py: 2,
-              display: "flex",
-              gap: 1,
-              alignItems: "center",
             }}
           >
             <Typography
-              variant="h5"
+              variant="h6"
               component="h2"
               noWrap
-              sx={{
-                fontWeight: 600,
-                flexGrow: 1,
-              }}
+              sx={{ px: "32px", textAlign: "center" }}
             >
               {video.title}
             </Typography>
-            <YouTubeIcon
-              sx={{ color: "#FF0000", cursor: "pointer", fontSize: 28 }}
+            <PlayCircleRoundedIcon
+              sx={{
+                color: "#FF0000",
+                fontSize: 24,
+                cursor: "pointer",
+                position: "absolute",
+                top: "50%",
+                transform: "translateY(-50%)",
+                right: 0,
+              }}
               onClick={() => handleYoutubeModalButtonClick(video.id)}
             />
           </Box>

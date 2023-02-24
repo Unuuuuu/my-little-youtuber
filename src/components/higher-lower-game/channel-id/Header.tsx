@@ -1,10 +1,12 @@
 import { useAppSelector } from "@/redux/hooks";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/image";
 import NavigateBeforeRoundedIcon from "@mui/icons-material/NavigateBeforeRounded";
 import Link from "next/link";
 
 const Header = () => {
+  const theme = useTheme();
+  const isPc = useMediaQuery(theme.breakpoints.up("lg"));
   const { channelTitle, count, thumbnail } = useAppSelector((state) => ({
     count: state.higherLowerGame.count,
     channelTitle: state.higherLowerGame.title,
@@ -14,12 +16,19 @@ const Header = () => {
   return (
     <Box
       component={"header"}
-      sx={{
-        height: 64,
-        p: 2,
-        display: "flex",
-        justifyContent: "space-between",
-      }}
+      sx={[
+        {
+          height: 64,
+          p: 2,
+          display: "flex",
+          justifyContent: "space-between",
+          borderBottom: "1px solid",
+          borderColor: "divider",
+        },
+        isPc && {
+          borderColor: "transparent",
+        },
+      ]}
     >
       <Link href="/higher-lower-game">
         <NavigateBeforeRoundedIcon
@@ -29,24 +38,23 @@ const Header = () => {
       <Box
         sx={{ display: "flex", gap: 1, flexGrow: 1, justifyContent: "center" }}
       >
-        <Box sx={{ borderRadius: "50%", overflow: "hidden" }}>
-          <Image
-            src={thumbnail?.url ?? ""}
-            placeholder="blur"
-            blurDataURL={thumbnail?.blurDataURL}
-            alt="channel thumbnail"
-            width={32}
-            height={32}
-          />
-        </Box>
-        <Typography variant="h5" sx={{ fontWeight: 600 }}>
+        <Image
+          src={thumbnail?.url ?? ""}
+          placeholder="blur"
+          blurDataURL={thumbnail?.blurDataURL}
+          alt="channel thumbnail"
+          width={32}
+          height={32}
+          style={{ borderRadius: "50%" }}
+        />
+        <Typography component={"h1"} variant="h5" fontWeight={500}>
           {channelTitle}
         </Typography>
       </Box>
       <Typography
         variant="h5"
+        fontWeight={500}
         sx={{
-          fontWeight: 600,
           flexShrink: 0,
           flexBasis: 32,
           textAlign: "center",

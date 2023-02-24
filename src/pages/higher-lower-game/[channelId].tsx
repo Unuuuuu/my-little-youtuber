@@ -50,6 +50,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
     params: { channelId: string };
   }[] = [];
 
+  /**
+   * Real
+   */
   const querySnapshot = await getDocs(collection(db, "channels"));
   querySnapshot.forEach((doc) => {
     paths.push({ params: { channelId: doc.id } });
@@ -78,6 +81,9 @@ export const getStaticProps: GetStaticProps<
     };
   }
 
+  /**
+   * Real
+   */
   const channelDocumentData = await getDoc(
     doc(db, "channels", params.channelId)
   ).then((doc) => doc.data() as ChannelDocumentData);

@@ -5,12 +5,38 @@ import { store } from "@/redux/store";
 import { Provider } from "react-redux";
 import localFont from "@next/font/local";
 
-const pretendard = localFont({ src: "./PretendardVariable.ttf" });
+const pretendard = localFont({
+  src: [
+    {
+      path: "./Pretendard-Light.subset.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "./Pretendard-Regular.subset.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./Pretendard-Medium.subset.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./Pretendard-Bold.subset.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+});
 
 const globalCss = css({
   "#__next": {
     position: "absolute",
     inset: "0px",
+  },
+  a: {
+    color: "inherit",
   },
 });
 
