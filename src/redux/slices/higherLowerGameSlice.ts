@@ -78,6 +78,16 @@ const higherLowerGameSlice = createSlice({
       state.manipulatedVideos = newManipulatedVideos;
       state.selectedVideos = newSelectedVideos;
     },
+    finalize: (state) => {
+      state.isInitialized = false;
+      state.status = "IDLE";
+      state.originalVideos = [];
+      state.manipulatedVideos = [];
+      state.selectedVideos = [];
+      state.selectedVideoId = null;
+      state.count = 0;
+      state.isYoutubeModalOpen = false;
+    },
     click: (state, action: PayloadAction<string>) => {
       if (state.status !== "IDLE") {
         return;

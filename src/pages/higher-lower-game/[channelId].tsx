@@ -26,6 +26,10 @@ const HigherLowerGameChannelId: React.FC<HigherLowerGameChannelIdProps> = (
 
   useEffect(() => {
     dispatch(higherLowerGameActions.initialize(props));
+
+    return () => {
+      dispatch(higherLowerGameActions.finalize());
+    };
   }, [dispatch, props]);
 
   if (!isInitialized) {
@@ -54,7 +58,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   /**
    * Temp
    */
-  // paths.push({ params: { channelId: "UCIG4gr_wIy5CIlcFciUbIQw" } });
+  // paths.push({ params: { channelId: "UCWy5ZJoLkHZswfPCbsUGwCw" } });
 
   return { paths, fallback: false };
 };
@@ -73,6 +77,7 @@ export const getStaticProps: GetStaticProps<
       },
     };
   }
+
   const channelDocumentData = await getDoc(
     doc(db, "channels", params.channelId)
   ).then((doc) => doc.data() as ChannelDocumentData);
@@ -84,6 +89,8 @@ export const getStaticProps: GetStaticProps<
       });
     }
   );
+
+  return { props: { ...channelDocumentData, videos } };
 
   /**
    * Temp
@@ -100,8 +107,6 @@ export const getStaticProps: GetStaticProps<
   //     videos: woowakgoodVideos,
   //   } as HigherLowerGameChannelIdProps,
   // };
-
-  return { props: { ...channelDocumentData, videos } };
 };
 
 export default HigherLowerGameChannelId;

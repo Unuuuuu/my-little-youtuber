@@ -1,6 +1,8 @@
 import { useAppSelector } from "@/redux/hooks";
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
+import NavigateBeforeRoundedIcon from "@mui/icons-material/NavigateBeforeRounded";
+import Link from "next/link";
 
 const Header = () => {
   const { channelTitle, count, thumbnail } = useAppSelector((state) => ({
@@ -19,8 +21,14 @@ const Header = () => {
         justifyContent: "space-between",
       }}
     >
-      <Box />
-      <Box sx={{ display: "flex", gap: 1 }}>
+      <Link href="/higher-lower-game">
+        <NavigateBeforeRoundedIcon
+          sx={{ fontSize: 32, cursor: "pointer", flexShrink: 0 }}
+        />
+      </Link>
+      <Box
+        sx={{ display: "flex", gap: 1, flexGrow: 1, justifyContent: "center" }}
+      >
         <Box sx={{ borderRadius: "50%", overflow: "hidden" }}>
           <Image
             src={thumbnail?.url ?? ""}
@@ -35,7 +43,15 @@ const Header = () => {
           {channelTitle}
         </Typography>
       </Box>
-      <Typography variant="h5" sx={{ fontWeight: 600 }}>
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: 600,
+          flexShrink: 0,
+          flexBasis: 32,
+          textAlign: "center",
+        }}
+      >
         {count}
       </Typography>
     </Box>
