@@ -26,10 +26,10 @@ const calculateVideos = (
 type Status = "IDLE" | "PENDING" | "FAILED" | "SUCCEEDED";
 
 interface HigherLowerGameState {
-  channelTitle?: string;
+  title?: string;
   thumbnail?: {
     url: string;
-    placeholder: string;
+    blurDataURL: string;
   };
   isInitialized: boolean;
   status: Status;
@@ -65,8 +65,8 @@ const higherLowerGameSlice = createSlice({
       state,
       action: PayloadAction<HigherLowerGameChannelIdProps>
     ) => {
-      const { channelTitle, thumbnail, videos } = action.payload;
-      state.channelTitle = channelTitle;
+      const { title, thumbnail, videos } = action.payload;
+      state.title = title;
       state.thumbnail = thumbnail;
       state.isInitialized = true;
       state.originalVideos = videos;

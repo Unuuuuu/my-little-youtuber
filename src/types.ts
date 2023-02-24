@@ -1,9 +1,22 @@
 export interface Video {
   id: string;
+  title: string;
   thumbnail: {
     url: string;
-    placeholder: string;
+    blurDataURL: string;
   };
-  title: string;
   viewCount: string;
+}
+
+export interface ChannelDocumentData {
+  id: string;
+  title: string;
+  thumbnail: {
+    url: string;
+    blurDataURL: string;
+  };
+}
+
+export interface ChannelDocumentDataWithCollection extends ChannelDocumentData {
+  videos: Video[];
 }

@@ -5,7 +5,7 @@ import Image from "next/image";
 const Header = () => {
   const { channelTitle, count, thumbnail } = useAppSelector((state) => ({
     count: state.higherLowerGame.count,
-    channelTitle: state.higherLowerGame.channelTitle,
+    channelTitle: state.higherLowerGame.title,
     thumbnail: state.higherLowerGame.thumbnail,
   }));
 
@@ -25,7 +25,7 @@ const Header = () => {
           <Image
             src={thumbnail?.url ?? ""}
             placeholder="blur"
-            blurDataURL={thumbnail?.placeholder}
+            blurDataURL={thumbnail?.blurDataURL}
             alt="channel thumbnail"
             width={32}
             height={32}

@@ -108,7 +108,7 @@ const Main = () => {
             <Box
               component={Image}
               placeholder="blur"
-              blurDataURL={video.thumbnail.placeholder}
+              blurDataURL={video.thumbnail.blurDataURL}
               src={video.thumbnail.url}
               alt="thumbnail"
               fill
