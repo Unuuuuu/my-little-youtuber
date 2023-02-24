@@ -10,6 +10,7 @@ import Indicator from "./Indicator";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
+import { useEffect, useRef } from "react";
 
 const Main = () => {
   const theme = useTheme();
@@ -19,6 +20,23 @@ const Main = () => {
     status: state.higherLowerGame.status,
   }));
   const dispatch = useAppDispatch();
+  const failAudioRef = useRef<HTMLAudioElement>(null);
+  const successAudioRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    switch (status) {
+      case "PENDING":
+        failAudioRef.current?.load();
+        successAudioRef.current?.load();
+        break;
+      case "FAILED":
+        failAudioRef.current?.play();
+        break;
+      case "SUCCEEDED":
+        successAudioRef.current?.play();
+        break;
+    }
+  }, [status]);
 
   const handleVideoClick = (videoId: string) => {
     dispatch(higherLowerGameActions.click(videoId));
@@ -157,6 +175,8 @@ const Main = () => {
       ))}
       <YouTubeModal />
       <Indicator />
+      <audio ref={failAudioRef} src="/sounds/fail.mp3" />
+      <audio ref={successAudioRef} src="/sounds/success.mp3" />
     </Box>
   );
 };
