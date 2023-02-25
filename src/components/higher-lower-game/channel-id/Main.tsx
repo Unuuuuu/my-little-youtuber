@@ -12,13 +12,30 @@ import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
 import { useEffect, useRef } from "react";
 import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 
+const getDurationFromViewCount = (
+  viewCount: string,
+  higherViewCount: string
+): number => {
+  // 100,000 > 2
+  // 1,000 > 0.2
+  const viewCountAsNumber = Number(viewCount);
+  const higherViewCountAsNumber = Number(higherViewCount);
+
+  const duration = viewCountAsNumber / (higherViewCountAsNumber / 2);
+  console.log(duration);
+  return duration;
+};
+
 const Main = () => {
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
-  const { selectedVideos, status } = useAppSelector((state) => ({
-    selectedVideos: state.higherLowerGame.selectedVideos,
-    status: state.higherLowerGame.status,
-  }));
+  const { randomVideos, higherRandomVideo, status } = useAppSelector(
+    (state) => ({
+      randomVideos: state.higherLowerGame.randomVideos,
+      higherRandomVideo: state.higherLowerGame.higherRandomVideo,
+      status: state.higherLowerGame.status,
+    })
+  );
   const dispatch = useAppDispatch();
   const failAudioRef = useRef<HTMLAudioElement>(null);
   const successAudioRef = useRef<HTMLAudioElement>(null);
@@ -55,6 +72,10 @@ const Main = () => {
     dispatch(higherLowerGameActions.compare());
   };
 
+  if (randomVideos === undefined || higherRandomVideo === undefined) {
+    return null;
+  }
+
   return (
     <Box
       component={"main"}
@@ -71,7 +92,7 @@ const Main = () => {
         },
       ]}
     >
-      {selectedVideos.map((video, index) => (
+      {randomVideos.map((video, index) => (
         <Box
           key={video.id}
           sx={[
@@ -140,8 +161,13 @@ const Main = () => {
                     end={Number(video.viewCount)}
                     separator=","
                     suffix="회"
+                    useEasing={false}
+                    duration={getDurationFromViewCount(
+                      video.viewCount,
+                      higherRandomVideo.viewCount
+                    )}
                     onEnd={() => {
-                      if (index === 0) {
+                      if (video.id === higherRandomVideo.id) {
                         handleCountUpEnd();
                       }
                     }}

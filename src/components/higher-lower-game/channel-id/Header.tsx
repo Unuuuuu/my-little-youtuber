@@ -7,9 +7,9 @@ import Link from "next/link";
 const Header = () => {
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
-  const { channelTitle, count, thumbnail } = useAppSelector((state) => ({
+  const { title, count, thumbnail } = useAppSelector((state) => ({
     count: state.higherLowerGame.count,
-    channelTitle: state.higherLowerGame.title,
+    title: state.higherLowerGame.title,
     thumbnail: state.higherLowerGame.thumbnail,
   }));
 
@@ -48,7 +48,7 @@ const Header = () => {
           style={{ borderRadius: "50%" }}
         />
         <Typography component={"h1"} variant="h5" fontWeight={500}>
-          {channelTitle}
+          {title}
         </Typography>
       </Box>
       <Typography
