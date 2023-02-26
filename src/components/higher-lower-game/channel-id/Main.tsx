@@ -13,15 +13,12 @@ import { useEffect, useRef } from "react";
 import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 
 const getDurationFromViewCount = (
-  viewCount: string,
-  higherViewCount: string
+  viewCount: number,
+  higherViewCount: number
 ): number => {
   // 100,000 > 2
   // 1,000 > 0.2
-  const viewCountAsNumber = Number(viewCount);
-  const higherViewCountAsNumber = Number(higherViewCount);
-
-  const duration = viewCountAsNumber / (higherViewCountAsNumber / 2);
+  const duration = viewCount / (higherViewCount / 2);
   console.log(duration);
   return duration;
 };
@@ -158,7 +155,7 @@ const Main = () => {
                     variant="h3"
                     component={CountUp}
                     sx={{ color: "white" }}
-                    end={Number(video.viewCount)}
+                    end={video.viewCount}
                     separator=","
                     suffix="회"
                     useEasing={false}

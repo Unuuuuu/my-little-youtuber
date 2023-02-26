@@ -17,7 +17,7 @@ const getRandomVideos = (
   const anotherRandomIndex = getRamdomIndexOfArray(copiedVideos.length);
   const [anotherRandomVideo] = copiedVideos.splice(anotherRandomIndex, 1);
 
-  if (Number(randomVideo.viewCount) === Number(anotherRandomVideo.viewCount)) {
+  if (randomVideo.viewCount === anotherRandomVideo.viewCount) {
     return getRandomVideos(videos);
   }
 
@@ -38,7 +38,7 @@ const calculateVideos = (
   const [leftRandomVideo, rightRandomVideo] = randomVideos;
 
   let higherRandomVideo: Video;
-  if (Number(leftRandomVideo.viewCount) > Number(rightRandomVideo.viewCount)) {
+  if (leftRandomVideo.viewCount > rightRandomVideo.viewCount) {
     higherRandomVideo = leftRandomVideo;
   } else {
     higherRandomVideo = rightRandomVideo;

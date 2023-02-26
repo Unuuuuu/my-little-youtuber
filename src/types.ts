@@ -5,18 +5,18 @@ export interface Video {
     url: string;
     blurDataURL: string;
   };
-  viewCount: string;
+  viewCount: number;
 }
 
-export interface ChannelDocumentData {
+export interface Channel {
   id: string;
   title: string;
   thumbnail: {
     url: string;
     blurDataURL: string;
   };
-}
-
-export interface ChannelDocumentDataWithCollection extends ChannelDocumentData {
+  updateTime: string;
   videos: Video[];
 }
+
+export interface ChannelWithoutVideos extends Omit<Channel, "videos"> {}
