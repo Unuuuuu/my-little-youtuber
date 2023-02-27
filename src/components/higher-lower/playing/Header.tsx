@@ -30,7 +30,7 @@ const Header = () => {
         },
       ]}
     >
-      <Link href="/higher-lower-game">
+      <Link href="/games/higher-lower">
         <NavigateBeforeRoundedIcon
           sx={{ fontSize: 32, cursor: "pointer", flexShrink: 0 }}
         />

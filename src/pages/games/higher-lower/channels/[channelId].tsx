@@ -1,5 +1,5 @@
-import Header from "@/components/higher-lower-game/channel-id/Header";
-import Main from "@/components/higher-lower-game/channel-id/Main";
+import Header from "@/components/higher-lower/playing/Header";
+import Main from "@/components/higher-lower/playing/Main";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
 import { Channel } from "@/types";

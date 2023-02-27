@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Video } from "@/types";
-import { HigherLowerGameChannelIdProps } from "@/pages/higher-lower-game/[channelId]";
+import { HigherLowerGameChannelIdProps } from "@/pages/games/higher-lower/channels/[channelId]";
 
 const getRamdomIndexOfArray = (lengthOfArray: number) => {
   return Math.floor(Math.random() * lengthOfArray);

@@ -16,7 +16,7 @@ const HigherLowerGame: React.FC<HigherLowerGameProps> = (props) => {
     <ul>
       {channels.map((channel) => (
         <li key={channel.id}>
-          <Link href={`/higher-lower-game/${channel.id}`}>
+          <Link href={`/games/higher-lower/channels/${channel.id}`}>
             <Image
               placeholder="blur"
               blurDataURL={channel.thumbnail.blurDataURL}
