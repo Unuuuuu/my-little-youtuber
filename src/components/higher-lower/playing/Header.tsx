@@ -7,11 +7,14 @@ import Link from "next/link";
 const Header = () => {
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
-  const { title, count, thumbnail } = useAppSelector((state) => ({
-    count: state.higherLowerGame.count,
-    title: state.higherLowerGame.title,
-    thumbnail: state.higherLowerGame.thumbnail,
-  }));
+  const { isInitialized, title, count, thumbnail } = useAppSelector(
+    (state) => ({
+      isInitialized: state.higherLowerGame.isInitialized,
+      count: state.higherLowerGame.count,
+      title: state.higherLowerGame.title,
+      thumbnail: state.higherLowerGame.thumbnail,
+    })
+  );
 
   return (
     <Box
@@ -38,19 +41,23 @@ const Header = () => {
       <Box
         sx={{ display: "flex", gap: 1, flexGrow: 1, justifyContent: "center" }}
       >
-        <Image
-          src={thumbnail?.url ?? ""}
-          placeholder="blur"
-          blurDataURL={thumbnail?.blurDataURL}
-          alt="channel thumbnail"
-          width={32}
-          height={32}
-          style={{ borderRadius: "50%" }}
-        />
-        {isPc && (
-          <Typography component={"h1"} variant="h5" fontWeight={500}>
-            {title}
-          </Typography>
+        {isInitialized && (
+          <>
+            <Image
+              src={thumbnail?.url ?? ""}
+              placeholder="blur"
+              blurDataURL={thumbnail?.blurDataURL}
+              alt="channel thumbnail"
+              width={32}
+              height={32}
+              style={{ borderRadius: "50%" }}
+            />
+            {isPc && (
+              <Typography component={"h1"} variant="h5" fontWeight={500}>
+                {title}
+              </Typography>
+            )}
+          </>
         )}
       </Box>
       <Typography

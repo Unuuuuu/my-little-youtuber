@@ -1,6 +1,6 @@
 import Header from "@/components/higher-lower/playing/Header";
 import Main from "@/components/higher-lower/playing/Main";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
 import { Channel } from "@/types";
 import { db } from "@/utils/firebase";
@@ -20,9 +20,6 @@ export interface HigherLowerGameChannelIdProps extends Channel {}
 const HigherLowerGameChannelId: React.FC<HigherLowerGameChannelIdProps> = (
   props
 ) => {
-  const isInitialized = useAppSelector(
-    (state) => state.higherLowerGame.isInitialized
-  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -32,11 +29,6 @@ const HigherLowerGameChannelId: React.FC<HigherLowerGameChannelIdProps> = (
       dispatch(higherLowerGameActions.finalize());
     };
   }, [dispatch, props]);
-
-  if (!isInitialized) {
-    // TODO
-    return <div>Loading...</div>;
-  }
 
   return (
     <>
