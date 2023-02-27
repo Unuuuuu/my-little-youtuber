@@ -19,7 +19,6 @@ const getDurationFromViewCount = (
   // 100,000 > 2
   // 1,000 > 0.2
   const duration = viewCount / (higherViewCount / 2);
-  console.log(duration);
   return duration;
 };
 

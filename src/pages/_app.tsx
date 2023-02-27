@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 import { store } from "@/redux/store";
 import { Provider } from "react-redux";
 import localFont from "@next/font/local";
+import "@/utils/firebase";
 
 const pretendard = localFont({
   src: [
