@@ -1,8 +1,11 @@
 import { useAppSelector } from "@/redux/hooks";
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/image";
 import NavigateBeforeRoundedIcon from "@mui/icons-material/NavigateBeforeRounded";
 import Link from "next/link";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 const Header = () => {
   const theme = useTheme();

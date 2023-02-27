@@ -4,7 +4,6 @@ import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import Box from "@mui/material/Box";
 import YouTubeModal from "./YouTubeModal";
-import { Fade, Skeleton } from "@mui/material";
 import CountUp from "react-countup";
 import Indicator from "./Indicator";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -12,6 +11,8 @@ import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
 import { useEffect, useRef } from "react";
 import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 import { SystemStyleObject } from "@mui/system";
+import Fade from "@mui/material/Fade";
+import Skeleton from "@mui/material/Skeleton";
 
 const getMainCss = (isPc: boolean, index: number) => ({
   videoContainer: [

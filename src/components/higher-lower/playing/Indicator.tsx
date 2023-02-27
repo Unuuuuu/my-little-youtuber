@@ -1,4 +1,3 @@
-import { IconButton, SxProps, useMediaQuery, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
@@ -8,6 +7,9 @@ import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
+import { SxProps, useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import IconButton from "@mui/material/IconButton";
 
 const indicatorCss: { [key: string]: SxProps } = {
   item: {

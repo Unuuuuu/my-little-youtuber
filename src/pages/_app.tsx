@@ -1,10 +1,11 @@
 import { css, Global } from "@emotion/react";
-import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import type { AppProps } from "next/app";
 import { store } from "@/redux/store";
 import { Provider } from "react-redux";
 import localFont from "@next/font/local";
 import "@/utils/firebase";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const pretendard = localFont({
   src: [
