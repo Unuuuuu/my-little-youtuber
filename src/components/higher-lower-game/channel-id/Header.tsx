@@ -47,9 +47,11 @@ const Header = () => {
           height={32}
           style={{ borderRadius: "50%" }}
         />
-        <Typography component={"h1"} variant="h5" fontWeight={500}>
-          {title}
-        </Typography>
+        {isPc && (
+          <Typography component={"h1"} variant="h5" fontWeight={500}>
+            {title}
+          </Typography>
+        )}
       </Box>
       <Typography
         variant="h5"
