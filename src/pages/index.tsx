@@ -26,9 +26,19 @@ const Home = () => {
         <FavoriteIcon
           sx={{
             position: "absolute",
-            top: -4,
-            right: -12,
-            fontSize: 12,
+            top: 4,
+            left: -20,
+            fontSize: 16,
+            transform: "rotate(-30deg)",
+            color: pink[200],
+          }}
+        />
+        <FavoriteIcon
+          sx={{
+            position: "absolute",
+            bottom: 4,
+            right: -20,
+            fontSize: 16,
             transform: "rotate(30deg)",
             color: pink[200],
           }}
