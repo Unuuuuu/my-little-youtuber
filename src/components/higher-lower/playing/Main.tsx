@@ -40,7 +40,7 @@ const getMainCss = (isPc: boolean, index: number) => ({
     my: 2,
   } as SystemStyleObject,
   playCircleRoundedIcon: {
-    color: "#FF0000",
+    color: "youtube",
     fontSize: 24,
     cursor: "pointer",
     position: "absolute",

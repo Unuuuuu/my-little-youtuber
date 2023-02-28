@@ -51,7 +51,6 @@ const HigherLowerGame: React.FC<HigherLowerGameProps> = (props) => {
                 sx={{
                   p: 2,
                   display: "flex",
-                  textDecoration: "none",
                   gap: 2,
                   alignItems: "center",
                 }}

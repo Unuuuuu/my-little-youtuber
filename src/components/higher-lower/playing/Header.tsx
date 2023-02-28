@@ -37,9 +37,7 @@ const Header = () => {
       ]}
     >
       <Link href="/games/higher-lower">
-        <NavigateBeforeRoundedIcon
-          sx={{ fontSize: 32, cursor: "pointer", flexShrink: 0 }}
-        />
+        <NavigateBeforeRoundedIcon sx={{ fontSize: 32 }} />
       </Link>
       <Box
         sx={{ display: "flex", gap: 1, flexGrow: 1, justifyContent: "center" }}

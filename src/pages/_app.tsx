@@ -6,6 +6,7 @@ import localFont from "@next/font/local";
 import "@/utils/firebase";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { deepPurple } from "@mui/material/colors";
 
 const pretendard = localFont({
   src: [
@@ -39,14 +40,31 @@ const globalCss = css({
   },
   a: {
     color: "inherit",
+    textDecoration: "none",
   },
 });
 
 const theme = createTheme({
+  palette: {
+    primary: {
+      main: deepPurple[300],
+    },
+    youtube: "#FF0000",
+  },
   typography: {
     fontFamily: pretendard.style.fontFamily,
   },
 });
+
+declare module "@mui/material/styles" {
+  interface Palette {
+    youtube: React.CSSProperties["color"];
+  }
+
+  interface PaletteOptions {
+    youtube: React.CSSProperties["color"];
+  }
+}
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
