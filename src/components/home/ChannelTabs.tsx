@@ -148,7 +148,10 @@ const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
                   <Box
                     component={Link}
                     href={`/channel/${channelData.id}`}
-                    sx={{ flexGrow: 1 }}
+                    sx={{
+                      flexGrow: 1,
+                      overflow: "hidden",
+                    }}
                   >
                     <ButtonBase
                       focusRipple
@@ -173,6 +176,7 @@ const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
                         component={"h2"}
                         fontSize={16}
                         fontWeight={500}
+                        noWrap
                       >
                         {channelData.title}
                       </Typography>
@@ -182,7 +186,8 @@ const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
                     icon={<StarOutlineRoundedIcon />}
                     checkedIcon={<StarRoundedIcon />}
                     sx={{
-                      width: 80,
+                      flexBasis: 80,
+                      flexShrink: 0,
                       height: 80,
                       color: "favorite",
                       "&.Mui-checked": {

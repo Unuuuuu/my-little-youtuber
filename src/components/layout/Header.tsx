@@ -11,6 +11,7 @@ import { useAppSelector } from "@/redux/hooks";
 import Chip from "@mui/material/Chip";
 import AttachMoneyRoundedIcon from "@mui/icons-material/AttachMoneyRounded";
 import Icon from "../higher-lower-game/Icon";
+import logo from "../../../public/logo@512w.png";
 
 const scaleUpAndDown = keyframes`
   0%{
@@ -26,7 +27,11 @@ const scaleUpAndDown = keyframes`
 
 const Seperator = () => {
   return (
-    <Typography fontSize={24} fontWeight={500} sx={{ color: grey["A400"] }}>
+    <Typography
+      fontSize={24}
+      fontWeight={500}
+      sx={{ color: grey["A400"], flexShrink: 0 }}
+    >
       /
     </Typography>
   );
@@ -42,9 +47,9 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = (props) => {
   const {
     channelDataWithoutVideos,
-    isHomePage,
-    isChannelPage,
-    isHigherLowerGamePage,
+    isHomePage = false,
+    isChannelPage = false,
+    isHigherLowerGamePage = false,
   } = props;
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
@@ -57,7 +62,7 @@ const Header: React.FC<HeaderProps> = (props) => {
     <Box
       component={"header"}
       sx={{
-        width: "100%",
+        flexGrow: 1,
         height: "56px",
         display: "flex",
         justifyContent: "space-between",
@@ -66,14 +71,26 @@ const Header: React.FC<HeaderProps> = (props) => {
     >
       <Box
         component={"nav"}
-        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          overflow: "hidden",
+        }}
       >
         <Box
           component={Link}
-          sx={{ display: "flex", gap: 1, alignItems: "center" }}
+          sx={{ display: "flex", gap: 1, alignItems: "center", flexShrink: 0 }}
           href="/"
         >
-          <Image src={"/logo.svg"} alt="logo" width={28.57} height={20} />
+          <Image
+            src={logo}
+            alt="logo"
+            width={28.57}
+            height={20}
+            placeholder="blur"
+          />
           {(isHomePage || isPc) && (
             <Box sx={{ display: "flex" }}>
               <Typography component={"h2"} fontSize={20} fontWeight={700}>
@@ -95,7 +112,16 @@ const Header: React.FC<HeaderProps> = (props) => {
             <Seperator />
             <Box
               component={Link}
-              sx={{ display: "flex", gap: 1, alignItems: "center" }}
+              sx={[
+                {
+                  display: "flex",
+                  gap: 1,
+                  alignItems: "center",
+                },
+                isChannelPage && {
+                  overflow: "hidden",
+                },
+              ]}
               href={`/channel/${channelDataWithoutVideos.id}`}
             >
               <Image
@@ -105,10 +131,15 @@ const Header: React.FC<HeaderProps> = (props) => {
                 alt="thumbnail"
                 width={28}
                 height={28}
-                style={{ borderRadius: "50%" }}
+                style={{ borderRadius: "50%", flexShrink: 0 }}
               />
               {(isChannelPage || isPc) && (
-                <Typography component={"h2"} fontSize={20} fontWeight={700}>
+                <Typography
+                  component={"h2"}
+                  fontSize={20}
+                  fontWeight={700}
+                  noWrap
+                >
                   {channelDataWithoutVideos.title}
                 </Typography>
               )}
@@ -119,16 +150,27 @@ const Header: React.FC<HeaderProps> = (props) => {
           <>
             <Seperator />
             <Box
-              sx={{
-                display: "flex",
-                gap: 1,
-                alignItems: "center",
-                pointerEvents: "none",
-              }}
+              sx={[
+                {
+                  display: "flex",
+                  gap: 1,
+                  alignItems: "center",
+                  pointerEvents: "none",
+                },
+                isHigherLowerGamePage && {
+                  overflow: "hidden",
+                },
+              ]}
             >
               <Icon />
               {(isHigherLowerGamePage || isPc) && (
-                <Typography component={"h2"} fontSize={20} fontWeight={700}>
+                <Typography
+                  component={"h2"}
+                  fontSize={20}
+                  fontWeight={700}
+                  sx={{ flexGrow: 1, width: "100%" }}
+                  noWrap
+                >
                   더 많이 더 적게
                 </Typography>
               )}
@@ -144,7 +186,6 @@ const Header: React.FC<HeaderProps> = (props) => {
           sx={[
             {
               alignSelf: "center",
-              // textAlign: "center",
               fontSize: 16,
             },
             status === "SUCCEEDED" && {
@@ -153,21 +194,6 @@ const Header: React.FC<HeaderProps> = (props) => {
           ]}
         />
       )}
-      {/* <Typography
-        fontWeight={500}
-        fontSize={24}
-        sx={[
-          {
-            alignSelf: "center",
-            // textAlign: "center",
-          },
-          status === "SUCCEEDED" && {
-            animation: `${scaleUpAndDown} 1s ease infinite`,
-          },
-        ]}
-      >
-        {score}
-      </Typography> */}
     </Box>
   );
 };
