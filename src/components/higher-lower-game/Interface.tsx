@@ -3,9 +3,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import Box from "@mui/material/Box";
-import YouTubeModal from "./YouTubeModal";
 import CountUp from "react-countup";
-import Indicator from "./Indicator";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
 import { useEffect, useRef } from "react";
@@ -14,7 +12,7 @@ import { SystemStyleObject } from "@mui/system";
 import Fade from "@mui/material/Fade";
 import Skeleton from "@mui/material/Skeleton";
 
-const getMainCss = (isPc: boolean, index: number) => ({
+const getInterfaceCss = (isPc: boolean, index: number) => ({
   videoContainer: [
     {
       flexGrow: 1,
@@ -60,16 +58,22 @@ const getDurationFromViewCount = (
   return duration;
 };
 
-const Main = () => {
+const Interface = () => {
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
-  const { isInitialized, randomVideos, higherRandomVideo, status } =
-    useAppSelector((state) => ({
-      isInitialized: state.higherLowerGame.isInitialized,
-      randomVideos: state.higherLowerGame.randomVideos,
-      higherRandomVideo: state.higherLowerGame.higherRandomVideo,
-      status: state.higherLowerGame.status,
-    }));
+  const {
+    isInitialized,
+    randomVideos,
+    higherRandomVideo,
+    status,
+    isTimeLimitedMode,
+  } = useAppSelector((state) => ({
+    isInitialized: state.higherLowerGame.isInitialized,
+    randomVideos: state.higherLowerGame.randomVideos,
+    higherRandomVideo: state.higherLowerGame.higherRandomVideo,
+    status: state.higherLowerGame.status,
+    isTimeLimitedMode: state.higherLowerGame.isTimeLimitedMode,
+  }));
   const dispatch = useAppDispatch();
   const failAudioRef = useRef<HTMLAudioElement>(null);
   const successAudioRef = useRef<HTMLAudioElement>(null);
@@ -108,14 +112,14 @@ const Main = () => {
 
   return (
     <Box
-      component={"main"}
       sx={[
         {
+          width: "100%",
+          height: "100%",
+          px: 2,
           display: "flex",
           flexDirection: "column",
-          height: "calc(100% - 64px)",
           gap: 2,
-          px: 2,
         },
         isPc && {
           flexDirection: "row",
@@ -126,13 +130,13 @@ const Main = () => {
       randomVideos !== undefined &&
       higherRandomVideo !== undefined
         ? randomVideos.map((video, index) => {
-            const mainCss = getMainCss(isPc, index);
+            const interfaceCss = getInterfaceCss(isPc, index);
 
             return (
-              <Box key={video.id} sx={mainCss.videoContainer}>
+              <Box key={video.id} sx={interfaceCss.videoContainer}>
                 <Box
                   sx={[
-                    mainCss.imageContainer,
+                    interfaceCss.imageContainer,
                     {
                       position: "relative",
                       bgcolor: "black",
@@ -194,7 +198,7 @@ const Main = () => {
                     </Box>
                   </Fade>
                 </Box>
-                <Box sx={mainCss.titleContainer}>
+                <Box sx={interfaceCss.titleContainer}>
                   <Typography
                     variant="h6"
                     component="h2"
@@ -203,32 +207,36 @@ const Main = () => {
                   >
                     {video.title}
                   </Typography>
-                  <PlayCircleRoundedIcon
-                    sx={mainCss.playCircleRoundedIcon}
-                    onClick={() => handleYoutubeModalButtonClick(video.id)}
-                  />
+                  {!isTimeLimitedMode && (
+                    <PlayCircleRoundedIcon
+                      sx={interfaceCss.playCircleRoundedIcon}
+                      onClick={() => handleYoutubeModalButtonClick(video.id)}
+                    />
+                  )}
                 </Box>
               </Box>
             );
           })
         : [0, 1].map((index) => {
-            const mainCss = getMainCss(isPc, index);
+            const interfaceCss = getInterfaceCss(isPc, index);
 
             return (
-              <Box key={index} sx={mainCss.videoContainer}>
-                <Skeleton variant="rounded" sx={mainCss.imageContainer} />
-                <Box sx={mainCss.titleContainer}>
-                  <PlayCircleRoundedIcon sx={mainCss.playCircleRoundedIcon} />
+              <Box key={index} sx={interfaceCss.videoContainer}>
+                <Skeleton variant="rounded" sx={interfaceCss.imageContainer} />
+                <Box sx={interfaceCss.titleContainer}>
+                  {!isTimeLimitedMode && (
+                    <PlayCircleRoundedIcon
+                      sx={interfaceCss.playCircleRoundedIcon}
+                    />
+                  )}
                 </Box>
               </Box>
             );
           })}
-      <YouTubeModal />
-      <Indicator />
       <audio ref={failAudioRef} src="/sounds/fail.mp3" />
       <audio ref={successAudioRef} src="/sounds/success.mp3" />
     </Box>
   );
 };
 
-export default Main;
+export default Interface;

@@ -5,13 +5,16 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import Grow from "@mui/material/Grow";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
+import HistoryEduRoundedIcon from "@mui/icons-material/HistoryEduRounded";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
-import { SxProps, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import IconButton from "@mui/material/IconButton";
+import { useEffect } from "react";
+import { SystemStyleObject } from "@mui/system/styleFunctionSx";
 
-const indicatorCss: { [key: string]: SxProps } = {
+const indicatorCss = {
   item: {
     flexBasis: 48,
     width: "100%",
@@ -22,7 +25,7 @@ const indicatorCss: { [key: string]: SxProps } = {
     justifyContent: "center",
     bgcolor: "white",
     boxShadow: 2,
-  },
+  } as SystemStyleObject,
   absoluteItem: {
     position: "absolute",
     inset: 0,
@@ -30,13 +33,20 @@ const indicatorCss: { [key: string]: SxProps } = {
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "50%",
-  },
+  } as SystemStyleObject,
 };
 
 const Indicator = () => {
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
-  const status = useAppSelector((state) => state.higherLowerGame.status);
+  const { status, score, isTimeLimitedMode, time } = useAppSelector(
+    (state) => ({
+      status: state.higherLowerGame.status,
+      score: state.higherLowerGame.score,
+      isTimeLimitedMode: state.higherLowerGame.isTimeLimitedMode,
+      time: state.higherLowerGame.time,
+    })
+  );
   const dispatch = useAppDispatch();
 
   const handleReplayButtonClick = () => {
@@ -47,6 +57,25 @@ const Indicator = () => {
     dispatch(higherLowerGameActions.next());
   };
 
+  useEffect(() => {
+    if (!isTimeLimitedMode || status !== "IDLE") {
+      return;
+    }
+
+    if (time === 0) {
+      dispatch(higherLowerGameActions.fail());
+      return;
+    }
+
+    const timeoutId = setInterval(() => {
+      dispatch(higherLowerGameActions.minusTime());
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [dispatch, isTimeLimitedMode, time, status]);
+
   return (
     <Box
       sx={[
@@ -54,40 +83,31 @@ const Indicator = () => {
           width: 176,
           height: 48,
           position: "absolute",
-          top: "calc((100% + 64px) / 2)",
+          top: "calc((100% + 56px) / 2)",
           left: "50%",
           transform: "translate(-50%, -50%)",
           display: "flex",
-          flexDirection: "row-reverse",
+          flexDirection: "row",
           gap: 2,
         },
         isPc && {
           width: 48,
           height: 176,
-          top: "50%",
+          top: "calc((100% - 8px) / 2)",
           flexDirection: "column",
         },
       ]}
     >
-      <Grow in={status === "FAILED" || status === "SUCCEEDED"}>
+      <Grow in={isTimeLimitedMode}>
         <Box sx={indicatorCss.item}>
-          {status === "FAILED" && (
-            <IconButton
-              color="error"
-              size="large"
-              onClick={handleReplayButtonClick}
-            >
-              <ReplayRoundedIcon />
+          {status === "FAILED" && score !== 0 ? (
+            <IconButton color="error" size="large" onClick={() => {}}>
+              <HistoryEduRoundedIcon />
             </IconButton>
-          )}
-          {status === "SUCCEEDED" && (
-            <IconButton
-              color="success"
-              size="large"
-              onClick={handlePlayButtonClick}
-            >
-              <PlayArrowRoundedIcon />
-            </IconButton>
+          ) : (
+            <Typography component="span" fontWeight={500}>
+              {time}
+            </Typography>
           )}
         </Box>
       </Grow>
@@ -118,6 +138,28 @@ const Indicator = () => {
           </Box>
         </Grow>
       </Box>
+      <Grow in={status === "FAILED" || status === "SUCCEEDED"}>
+        <Box sx={indicatorCss.item}>
+          {status === "FAILED" && (
+            <IconButton
+              color="error"
+              size="large"
+              onClick={handleReplayButtonClick}
+            >
+              <ReplayRoundedIcon />
+            </IconButton>
+          )}
+          {status === "SUCCEEDED" && (
+            <IconButton
+              color="success"
+              size="large"
+              onClick={handlePlayButtonClick}
+            >
+              <PlayArrowRoundedIcon />
+            </IconButton>
+          )}
+        </Box>
+      </Grow>
     </Box>
   );
 };

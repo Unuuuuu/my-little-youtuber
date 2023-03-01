@@ -1,4 +1,4 @@
-export interface Video {
+export interface VideoData {
   id: string;
   title: string;
   thumbnail: {
@@ -8,15 +8,16 @@ export interface Video {
   viewCount: number;
 }
 
-export interface Channel {
+export interface ChannelData {
   id: string;
+  subscriberCount: number;
   title: string;
   thumbnail: {
     url: string;
     blurDataURL: string;
   };
   updateTime: string;
-  videos: Video[];
+  videos: VideoData[];
 }
 
-export interface ChannelWithoutVideos extends Omit<Channel, "videos"> {}
+export interface ChannelDataWithoutVideos extends Omit<ChannelData, "videos"> {}

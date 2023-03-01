@@ -6,7 +6,7 @@ import localFont from "@next/font/local";
 import "@/utils/firebase";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { deepPurple } from "@mui/material/colors";
+import { common, deepPurple, green, yellow } from "@mui/material/colors";
 
 const pretendard = localFont({
   src: [
@@ -41,6 +41,12 @@ const globalCss = css({
   a: {
     color: "inherit",
     textDecoration: "none",
+    WebkitTapHighlightColor: "transparent", // for removing the highlight
+  },
+  ul: {
+    margin: 0,
+    padding: 0,
+    listStyle: "none",
   },
 });
 
@@ -49,7 +55,16 @@ const theme = createTheme({
     primary: {
       main: deepPurple[300],
     },
+    money: {
+      main: green["500"],
+      contrastText: common.white,
+    },
     youtube: "#FF0000",
+    favorite: yellow[800],
+    bronze: "#964B00",
+    silver: "#C0C0C0",
+    gold: "#FFD700",
+    diamond: "#D4F1F4",
   },
   typography: {
     fontFamily: pretendard.style.fontFamily,
@@ -58,11 +73,29 @@ const theme = createTheme({
 
 declare module "@mui/material/styles" {
   interface Palette {
+    money: Palette["primary"];
     youtube: React.CSSProperties["color"];
+    favorite: React.CSSProperties["color"];
+    bronze: React.CSSProperties["color"];
+    silver: React.CSSProperties["color"];
+    gold: React.CSSProperties["color"];
+    diamond: React.CSSProperties["color"];
   }
 
   interface PaletteOptions {
+    money: PaletteOptions["primary"];
     youtube: React.CSSProperties["color"];
+    favorite: React.CSSProperties["color"];
+    bronze: React.CSSProperties["color"];
+    silver: React.CSSProperties["color"];
+    gold: React.CSSProperties["color"];
+    diamond: React.CSSProperties["color"];
+  }
+}
+
+declare module "@mui/material/Chip" {
+  interface ChipPropsColorOverrides {
+    money: true;
   }
 }
 

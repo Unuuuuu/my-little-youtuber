@@ -1,15 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Video } from "@/types";
-import { HigherLowerGameChannelIdProps } from "@/pages/games/higher-lower/channels/[channelId]";
+import { ChannelData, VideoData } from "@/types";
 
 const getRamdomIndexOfArray = (lengthOfArray: number) => {
   return Math.floor(Math.random() * lengthOfArray);
 };
 
 const getRandomVideos = (
-  videos: Video[]
-): { manipulatedVideos: Video[]; randomVideos: Video[] } => {
+  videos: VideoData[]
+): { manipulatedVideos: VideoData[]; randomVideos: VideoData[] } => {
   const copiedVideos = [...videos];
 
   const randomIndex = getRamdomIndexOfArray(copiedVideos.length);
@@ -28,16 +27,16 @@ const getRandomVideos = (
 };
 
 const calculateVideos = (
-  videos: Video[]
+  videos: VideoData[]
 ): {
-  manipulatedVideos: Video[];
-  randomVideos: Video[];
-  higherRandomVideo: Video;
+  manipulatedVideos: VideoData[];
+  randomVideos: VideoData[];
+  higherRandomVideo: VideoData;
 } => {
   const { manipulatedVideos, randomVideos } = getRandomVideos(videos);
   const [leftRandomVideo, rightRandomVideo] = randomVideos;
 
-  let higherRandomVideo: Video;
+  let higherRandomVideo: VideoData;
   if (leftRandomVideo.viewCount > rightRandomVideo.viewCount) {
     higherRandomVideo = leftRandomVideo;
   } else {
@@ -61,36 +60,41 @@ interface HigherLowerGameState {
     blurDataURL: string;
   };
   status: Status;
-  originalVideos?: Video[];
-  manipulatedVideos?: Video[];
-  randomVideos?: Video[];
-  higherRandomVideo?: Video;
+  originalVideos?: VideoData[];
+  manipulatedVideos?: VideoData[];
+  randomVideos?: VideoData[];
+  higherRandomVideo?: VideoData;
   selectedVideoId: string | null;
-  count: number;
+  score: number;
 
   // youtube modal
   isYoutubeModalOpen: boolean;
   youtubeModalVideoId?: string;
+
+  // time limit
+  isTimeLimitedMode: boolean;
+  time: number;
 }
 
 const initialState: HigherLowerGameState = {
   isInitialized: false,
   status: "IDLE",
   selectedVideoId: null,
-  count: 0,
+  score: 0,
 
   // youtube modal
   isYoutubeModalOpen: false,
+
+  // time limit
+  isTimeLimitedMode: false,
+  time: 10,
 };
 
 const higherLowerGameSlice = createSlice({
   name: "higherLowerGame",
   initialState,
   reducers: {
-    initialize: (
-      state,
-      action: PayloadAction<HigherLowerGameChannelIdProps>
-    ) => {
+    initialize: (state, action: PayloadAction<ChannelData>) => {
       state.isInitialized = true;
       const { title, thumbnail, videos } = action.payload;
       state.title = title;
@@ -116,9 +120,14 @@ const higherLowerGameSlice = createSlice({
       state.randomVideos = undefined;
       state.higherRandomVideo = undefined;
       state.selectedVideoId = null;
-      state.count = 0;
+      state.score = 0;
+
+      // youtube modal
       state.isYoutubeModalOpen = false;
       state.youtubeModalVideoId = undefined;
+
+      // time limit
+      state.time = 10;
     },
     click: (state, action: PayloadAction<string>) => {
       if (state.isInitialized === false || state.status !== "IDLE") {
@@ -140,7 +149,11 @@ const higherLowerGameSlice = createSlice({
 
       if (state.selectedVideoId === state.higherRandomVideo.id) {
         state.status = "SUCCEEDED";
-        state.count++;
+        if (state.isTimeLimitedMode) {
+          state.score = state.score + state.time;
+        } else {
+          state.score++;
+        }
       } else {
         state.status = "FAILED";
       }
@@ -161,7 +174,12 @@ const higherLowerGameSlice = createSlice({
       state.randomVideos = newRandomVideos;
       state.higherRandomVideo = newHigherRandomVideo;
       state.selectedVideoId = null;
-      state.count = 0;
+      state.score = 0;
+
+      // time limit
+      if (state.isTimeLimitedMode) {
+        state.time = 10;
+      }
     },
     next: (state) => {
       if (
@@ -174,7 +192,7 @@ const higherLowerGameSlice = createSlice({
 
       state.status = "IDLE";
 
-      let targetVideos: Video[];
+      let targetVideos: VideoData[];
       if (state.manipulatedVideos.length < 2) {
         targetVideos = state.originalVideos;
       } else {
@@ -190,6 +208,18 @@ const higherLowerGameSlice = createSlice({
       state.randomVideos = newRandomVideos;
       state.higherRandomVideo = newHigherRandomVideo;
       state.selectedVideoId = null;
+
+      // time limit
+      if (state.isTimeLimitedMode) {
+        state.time = 10;
+      }
+    },
+    fail: (state) => {
+      if (state.isInitialized === false) {
+        return;
+      }
+
+      state.status = "FAILED";
     },
 
     // youtube modal
@@ -207,6 +237,14 @@ const higherLowerGameSlice = createSlice({
       }
 
       state.isYoutubeModalOpen = false;
+    },
+
+    // time limit
+    toggleTimeLimitedMode: (state) => {
+      state.isTimeLimitedMode = !state.isTimeLimitedMode;
+    },
+    minusTime: (state) => {
+      state.time--;
     },
   },
 });
