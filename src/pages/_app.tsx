@@ -7,6 +7,10 @@ import "@/utils/firebase";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { common, deepPurple, green, yellow } from "@mui/material/colors";
+import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/utils/firebase";
+import { userActions } from "@/redux/slices/userSlice";
 
 const pretendard = localFont({
   src: [
@@ -38,10 +42,12 @@ const globalCss = css({
     position: "absolute",
     inset: "0px",
   },
+  "*": {
+    WebkitTapHighlightColor: "transparent", // for removing the highlight
+  },
   a: {
     color: "inherit",
     textDecoration: "none",
-    WebkitTapHighlightColor: "transparent", // for removing the highlight
   },
   ul: {
     margin: 0,
@@ -56,7 +62,7 @@ const theme = createTheme({
       main: deepPurple[300],
     },
     money: {
-      main: green["500"],
+      main: green["400"],
       contrastText: common.white,
     },
     youtube: "#FF0000",
@@ -100,6 +106,20 @@ declare module "@mui/material/Chip" {
 }
 
 export default function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const { photoURL } = user;
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        store.dispatch(userActions.signIn({ photoURL }));
+      } else {
+        // User is signed out
+        store.dispatch(userActions.signOut());
+      }
+    });
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>

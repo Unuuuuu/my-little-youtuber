@@ -5,25 +5,19 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { grey, pink } from "@mui/material/colors";
 import { ChannelDataWithoutVideos } from "@/types";
 import Typography from "@mui/material/Typography";
-import { keyframes, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useAppSelector } from "@/redux/hooks";
-import Chip from "@mui/material/Chip";
-import AttachMoneyRoundedIcon from "@mui/icons-material/AttachMoneyRounded";
 import HigherLowerGameIcon from "../higher-lower-game/HigherLowerGameIcon";
 import YouTubeIcon from "@mui/icons-material/YouTube";
-
-const scaleUpAndDown = keyframes`
-  0%{
-    scale: 1;
-  }
-  50%{
-    scale: 1.2;
-  }
-  1000%{
-    scale: 1;
-  }
-`;
+import { signInWithRedirect, signOut } from "firebase/auth";
+import { auth, provider } from "@/utils/firebase";
+import Button from "@mui/material/Button";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import { useState, MouseEventHandler } from "react";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Fade from "@mui/material/Fade";
 
 const Seperator = () => {
   return (
@@ -53,20 +47,34 @@ const Header: React.FC<HeaderProps> = (props) => {
   } = props;
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
-  const { score, status } = useAppSelector((state) => ({
-    score: state.higherLowerGame.score,
-    status: state.higherLowerGame.status,
-  }));
+  const user = useAppSelector((state) => state.user);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const isOpen = Boolean(anchorEl);
+
+  const handleLoginButtonClick = () => {
+    signInWithRedirect(auth, provider);
+  };
+  const handleProfileClick: MouseEventHandler<HTMLElement> = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+  const handleLogoutMenuItemClick = () => {
+    signOut(auth);
+  };
 
   return (
     <Box
       component={"header"}
       sx={{
-        flexGrow: 1,
+        width: "100%",
         height: "56px",
         display: "flex",
         justifyContent: "space-between",
+        alignItems: "center",
         px: 2,
+        gap: 2,
       }}
     >
       <Box
@@ -172,22 +180,83 @@ const Header: React.FC<HeaderProps> = (props) => {
           </>
         )}
       </Box>
-      {isHigherLowerGamePage && (
-        <Chip
-          icon={<AttachMoneyRoundedIcon />}
-          label={score}
-          color="money"
-          sx={[
-            {
-              alignSelf: "center",
-              fontSize: 16,
-            },
-            status === "SUCCEEDED" && {
-              animation: `${scaleUpAndDown} 1s ease`,
-            },
-          ]}
-        />
-      )}
+      <Box
+        sx={{
+          display: "flex",
+          flexShrink: 0,
+        }}
+      >
+        {!user.isInitialized && (
+          <Box
+            sx={{
+              width: 28,
+              height: 44,
+            }}
+          />
+        )}
+        <Fade in={user.isInitialized && user.isSignedIn} appear={false}>
+          {user.isInitialized && user.isSignedIn ? (
+            <Box sx={{ display: "flex" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  cursor: "pointer",
+                  width: 28,
+                  height: 44,
+                  alignItems: "center",
+                }}
+                onClick={handleProfileClick}
+              >
+                {user.photoURL == null ? (
+                  <AccountCircleOutlinedIcon
+                    sx={{ fontSize: 28 }}
+                    color="primary"
+                  />
+                ) : (
+                  <Image
+                    src={user.photoURL}
+                    alt="photo url"
+                    width={28}
+                    height={28}
+                    style={{ borderRadius: "50%" }}
+                  />
+                )}
+              </Box>
+              <Menu
+                anchorEl={anchorEl}
+                open={isOpen}
+                onClose={handleMenuClose}
+                elevation={3}
+                TransitionComponent={Fade}
+                autoFocus={false}
+                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+              >
+                <MenuItem onClick={handleLogoutMenuItemClick} dense>
+                  로그아웃
+                </MenuItem>
+              </Menu>
+            </Box>
+          ) : (
+            <div></div>
+          )}
+        </Fade>
+        <Fade in={user.isInitialized && !user.isSignedIn} appear={false}>
+          {user.isInitialized && !user.isSignedIn ? (
+            <Button
+              startIcon={<AccountCircleOutlinedIcon />}
+              variant="outlined"
+              onClick={handleLoginButtonClick}
+              sx={{
+                borderRadius: 99,
+              }}
+            >
+              로그인
+            </Button>
+          ) : (
+            <div></div>
+          )}
+        </Fade>
+      </Box>
     </Box>
   );
 };
