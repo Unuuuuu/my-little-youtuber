@@ -11,6 +11,7 @@ import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 import { SystemStyleObject } from "@mui/system";
 import Fade from "@mui/material/Fade";
 import Skeleton from "@mui/material/Skeleton";
+import ButtonBase from "@mui/material/ButtonBase";
 
 const getInterfaceCss = (isPc: boolean, index: number) => ({
   videoContainer: [
@@ -134,7 +135,9 @@ const Interface = () => {
 
             return (
               <Box key={video.id} sx={interfaceCss.videoContainer}>
-                <Box
+                <ButtonBase
+                  centerRipple
+                  disableRipple={status === "SUCCEEDED" || status === "FAILED"}
                   sx={[
                     interfaceCss.imageContainer,
                     {
@@ -143,11 +146,8 @@ const Interface = () => {
                       overflow: "hidden",
                       boxShadow: 2,
                     },
-                    status === "IDLE" && {
-                      cursor: "pointer",
-                      ":hover": {
-                        opacity: "0.9",
-                      },
+                    status !== "IDLE" && {
+                      cursor: "default",
                     },
                   ]}
                   onClick={() => handleVideoClick(video.id)}
@@ -164,7 +164,7 @@ const Interface = () => {
                       objectFit: "contain",
                     }}
                   />
-                  <Fade in={status !== "IDLE"}>
+                  <Fade in={status !== "IDLE"} timeout={500}>
                     <Box
                       sx={{
                         position: "absolute",
@@ -197,7 +197,7 @@ const Interface = () => {
                       )}
                     </Box>
                   </Fade>
-                </Box>
+                </ButtonBase>
                 <Box sx={interfaceCss.titleContainer}>
                   <Typography
                     variant="h6"
