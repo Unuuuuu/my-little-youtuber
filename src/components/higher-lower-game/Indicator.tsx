@@ -8,33 +8,23 @@ import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import HistoryEduRoundedIcon from "@mui/icons-material/HistoryEduRounded";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
-import { useTheme } from "@mui/material/styles";
+import { keyframes, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import IconButton from "@mui/material/IconButton";
 import { useEffect } from "react";
-import { SystemStyleObject } from "@mui/system/styleFunctionSx";
+import AttachMoneyRoundedIcon from "@mui/icons-material/AttachMoneyRounded";
 
-const indicatorCss = {
-  item: {
-    flexBasis: 48,
-    width: "100%",
-    position: "relative",
-    borderRadius: "50%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    bgcolor: "white",
-    boxShadow: 2,
-  } as SystemStyleObject,
-  absoluteItem: {
-    position: "absolute",
-    inset: 0,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: "50%",
-  } as SystemStyleObject,
-};
+const scaleUpAndDown = keyframes`
+  0%{
+    scale: 1;
+  }
+  50%{
+    scale: 1.2;
+  }
+  1000%{
+    scale: 1;
+  }
+`;
 
 const Indicator = () => {
   const theme = useTheme();
@@ -80,47 +70,68 @@ const Indicator = () => {
     <Box
       sx={[
         {
-          width: 176,
-          height: 48,
+          width: "100%",
+          px: 2,
           position: "absolute",
           top: "calc((100% + 56px) / 2)",
           left: "50%",
           transform: "translate(-50%, -50%)",
           display: "flex",
           flexDirection: "row",
+          justifyContent: "center",
           gap: 2,
         },
         isPc && {
-          width: 48,
-          height: 176,
+          width: "auto",
+          px: 0,
           top: "calc((100% - 8px) / 2)",
           flexDirection: "column",
         },
       ]}
     >
-      <Grow in={isTimeLimitedMode}>
-        <Box sx={indicatorCss.item}>
-          {status === "FAILED" && score !== 0 ? (
-            <IconButton color="error" size="large" onClick={() => {}}>
-              <HistoryEduRoundedIcon />
-            </IconButton>
-          ) : (
-            <Typography component="span" fontWeight={500}>
-              {time}
-            </Typography>
-          )}
+      <Box
+        sx={{
+          position: "relative",
+          width: 48,
+          height: 48,
+          display: "flex",
+        }}
+      ></Box>
+      <Box
+        sx={{
+          position: "relative",
+          width: 48,
+          height: 48,
+          display: "flex",
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            bgcolor: "white",
+            borderRadius: "50%",
+            boxShadow: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Typography component="span" fontWeight={500}>
+            VS
+          </Typography>
         </Box>
-      </Grow>
-      <Box sx={indicatorCss.item}>
-        <Typography component="span" fontWeight={500}>
-          VS
-        </Typography>
         <Grow in={status === "SUCCEEDED"}>
           <Box
             sx={{
-              ...indicatorCss.absoluteItem,
+              position: "absolute",
+              inset: 0,
               bgcolor: "success.light",
               color: "success.contrastText",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <CheckRoundedIcon />
@@ -129,27 +140,75 @@ const Indicator = () => {
         <Grow in={status === "FAILED"}>
           <Box
             sx={{
-              ...indicatorCss.absoluteItem,
+              position: "absolute",
+              inset: 0,
               bgcolor: "error.light",
               color: "error.contrastText",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <CloseRoundedIcon />
           </Box>
         </Grow>
+        <Box
+          sx={[
+            {
+              position: "absolute",
+              top: "-37.5%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            },
+            isPc && {
+              top: "-50%",
+            },
+          ]}
+        >
+          <Box
+            sx={[
+              {
+                height: 24,
+                color: "money.contrastText",
+                bgcolor: "money.main",
+                display: "flex",
+                alignItems: "center",
+                borderRadius: 1,
+                pl: 0.5,
+                pr: 1,
+                gap: 0.5,
+              },
+              status === "SUCCEEDED" && {
+                animation: `${scaleUpAndDown} 1s ease infinite`,
+              },
+            ]}
+          >
+            <AttachMoneyRoundedIcon sx={{ fontSize: 16 }} />
+            <Typography fontSize={12} fontWeight={500}>
+              {score}
+            </Typography>
+          </Box>
+        </Box>
       </Box>
-      <Grow in={status === "FAILED" || status === "SUCCEEDED"}>
-        <Box sx={indicatorCss.item}>
-          {status === "FAILED" && (
-            <IconButton
-              color="error"
-              size="large"
-              onClick={handleReplayButtonClick}
-            >
-              <ReplayRoundedIcon />
-            </IconButton>
-          )}
-          {status === "SUCCEEDED" && (
+      <Box
+        sx={{
+          position: "relative",
+          width: 48,
+          height: 48,
+          display: "flex",
+        }}
+      >
+        <Grow in={status === "SUCCEEDED"}>
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              bgcolor: "white",
+              borderRadius: "50%",
+              boxShadow: 2,
+            }}
+          >
             <IconButton
               color="success"
               size="large"
@@ -157,9 +216,28 @@ const Indicator = () => {
             >
               <PlayArrowRoundedIcon />
             </IconButton>
-          )}
-        </Box>
-      </Grow>
+          </Box>
+        </Grow>
+        <Grow in={status === "FAILED"}>
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              bgcolor: "white",
+              borderRadius: "50%",
+              boxShadow: 2,
+            }}
+          >
+            <IconButton
+              color="error"
+              size="large"
+              onClick={handleReplayButtonClick}
+            >
+              <ReplayRoundedIcon />
+            </IconButton>
+          </Box>
+        </Grow>
+      </Box>
     </Box>
   );
 };
