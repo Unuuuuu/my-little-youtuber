@@ -1,10 +1,9 @@
-import Icon from "@/components/higher-lower-game/Icon";
+import HigherLowerGameIcon from "@/components/higher-lower-game/HigherLowerGameIcon";
 import Header from "@/components/layout/Header";
 import Main from "@/components/layout/Main";
 import { ChannelData, ChannelDataWithoutVideos } from "@/types";
 import { db } from "@/utils/firebase";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import {
@@ -77,7 +76,7 @@ const Channel: React.FC<ChannelProps> = (props) => {
           >
             To be developed
             <ButtonBase sx={{ p: 2, display: "flex", gap: 1 }}>
-              <Icon />
+              <HigherLowerGameIcon />
               <Typography component={"h2"} fontSize={16} fontWeight={500}>
                 더 많이 더 적게
               </Typography>

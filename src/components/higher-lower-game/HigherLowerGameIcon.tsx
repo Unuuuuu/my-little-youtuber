@@ -3,7 +3,7 @@ import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
 import ThumbDownRoundedIcon from "@mui/icons-material/ThumbDownRounded";
 import { blue, red } from "@mui/material/colors";
 
-const Icon = () => {
+const HigherLowerGameIcon = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <ThumbUpRoundedIcon
@@ -28,4 +28,4 @@ const Icon = () => {
   );
 };
 
-export default Icon;
+export default HigherLowerGameIcon;

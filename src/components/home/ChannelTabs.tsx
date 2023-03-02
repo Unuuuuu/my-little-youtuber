@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useMemo, useRef, useState } from "react";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import SubscriptionsRoundedIcon from "@mui/icons-material/SubscriptionsRounded";
 import { grey } from "@mui/material/colors";
@@ -19,6 +19,41 @@ const playButtonColorMap = {
   silver: "실버",
   gold: "골드",
   diamond: "다이아몬드",
+};
+
+type PlayButtonColorKey = keyof typeof playButtonColorMap;
+
+const classifyChannelDatas = (
+  channelDatasWithoutVideos: ChannelDataWithoutVideos[]
+): {
+  diamond: ChannelDataWithoutVideos[];
+  gold: ChannelDataWithoutVideos[];
+  silver: ChannelDataWithoutVideos[];
+  bronze: ChannelDataWithoutVideos[];
+} => {
+  const diamond: ChannelDataWithoutVideos[] = [];
+  const gold: ChannelDataWithoutVideos[] = [];
+  const silver: ChannelDataWithoutVideos[] = [];
+  const bronze: ChannelDataWithoutVideos[] = [];
+
+  channelDatasWithoutVideos.forEach((channelDataWithoutVideos) => {
+    if (channelDataWithoutVideos.subscriberCount < 100000) {
+      bronze.push(channelDataWithoutVideos);
+    } else if (channelDataWithoutVideos.subscriberCount < 1000000) {
+      silver.push(channelDataWithoutVideos);
+    } else if (channelDataWithoutVideos.subscriberCount < 10000000) {
+      gold.push(channelDataWithoutVideos);
+    } else if (channelDataWithoutVideos.subscriberCount < 10000000) {
+      diamond.push(channelDataWithoutVideos);
+    }
+  });
+
+  return {
+    diamond,
+    gold,
+    silver,
+    bronze,
+  };
 };
 
 interface TabPanelProps {
@@ -48,11 +83,15 @@ interface ChannelTabsProps {
 const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
   const { channelDatasWithoutVideos } = props;
   const [value, setValue] = useState(0);
-  const playButtonColorRef = useRef<keyof typeof playButtonColorMap>();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  const classifiedChannelDatas = useMemo(
+    () => classifyChannelDatas(channelDatasWithoutVideos),
+    [channelDatasWithoutVideos]
+  );
 
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
@@ -92,113 +131,114 @@ const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
       </Tabs>
       <TabPanel value={value} index={0}>
         <Box
-          component={"ul"}
           sx={{
             display: "flex",
             flexDirection: "column",
           }}
         >
-          {channelDatasWithoutVideos.map((channelData) => {
-            const prevPlayButtonColor = playButtonColorRef.current;
+          {Object.entries(classifiedChannelDatas).map(
+            ([playButtonColorKey, channelDatasWithoutVideos]) => {
+              if (channelDatasWithoutVideos.length === 0) {
+                return null;
+              }
 
-            if (channelData.subscriberCount < 100000) {
-              playButtonColorRef.current = "bronze";
-            } else if (channelData.subscriberCount < 1000000) {
-              playButtonColorRef.current = "silver";
-            } else if (channelData.subscriberCount < 10000000) {
-              playButtonColorRef.current = "gold";
-            } else if (channelData.subscriberCount < 10000000) {
-              playButtonColorRef.current = "diamond";
-            }
-
-            let playButtonElement: ReactNode = null;
-            if (prevPlayButtonColor !== playButtonColorRef.current) {
-              playButtonElement = (
+              return (
                 <Box
+                  key={playButtonColorKey}
                   sx={{
-                    display: "flex",
-                    py: 2,
-                    px: 2,
-                    alignItems: "center",
-                    gap: 0.5,
-                    "&:not(:first-child)": {
-                      borderTop: 1,
+                    "&:not(:last-child)": {
+                      borderBottom: 1,
                       borderColor: "divider",
                     },
                   }}
                 >
-                  <YouTubeIcon
-                    sx={{ color: `${playButtonColorRef.current}` }}
-                  />
-                  <Typography color="GrayText" fontSize={14}>
-                    {playButtonColorMap[playButtonColorRef.current!]}버튼
-                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      py: 2,
+                      px: 2,
+                      alignItems: "center",
+                      gap: 0.5,
+                    }}
+                  >
+                    <YouTubeIcon sx={{ color: playButtonColorKey }} />
+                    <Typography color="GrayText" fontSize={14}>
+                      {
+                        playButtonColorMap[
+                          playButtonColorKey as PlayButtonColorKey
+                        ]
+                      }
+                      버튼
+                    </Typography>
+                  </Box>
+                  <Box component={"ul"}>
+                    {channelDatasWithoutVideos.map(
+                      (channelDataWithoutVideos) => (
+                        <Box
+                          key={channelDataWithoutVideos.id}
+                          component={"li"}
+                          sx={{ display: "flex", alignItems: "center" }}
+                        >
+                          <Box
+                            component={Link}
+                            href={`/channel/${channelDataWithoutVideos.id}`}
+                            sx={{
+                              flexGrow: 1,
+                              overflow: "hidden",
+                            }}
+                          >
+                            <ButtonBase
+                              focusRipple
+                              sx={{
+                                width: "100%",
+                                p: 2,
+                                display: "flex",
+                                gap: 2,
+                                justifyContent: "flex-start",
+                              }}
+                            >
+                              <Image
+                                placeholder="blur"
+                                blurDataURL={
+                                  channelDataWithoutVideos.thumbnail.blurDataURL
+                                }
+                                src={channelDataWithoutVideos.thumbnail.url}
+                                alt="thumbnail"
+                                width={48}
+                                height={48}
+                                style={{ borderRadius: "50%" }}
+                              />
+                              <Typography
+                                component={"h2"}
+                                fontSize={16}
+                                fontWeight={500}
+                                noWrap
+                              >
+                                {channelDataWithoutVideos.title}
+                              </Typography>
+                            </ButtonBase>
+                          </Box>
+                          <Checkbox
+                            icon={<StarOutlineRoundedIcon />}
+                            checkedIcon={<StarRoundedIcon />}
+                            sx={{
+                              flexBasis: 80,
+                              flexShrink: 0,
+                              height: 80,
+                              color: "favorite",
+                              "&.Mui-checked": {
+                                color: "favorite",
+                              },
+                            }}
+                          />
+                        </Box>
+                      )
+                    )}
+                  </Box>
                 </Box>
               );
             }
-
-            return (
-              <>
-                {playButtonElement}
-                <Box
-                  key={channelData.id}
-                  component={"li"}
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  <Box
-                    component={Link}
-                    href={`/channel/${channelData.id}`}
-                    sx={{
-                      flexGrow: 1,
-                      overflow: "hidden",
-                    }}
-                  >
-                    <ButtonBase
-                      focusRipple
-                      sx={{
-                        width: "100%",
-                        p: 2,
-                        display: "flex",
-                        gap: 2,
-                        justifyContent: "flex-start",
-                      }}
-                    >
-                      <Image
-                        placeholder="blur"
-                        blurDataURL={channelData.thumbnail.blurDataURL}
-                        src={channelData.thumbnail.url}
-                        alt="thumbnail"
-                        width={48}
-                        height={48}
-                        style={{ borderRadius: "50%" }}
-                      />
-                      <Typography
-                        component={"h2"}
-                        fontSize={16}
-                        fontWeight={500}
-                        noWrap
-                      >
-                        {channelData.title}
-                      </Typography>
-                    </ButtonBase>
-                  </Box>
-                  <Checkbox
-                    icon={<StarOutlineRoundedIcon />}
-                    checkedIcon={<StarRoundedIcon />}
-                    sx={{
-                      flexBasis: 80,
-                      flexShrink: 0,
-                      height: 80,
-                      color: "favorite",
-                      "&.Mui-checked": {
-                        color: "favorite",
-                      },
-                    }}
-                  />
-                </Box>
-              </>
-            );
-          })}
+          )}
         </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>

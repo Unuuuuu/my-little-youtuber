@@ -10,8 +10,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useAppSelector } from "@/redux/hooks";
 import Chip from "@mui/material/Chip";
 import AttachMoneyRoundedIcon from "@mui/icons-material/AttachMoneyRounded";
-import Icon from "../higher-lower-game/Icon";
-import logo from "../../../public/logo@512w.png";
+import HigherLowerGameIcon from "../higher-lower-game/HigherLowerGameIcon";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 
 const scaleUpAndDown = keyframes`
   0%{
@@ -84,13 +84,7 @@ const Header: React.FC<HeaderProps> = (props) => {
           sx={{ display: "flex", gap: 1, alignItems: "center", flexShrink: 0 }}
           href="/"
         >
-          <Image
-            src={logo}
-            alt="logo"
-            width={28.57}
-            height={20}
-            placeholder="blur"
-          />
+          <YouTubeIcon color="primary" fontSize="large" />
           {(isHomePage || isPc) && (
             <Box sx={{ display: "flex" }}>
               <Typography component={"h2"} fontSize={20} fontWeight={700}>
@@ -162,7 +156,7 @@ const Header: React.FC<HeaderProps> = (props) => {
                 },
               ]}
             >
-              <Icon />
+              <HigherLowerGameIcon />
               {(isHigherLowerGamePage || isPc) && (
                 <Typography
                   component={"h2"}
