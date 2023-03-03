@@ -20,29 +20,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/__/auth/handler",
-        destination:
-          "https://my-little-y0utuber.firebaseapp.com/__/auth/handler",
-      },
-      {
-        source: "/__/auth/handler.js",
-        destination:
-          "https://my-little-y0utuber.firebaseapp.com/__/auth/handler.js",
-      },
-      {
-        source: "/__/auth/experiments.js",
-        destination:
-          "https://my-little-y0utuber.firebaseapp.com/__/auth/experiments.js",
-      },
-      {
-        source: "/__/auth/iframe",
-        destination:
-          "https://my-little-y0utuber.firebaseapp.com/__/auth/iframe",
-      },
-      {
-        source: "/__/auth/iframe.js",
-        destination:
-          "https://my-little-y0utuber.firebaseapp.com/__/auth/iframe.js",
+        source: "/__/auth/:path*",
+        destination: `https://${process.env.NEXT_PUBLIC_PROJECT_ID}.firebaseapp.com/__/auth/:path*`,
       },
     ];
   },
