@@ -157,19 +157,16 @@ const Indicator = () => {
           sx={[
             {
               position: "absolute",
-              top: "-37.5%",
+              top: "-50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-            },
-            isPc && {
-              top: "-50%",
             },
           ]}
         >
           <Box
             sx={[
               {
-                height: 24,
+                height: 28,
                 color: "money.contrastText",
                 bgcolor: "money.main",
                 display: "flex",
@@ -178,14 +175,15 @@ const Indicator = () => {
                 pl: 0.5,
                 pr: 1,
                 gap: 0.5,
+                boxShadow: 2,
               },
               status === "SUCCEEDED" && {
                 animation: `${scaleUpAndDown} 1s ease infinite`,
               },
             ]}
           >
-            <AttachMoneyRoundedIcon sx={{ fontSize: 16 }} />
-            <Typography fontSize={12} fontWeight={500}>
+            <AttachMoneyRoundedIcon sx={{ fontSize: 20 }} />
+            <Typography fontSize={16} fontWeight={500}>
               {score}
             </Typography>
           </Box>
