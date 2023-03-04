@@ -249,7 +249,7 @@ const Header: React.FC<HeaderProps> = (props) => {
           {isInitialized && !isSignedIn ? (
             <Button
               startIcon={<GoogleIcon sx={{ color: "google" }} />}
-              variant="outlined"
+              size="small"
               onClick={handleLoginButtonClick}
             >
               로그인
