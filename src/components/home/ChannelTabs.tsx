@@ -27,10 +27,12 @@ const TabPanel: React.FC<TabPanelProps> = (props) => {
   return (
     <Box
       role="tabpanel"
-      hidden={value !== index}
-      sx={{ flexGrow: 1, overflowY: "scroll" }}
+      sx={[
+        { flexGrow: 1, overflowY: "scroll" },
+        value !== index && { display: "none" },
+      ]}
     >
-      {value === index && children}
+      {children}
     </Box>
   );
 };
