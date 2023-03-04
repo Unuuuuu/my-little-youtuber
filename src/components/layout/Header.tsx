@@ -18,6 +18,7 @@ import { useState, MouseEventHandler } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
+import GoogleIcon from "@mui/icons-material/Google";
 
 const Seperator = () => {
   return (
@@ -96,7 +97,7 @@ const Header: React.FC<HeaderProps> = (props) => {
           sx={{ display: "flex", gap: 1, alignItems: "center", flexShrink: 0 }}
           href="/"
         >
-          <YouTubeIcon color="primary" fontSize="large" />
+          <YouTubeIcon fontSize="large" sx={{ color: "brand" }} />
           {(isHomePage || isPc) && (
             <Box sx={{ display: "flex" }}>
               <Typography component={"h2"} fontSize={20} fontWeight={700}>
@@ -247,12 +248,9 @@ const Header: React.FC<HeaderProps> = (props) => {
         <Fade in={isInitialized && !isSignedIn} appear={false}>
           {isInitialized && !isSignedIn ? (
             <Button
-              startIcon={<AccountCircleOutlinedIcon />}
+              startIcon={<GoogleIcon sx={{ color: "google" }} />}
               variant="outlined"
               onClick={handleLoginButtonClick}
-              sx={{
-                borderRadius: 99,
-              }}
             >
               로그인
             </Button>

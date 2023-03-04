@@ -8,6 +8,12 @@ import { ChannelDataWithoutVideos } from "@/types";
 import { useAppSelector } from "@/redux/hooks";
 import ChannelList from "./ChannelList";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
+import GoogleIcon from "@mui/icons-material/Google";
+import Button from "@mui/material/Button";
+import { signInWithRedirect } from "firebase/auth";
+import { auth, provider } from "@/utils/firebase";
 
 interface TabPanelProps {
   children: ReactNode;
@@ -46,6 +52,10 @@ const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
 
   const handleTabsChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleLoginButtonClick = () => {
+    signInWithRedirect(auth, provider);
   };
 
   const favoriteChannelDatasWithoutVideos = useMemo(
@@ -104,15 +114,59 @@ const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
         <ChannelList channelDatasWithoutVideos={channelDatasWithoutVideos} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {/* TODO */}
-        {!isInitialized && <div>loading...</div>}
+        {!isInitialized && (
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
         {isInitialized &&
           (isSignedIn ? (
             <ChannelList
               channelDatasWithoutVideos={favoriteChannelDatasWithoutVideos}
             />
           ) : (
-            <div>로그인해야 이용할 수 있습니다.</div>
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 0.5,
+                  mb: 4,
+                  alignItems: "center",
+                }}
+              >
+                <Typography component={"h3"} fontSize={24} fontWeight={500}>
+                  로그인 해주세요
+                </Typography>
+                <Typography fontSize={16} fontWeight={400}>
+                  즐겨찾기를 추가할 수 있습니다
+                </Typography>
+              </Box>
+              <Button
+                startIcon={<GoogleIcon sx={{ color: "google" }} />}
+                variant="outlined"
+                onClick={handleLoginButtonClick}
+              >
+                구글 계정으로 로그인
+              </Button>
+            </Box>
           ))}
       </TabPanel>
     </Box>

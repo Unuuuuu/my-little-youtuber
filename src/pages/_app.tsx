@@ -6,7 +6,7 @@ import localFont from "@next/font/local";
 import "@/utils/firebase";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { common, deepPurple, green, yellow } from "@mui/material/colors";
+import { common, deepPurple, green, grey, yellow } from "@mui/material/colors";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "@/utils/firebase";
@@ -60,12 +60,14 @@ const globalCss = css({
 const theme = createTheme({
   palette: {
     primary: {
-      main: deepPurple[300],
+      main: grey[700],
     },
     money: {
       main: green["400"],
       contrastText: common.white,
     },
+    brand: deepPurple[300],
+    google: "#EA4335",
     youtube: "#FF0000",
     favorite: yellow[800],
     bronze: "#964B00",
@@ -81,6 +83,8 @@ const theme = createTheme({
 declare module "@mui/material/styles" {
   interface Palette {
     money: Palette["primary"];
+    brand: React.CSSProperties["color"];
+    google: React.CSSProperties["color"];
     youtube: React.CSSProperties["color"];
     favorite: React.CSSProperties["color"];
     bronze: React.CSSProperties["color"];
@@ -91,6 +95,8 @@ declare module "@mui/material/styles" {
 
   interface PaletteOptions {
     money: PaletteOptions["primary"];
+    brand: React.CSSProperties["color"];
+    google: React.CSSProperties["color"];
     youtube: React.CSSProperties["color"];
     favorite: React.CSSProperties["color"];
     bronze: React.CSSProperties["color"];
