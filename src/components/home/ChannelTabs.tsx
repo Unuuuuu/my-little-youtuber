@@ -12,7 +12,11 @@ import StarOutlineRoundedIcon from "@mui/icons-material/StarOutlineRounded";
 import Checkbox from "@mui/material/Checkbox";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import Link from "next/link";
-import ButtonBase from "@mui/material/ButtonBase";
+import ListSubheader from "@mui/material/ListSubheader";
+import ListItem from "@mui/material/ListItem";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 
 const playButtonColorMap = {
   bronze: "브론즈",
@@ -69,7 +73,7 @@ const TabPanel: React.FC<TabPanelProps> = (props) => {
     <Box
       role="tabpanel"
       hidden={value !== index}
-      sx={{ height: "calc(100% - 72px)", overflowY: "scroll" }}
+      sx={{ flexGrow: 1, overflowY: "scroll" }}
     >
       {value === index && children}
     </Box>
@@ -94,12 +98,20 @@ const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
   );
 
   return (
-    <Box sx={{ width: "100%", height: "100%" }}>
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Tabs
         value={value}
         onChange={handleChange}
         textColor="inherit"
         sx={{
+          flexShrink: 0,
           position: "relative",
           "& .MuiTabs-indicator": {
             height: 3,
@@ -130,10 +142,11 @@ const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
         />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <Box
+        <List
           sx={{
             display: "flex",
             flexDirection: "column",
+            p: 0,
           }}
         >
           {Object.entries(classifiedChannelDatas).map(
@@ -144,6 +157,7 @@ const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
 
               return (
                 <Box
+                  component={"li"}
                   key={playButtonColorKey}
                   sx={{
                     "&:not(:last-child)": {
@@ -152,51 +166,50 @@ const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
                     },
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      py: 2,
-                      px: 2,
-                      alignItems: "center",
-                      gap: 0.5,
-                    }}
-                  >
-                    <YouTubeIcon sx={{ color: playButtonColorKey }} />
-                    <Typography color="GrayText" fontSize={14}>
-                      {
-                        playButtonColorMap[
-                          playButtonColorKey as PlayButtonColorKey
-                        ]
-                      }
-                      버튼
-                    </Typography>
-                  </Box>
                   <Box component={"ul"}>
+                    <ListSubheader
+                      sx={{
+                        display: "flex",
+                        py: 2,
+                        alignItems: "center",
+                        gap: 0.5,
+                      }}
+                      disableSticky
+                    >
+                      <YouTubeIcon sx={{ color: playButtonColorKey }} />
+                      <Typography color="GrayText" fontSize={14}>
+                        {
+                          playButtonColorMap[
+                            playButtonColorKey as PlayButtonColorKey
+                          ]
+                        }
+                        버튼
+                      </Typography>
+                    </ListSubheader>
                     {channelDatasWithoutVideos.map(
                       (channelDataWithoutVideos) => (
-                        <Box
+                        <ListItem
                           key={channelDataWithoutVideos.id}
-                          component={"li"}
-                          sx={{ display: "flex", alignItems: "center" }}
+                          secondaryAction={
+                            <Checkbox
+                              icon={<StarOutlineRoundedIcon />}
+                              checkedIcon={<StarRoundedIcon />}
+                              sx={{
+                                color: "favorite",
+                                "&.Mui-checked": {
+                                  color: "favorite",
+                                },
+                              }}
+                            />
+                          }
+                          disablePadding
                         >
                           <Box
                             component={Link}
                             href={`/channel/${channelDataWithoutVideos.id}`}
-                            sx={{
-                              flexGrow: 1,
-                              overflow: "hidden",
-                            }}
+                            sx={{ width: "100%" }}
                           >
-                            <ButtonBase
-                              focusRipple
-                              sx={{
-                                width: "100%",
-                                p: 2,
-                                display: "flex",
-                                gap: 2,
-                                justifyContent: "flex-start",
-                              }}
-                            >
+                            <ListItemButton sx={{ py: 2, gap: 2, pr: "74px" }}>
                               <Image
                                 placeholder="blur"
                                 blurDataURL={
@@ -208,30 +221,16 @@ const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
                                 height={48}
                                 style={{ borderRadius: "50%" }}
                               />
-                              <Typography
-                                component={"h2"}
-                                fontSize={16}
-                                fontWeight={500}
-                                noWrap
+                              <ListItemText
+                                primaryTypographyProps={{
+                                  noWrap: true,
+                                }}
                               >
                                 {channelDataWithoutVideos.title}
-                              </Typography>
-                            </ButtonBase>
+                              </ListItemText>
+                            </ListItemButton>
                           </Box>
-                          <Checkbox
-                            icon={<StarOutlineRoundedIcon />}
-                            checkedIcon={<StarRoundedIcon />}
-                            sx={{
-                              flexBasis: 80,
-                              flexShrink: 0,
-                              height: 80,
-                              color: "favorite",
-                              "&.Mui-checked": {
-                                color: "favorite",
-                              },
-                            }}
-                          />
-                        </Box>
+                        </ListItem>
                       )
                     )}
                   </Box>
@@ -239,7 +238,7 @@ const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
               );
             }
           )}
-        </Box>
+        </List>
       </TabPanel>
       <TabPanel value={value} index={1}>
         To be developed
