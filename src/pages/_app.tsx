@@ -9,8 +9,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { common, deepPurple, green, yellow } from "@mui/material/colors";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/utils/firebase";
+import { auth, db } from "@/utils/firebase";
 import { userActions } from "@/redux/slices/userSlice";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const pretendard = localFont({
   src: [
@@ -107,12 +108,25 @@ declare module "@mui/material/Chip" {
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const { photoURL } = user;
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        store.dispatch(userActions.signIn({ photoURL }));
+        // User is signed in
+        const { photoURL, uid } = user;
+        const docRef = doc(db, "users", uid);
+        const docSnap = await getDoc(docRef);
+
+        let favoriteChannels: string[];
+        if (docSnap.exists()) {
+          favoriteChannels = docSnap.data().favoriteChannels;
+        } else {
+          await setDoc(docRef, {
+            id: uid,
+            favoriteChannels: [],
+          });
+          favoriteChannels = [];
+        }
+
+        store.dispatch(userActions.signIn({ photoURL, uid, favoriteChannels }));
       } else {
         // User is signed out
         store.dispatch(userActions.signOut());

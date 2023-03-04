@@ -47,7 +47,11 @@ const Header: React.FC<HeaderProps> = (props) => {
   } = props;
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
-  const user = useAppSelector((state) => state.user);
+  const { isInitialized, isSignedIn, photoURL } = useAppSelector((state) => ({
+    isInitialized: state.user.isInitialized,
+    isSignedIn: state.user.isSignedIn,
+    photoURL: state.user.photoURL,
+  }));
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isOpen = Boolean(anchorEl);
 
@@ -186,7 +190,7 @@ const Header: React.FC<HeaderProps> = (props) => {
           flexShrink: 0,
         }}
       >
-        {!user.isInitialized && (
+        {!isInitialized && (
           <Box
             sx={{
               width: 28,
@@ -194,8 +198,8 @@ const Header: React.FC<HeaderProps> = (props) => {
             }}
           />
         )}
-        <Fade in={user.isInitialized && user.isSignedIn} appear={false}>
-          {user.isInitialized && user.isSignedIn ? (
+        <Fade in={isInitialized && isSignedIn} appear={false}>
+          {isInitialized && isSignedIn ? (
             <Box sx={{ display: "flex" }}>
               <Box
                 sx={{
@@ -207,14 +211,14 @@ const Header: React.FC<HeaderProps> = (props) => {
                 }}
                 onClick={handleProfileClick}
               >
-                {user.photoURL == null ? (
+                {photoURL == null ? (
                   <AccountCircleOutlinedIcon
                     sx={{ fontSize: 28 }}
                     color="primary"
                   />
                 ) : (
                   <Image
-                    src={user.photoURL}
+                    src={photoURL}
                     alt="photo url"
                     width={28}
                     height={28}
@@ -240,8 +244,8 @@ const Header: React.FC<HeaderProps> = (props) => {
             <div></div>
           )}
         </Fade>
-        <Fade in={user.isInitialized && !user.isSignedIn} appear={false}>
-          {user.isInitialized && !user.isSignedIn ? (
+        <Fade in={isInitialized && !isSignedIn} appear={false}>
+          {isInitialized && !isSignedIn ? (
             <Button
               startIcon={<AccountCircleOutlinedIcon />}
               variant="outlined"
