@@ -1,7 +1,7 @@
-import { db } from "@/utils/firebase";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserInfo } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
+import { db } from "@/utils/firebase";
 
 interface UserData {
   favoriteChannels: string[];
@@ -54,14 +54,23 @@ const userSlice = createSlice({
       }
 
       const { channelId, checked } = action.payload;
-      const { favoriteChannels } = state;
+      const { favoriteChannels, uid } = state;
 
+      const docRef = doc(db, "users", uid);
       if (checked) {
-        state.favoriteChannels = [...favoriteChannels, channelId];
+        const newFavoriteChannels = [...favoriteChannels, channelId];
+        updateDoc(docRef, {
+          favoriteChannels: newFavoriteChannels,
+        });
+        state.favoriteChannels = newFavoriteChannels;
       } else {
-        state.favoriteChannels = favoriteChannels.filter(
+        const newFavoriteChannels = favoriteChannels.filter(
           (cid) => cid !== channelId
         );
+        updateDoc(docRef, {
+          favoriteChannels: newFavoriteChannels,
+        });
+        state.favoriteChannels = newFavoriteChannels;
       }
     },
   },

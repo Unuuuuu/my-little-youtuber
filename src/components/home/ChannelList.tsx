@@ -14,13 +14,11 @@ import ListItemText from "@mui/material/ListItemText";
 import { ChannelDataWithoutVideos } from "@/types";
 import { memo, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "@/utils/firebase";
 import { userActions } from "@/redux/slices/userSlice";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import InboxRoundedIcon from "@mui/icons-material/InboxRounded";
 import InboxTwoToneIcon from "@mui/icons-material/InboxTwoTone";
+
 const playButtonColorMap = {
   bronze: "브론즈",
   silver: "실버",
@@ -69,12 +67,11 @@ interface ChannelListProps {
 
 const ChannelList = memo<ChannelListProps>((props) => {
   const { channelDatasWithoutVideos } = props;
-  const { uid, isInitialized, isSignedIn, favoriteChannels } = useAppSelector(
+  const { isInitialized, isSignedIn, favoriteChannels } = useAppSelector(
     (state) => ({
       favoriteChannels: state.user.favoriteChannels,
       isInitialized: state.user.isInitialized,
       isSignedIn: state.user.isSignedIn,
-      uid: state.user.uid,
     })
   );
   const dispatch = useAppDispatch();
@@ -100,20 +97,9 @@ const ChannelList = memo<ChannelListProps>((props) => {
       return;
     }
 
-    if (!isSignedIn || uid === undefined) {
+    if (!isSignedIn) {
       handleSnackbarOpen();
       return;
-    }
-
-    const docRef = doc(db, "users", uid);
-    if (checked) {
-      updateDoc(docRef, {
-        favoriteChannels: [...favoriteChannels, channelId],
-      });
-    } else {
-      updateDoc(docRef, {
-        favoriteChannels: favoriteChannels.filter((cid) => cid !== channelId),
-      });
     }
 
     dispatch(userActions.updateFavoriteChannel({ checked, channelId }));
