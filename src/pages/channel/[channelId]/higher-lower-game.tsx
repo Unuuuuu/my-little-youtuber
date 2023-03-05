@@ -75,7 +75,7 @@ const HigherLowerGame: React.FC<HigherLowerGameProps> = (props) => {
     <>
       <Header
         channelDataWithoutVideos={channelDataWithoutVideos}
-        isHigherLowerGamePage
+        pageType="GAME"
       />
       <Main>
         <Interface />

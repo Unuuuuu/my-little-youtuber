@@ -66,7 +66,7 @@ const Channel: React.FC<ChannelProps> = (props) => {
     <>
       <Header
         channelDataWithoutVideos={channelDataWithoutVideos}
-        isChannelPage
+        pageType="CHANNEL"
       />
       <Main>
         <Box sx={{ p: 2 }}>

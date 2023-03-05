@@ -15,7 +15,7 @@ const Home: React.FC<HomeProps> = (props) => {
 
   return (
     <>
-      <Header isHomePage />
+      <Header pageType="HOME" />
       <Main>
         <ChannelTabs channelDatasWithoutVideos={channelDatasWithoutVideos} />
       </Main>

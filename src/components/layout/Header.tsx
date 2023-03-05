@@ -34,18 +34,11 @@ const Seperator = () => {
 
 interface HeaderProps {
   channelDataWithoutVideos?: ChannelDataWithoutVideos;
-  isHomePage?: boolean;
-  isChannelPage?: boolean;
-  isHigherLowerGamePage?: boolean;
+  pageType?: "HOME" | "CHANNEL" | "GAME";
 }
 
 const Header: React.FC<HeaderProps> = (props) => {
-  const {
-    channelDataWithoutVideos,
-    isHomePage = false,
-    isChannelPage = false,
-    isHigherLowerGamePage = false,
-  } = props;
+  const { channelDataWithoutVideos, pageType } = props;
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
   const { isInitialized, isSignedIn, photoURL } = useAppSelector((state) => ({
@@ -98,7 +91,7 @@ const Header: React.FC<HeaderProps> = (props) => {
           href="/"
         >
           <YouTubeIcon fontSize="large" sx={{ color: "brand" }} />
-          {(isHomePage || isPc) && (
+          {(pageType === "HOME" || isPc) && (
             <Box sx={{ display: "flex" }}>
               <Typography component={"h2"} fontSize={20} fontWeight={700}>
                 나의 작은 유튜버
@@ -125,7 +118,7 @@ const Header: React.FC<HeaderProps> = (props) => {
                   gap: 1,
                   alignItems: "center",
                 },
-                isChannelPage && {
+                pageType === "CHANNEL" && {
                   overflow: "hidden",
                 },
               ]}
@@ -140,7 +133,7 @@ const Header: React.FC<HeaderProps> = (props) => {
                 height={28}
                 style={{ borderRadius: "50%", flexShrink: 0 }}
               />
-              {(isChannelPage || isPc) && (
+              {(pageType === "CHANNEL" || isPc) && (
                 <Typography
                   component={"h2"}
                   fontSize={20}
@@ -153,7 +146,7 @@ const Header: React.FC<HeaderProps> = (props) => {
             </Box>
           </>
         )}
-        {isHigherLowerGamePage && (
+        {pageType === "GAME" && (
           <>
             <Seperator />
             <Box
@@ -164,13 +157,13 @@ const Header: React.FC<HeaderProps> = (props) => {
                   alignItems: "center",
                   pointerEvents: "none",
                 },
-                isHigherLowerGamePage && {
+                pageType === "GAME" && {
                   overflow: "hidden",
                 },
               ]}
             >
               <HigherLowerGameIcon />
-              {(isHigherLowerGamePage || isPc) && (
+              {(pageType === "GAME" || isPc) && (
                 <Typography
                   component={"h2"}
                   fontSize={20}
