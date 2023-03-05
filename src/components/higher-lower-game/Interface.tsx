@@ -62,19 +62,14 @@ const getDurationFromViewCount = (
 const Interface = () => {
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
-  const {
-    isInitialized,
-    randomVideos,
-    higherRandomVideo,
-    status,
-    isTimeLimitedMode,
-  } = useAppSelector((state) => ({
-    isInitialized: state.higherLowerGame.isInitialized,
-    randomVideos: state.higherLowerGame.randomVideos,
-    higherRandomVideo: state.higherLowerGame.higherRandomVideo,
-    status: state.higherLowerGame.status,
-    isTimeLimitedMode: state.higherLowerGame.isTimeLimitedMode,
-  }));
+  const { isInitialized, randomVideos, higherRandomVideo, status, mode } =
+    useAppSelector((state) => ({
+      isInitialized: state.higherLowerGame.isInitialized,
+      randomVideos: state.higherLowerGame.randomVideos,
+      higherRandomVideo: state.higherLowerGame.higherRandomVideo,
+      status: state.higherLowerGame.status,
+      mode: state.higherLowerGame.mode,
+    }));
   const dispatch = useAppDispatch();
   const failAudioRef = useRef<HTMLAudioElement>(null);
   const successAudioRef = useRef<HTMLAudioElement>(null);
@@ -207,7 +202,7 @@ const Interface = () => {
                   >
                     {video.title}
                   </Typography>
-                  {!isTimeLimitedMode && (
+                  {mode === "GENERAL" && (
                     <PlayCircleRoundedIcon
                       sx={interfaceCss.playCircleRoundedIcon}
                       onClick={() => handleYoutubeModalButtonClick(video.id)}
@@ -224,7 +219,7 @@ const Interface = () => {
               <Box key={index} sx={interfaceCss.videoContainer}>
                 <Skeleton variant="rounded" sx={interfaceCss.imageContainer} />
                 <Box sx={interfaceCss.titleContainer}>
-                  {!isTimeLimitedMode && (
+                  {mode === "GENERAL" && (
                     <PlayCircleRoundedIcon
                       sx={interfaceCss.playCircleRoundedIcon}
                     />

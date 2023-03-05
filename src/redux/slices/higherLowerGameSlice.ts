@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { ChannelData, VideoData } from "@/types";
+import { VideoData } from "@/types";
 
 const getRamdomIndexOfArray = (lengthOfArray: number) => {
   return Math.floor(Math.random() * lengthOfArray);
@@ -52,82 +52,91 @@ const calculateVideos = (
 
 type Status = "IDLE" | "PENDING" | "FAILED" | "SUCCEEDED";
 
+type Mode = "GENERAL" | "RANK";
+
+const TIME = 10;
+
 interface HigherLowerGameState {
   isInitialized: boolean;
-  title?: string;
-  thumbnail?: {
-    url: string;
-    blurDataURL: string;
-  };
+  mode: Mode;
   status: Status;
   originalVideos?: VideoData[];
   manipulatedVideos?: VideoData[];
   randomVideos?: VideoData[];
   higherRandomVideo?: VideoData;
   selectedVideoId: string | null;
-  score: number;
+  streak: number;
 
   // youtube modal
   isYoutubeModalOpen: boolean;
   youtubeModalVideoId?: string;
 
-  // time limit
-  isTimeLimitedMode: boolean;
+  // rank game
+  score: number;
   time: number;
 }
 
 const initialState: HigherLowerGameState = {
   isInitialized: false,
+  mode: "GENERAL",
   status: "IDLE",
   selectedVideoId: null,
-  score: 0,
+  streak: 0,
 
   // youtube modal
   isYoutubeModalOpen: false,
 
-  // time limit
-  isTimeLimitedMode: false,
-  time: 10,
+  // rank game
+  score: 0,
+  time: TIME,
 };
 
 const higherLowerGameSlice = createSlice({
   name: "higherLowerGame",
   initialState,
   reducers: {
-    initialize: (state, action: PayloadAction<ChannelData>) => {
-      state.isInitialized = true;
-      const { title, thumbnail, videos } = action.payload;
-      state.title = title;
-      state.thumbnail = thumbnail;
-      state.originalVideos = videos;
-
+    initialize: (state, action: PayloadAction<VideoData[]>) => {
+      const videos = action.payload;
       const {
         manipulatedVideos: newManipulatedVideos,
         randomVideos: newRandomVideos,
         higherRandomVideo: newHigherRandomVideo,
       } = calculateVideos(videos);
+
+      state.isInitialized = true;
+      state.status = "IDLE";
+      state.originalVideos = videos;
       state.manipulatedVideos = newManipulatedVideos;
       state.randomVideos = newRandomVideos;
       state.higherRandomVideo = newHigherRandomVideo;
+      state.selectedVideoId = null;
+      state.streak = 0;
+
+      // youtube modal
+      state.isYoutubeModalOpen = false;
+      state.youtubeModalVideoId = undefined;
+
+      // rank game
+      state.score = 0;
+      state.time = TIME;
     },
     finalize: (state) => {
       state.isInitialized = false;
-      state.title = undefined;
-      state.thumbnail = undefined;
       state.status = "IDLE";
       state.originalVideos = undefined;
       state.manipulatedVideos = undefined;
       state.randomVideos = undefined;
       state.higherRandomVideo = undefined;
       state.selectedVideoId = null;
-      state.score = 0;
+      state.streak = 0;
 
       // youtube modal
       state.isYoutubeModalOpen = false;
       state.youtubeModalVideoId = undefined;
 
-      // time limit
-      state.time = 10;
+      // rank game
+      state.score = 0;
+      state.time = TIME;
     },
     click: (state, action: PayloadAction<string>) => {
       if (state.isInitialized === false || state.status !== "IDLE") {
@@ -149,10 +158,10 @@ const higherLowerGameSlice = createSlice({
 
       if (state.selectedVideoId === state.higherRandomVideo.id) {
         state.status = "SUCCEEDED";
-        if (state.isTimeLimitedMode) {
+        state.streak++;
+
+        if (state.mode === "RANK") {
           state.score = state.score + state.time;
-        } else {
-          state.score++;
         }
       } else {
         state.status = "FAILED";
@@ -163,22 +172,23 @@ const higherLowerGameSlice = createSlice({
         return;
       }
 
-      state.status = "IDLE";
-
       const {
         manipulatedVideos: newManipulatedVideos,
         randomVideos: newRandomVideos,
         higherRandomVideo: newHigherRandomVideo,
       } = calculateVideos(state.originalVideos);
+
+      state.status = "IDLE";
       state.manipulatedVideos = newManipulatedVideos;
       state.randomVideos = newRandomVideos;
       state.higherRandomVideo = newHigherRandomVideo;
       state.selectedVideoId = null;
-      state.score = 0;
+      state.streak = 0;
 
-      // time limit
-      if (state.isTimeLimitedMode) {
-        state.time = 10;
+      // rank game
+      if (state.mode === "RANK") {
+        state.score = 0;
+        state.time = TIME;
       }
     },
     next: (state) => {
@@ -189,8 +199,6 @@ const higherLowerGameSlice = createSlice({
       ) {
         return;
       }
-
-      state.status = "IDLE";
 
       let targetVideos: VideoData[];
       if (state.manipulatedVideos.length < 2) {
@@ -204,22 +212,17 @@ const higherLowerGameSlice = createSlice({
         randomVideos: newRandomVideos,
         higherRandomVideo: newHigherRandomVideo,
       } = calculateVideos(targetVideos);
+
+      state.status = "IDLE";
       state.manipulatedVideos = newManipulatedVideos;
       state.randomVideos = newRandomVideos;
       state.higherRandomVideo = newHigherRandomVideo;
       state.selectedVideoId = null;
 
-      // time limit
-      if (state.isTimeLimitedMode) {
-        state.time = 10;
+      // rank game
+      if (state.mode === "RANK") {
+        state.time = TIME;
       }
-    },
-    fail: (state) => {
-      if (state.isInitialized === false) {
-        return;
-      }
-
-      state.status = "FAILED";
     },
 
     // youtube modal
@@ -239,12 +242,23 @@ const higherLowerGameSlice = createSlice({
       state.isYoutubeModalOpen = false;
     },
 
-    // time limit
-    toggleTimeLimitedMode: (state) => {
-      state.isTimeLimitedMode = !state.isTimeLimitedMode;
+    // rank game
+    updateMode: (state, action: PayloadAction<boolean>) => {
+      if (action.payload) {
+        state.mode = "RANK";
+      } else {
+        state.mode = "GENERAL";
+      }
     },
-    minusTime: (state) => {
+    updateTime: (state) => {
       state.time--;
+    },
+    fail: (state) => {
+      if (state.isInitialized === false) {
+        return;
+      }
+
+      state.status = "FAILED";
     },
   },
 });

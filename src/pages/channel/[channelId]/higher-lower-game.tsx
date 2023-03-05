@@ -64,12 +64,12 @@ const HigherLowerGame: React.FC<HigherLowerGameProps> = (props) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(higherLowerGameActions.initialize(channelData));
+    dispatch(higherLowerGameActions.initialize(videos));
 
     return () => {
       dispatch(higherLowerGameActions.finalize());
     };
-  }, [dispatch, channelData]);
+  }, [dispatch, videos]);
 
   return (
     <>

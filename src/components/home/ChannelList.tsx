@@ -48,7 +48,7 @@ const classifyChannelDatas = (
       silver.push(channelDataWithoutVideos);
     } else if (channelDataWithoutVideos.subscriberCount < 10000000) {
       gold.push(channelDataWithoutVideos);
-    } else if (channelDataWithoutVideos.subscriberCount < 10000000) {
+    } else if (channelDataWithoutVideos.subscriberCount < 100000000) {
       diamond.push(channelDataWithoutVideos);
     }
   });
