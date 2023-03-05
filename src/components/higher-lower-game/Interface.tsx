@@ -172,7 +172,7 @@ const Interface = () => {
                     >
                       {status !== "IDLE" && (
                         <Typography
-                          variant="h3"
+                          variant={isPc ? "h3" : "h4"}
                           component={CountUp}
                           sx={{ color: "white" }}
                           end={video.viewCount}
