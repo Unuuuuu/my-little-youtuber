@@ -90,51 +90,55 @@ const Indicator = () => {
       ]}
     >
       <Box
-        sx={[
-          {
-            position: "relative",
-            width: 48,
-            height: 48,
-          },
-          isPc && {
-            width: "auto",
-          },
-        ]}
+        sx={{
+          position: "relative",
+          width: 48,
+          height: 48,
+        }}
       >
         <Box
           sx={[
             {
-              minWidth: 84,
-              height: "100%",
               position: "absolute",
               top: 0,
               right: 0,
               bottom: 0,
-              bgcolor: "white",
-              borderRadius: 99,
-              boxShadow: 2,
-              display: "flex",
-              alignItems: "center",
-              pl: 1.5,
-              pr: 2,
-              gap: 1.5,
             },
             isPc && {
-              position: "static",
-            },
-            status === "SUCCEEDED" && {
-              animation: `${scaleUpAndDown} 1s ease infinite`,
+              right: "auto",
+              left: "50%",
+              transform: "translateX(-50%)",
             },
           ]}
         >
-          <LocalFireDepartmentTwoToneIcon sx={{ color: red["600"] }} />
-          <Typography
-            fontSize={16}
-            fontWeight={500}
-            sx={{ flexGrow: 1, textAlign: "center" }}
+          <Box
+            sx={[
+              {
+                minWidth: 84,
+                height: "100%",
+                bgcolor: "white",
+                borderRadius: 99,
+                boxShadow: 2,
+                display: "flex",
+                alignItems: "center",
+                pl: 1.5,
+                pr: 2,
+                gap: 1.5,
+              },
+              status === "SUCCEEDED" && {
+                animation: `${scaleUpAndDown} 1s ease infinite`,
+              },
+            ]}
           >
-            {mode === "GENERAL" ? streak : score}
-          </Typography>
+            <LocalFireDepartmentTwoToneIcon sx={{ color: red["600"] }} />
+            <Typography
+              component={"span"}
+              fontWeight={500}
+              sx={{ flexGrow: 1, textAlign: "center" }}
+            >
+              {mode === "GENERAL" ? streak : score}
+            </Typography>
+          </Box>
         </Box>
       </Box>
       <Box
