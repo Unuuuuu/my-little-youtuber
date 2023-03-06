@@ -26,11 +26,13 @@
     "react-countup": "^6.4.1",
     "react-dom": "18.2.0",
     "react-redux": "^8.0.5",
+    "react-window": "^1.8.8",
     "react-youtube": "^10.1.0",
     "sharp": "^0.31.3",
     "typescript": "4.9.5"
   },
   "devDependencies": {
+    "@types/react-window": "^1.8.5",
     "@types/youtube-player": "^5.5.7"
   }
 }

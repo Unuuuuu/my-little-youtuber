@@ -6,7 +6,6 @@ import SubscriptionsRoundedIcon from "@mui/icons-material/SubscriptionsRounded";
 import { grey } from "@mui/material/colors";
 import { ChannelDataWithoutVideos } from "@/types";
 import { useAppSelector } from "@/redux/hooks";
-import ChannelList from "./ChannelList";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
@@ -14,6 +13,11 @@ import GoogleIcon from "@mui/icons-material/Google";
 import Button from "@mui/material/Button";
 import { signInWithRedirect } from "firebase/auth";
 import { auth, provider } from "@/utils/firebase";
+import dynamic from "next/dynamic";
+
+const ChannelList = dynamic(() => import("./ChannelList"), {
+  ssr: false,
+});
 
 interface TabPanelProps {
   children: ReactNode;

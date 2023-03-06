@@ -1,10 +1,7 @@
 import Box from "@mui/material/Box";
-import List from "@mui/material/List";
-import ListSubheader from "@mui/material/ListSubheader";
 import Typography from "@mui/material/Typography";
 import ListItem from "@mui/material/ListItem";
 import Checkbox from "@mui/material/Checkbox";
-import YouTubeIcon from "@mui/icons-material/YouTube";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import StarOutlineRoundedIcon from "@mui/icons-material/StarOutlineRounded";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -12,54 +9,13 @@ import Link from "next/link";
 import Image from "next/image";
 import ListItemText from "@mui/material/ListItemText";
 import { ChannelDataWithoutVideos } from "@/types";
-import { memo, useMemo, useState } from "react";
+import { memo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { userActions } from "@/redux/slices/userSlice";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import InboxTwoToneIcon from "@mui/icons-material/InboxTwoTone";
-
-const playButtonColorMap = {
-  bronze: "브론즈",
-  silver: "실버",
-  gold: "골드",
-  diamond: "다이아몬드",
-};
-
-type PlayButtonColorKey = keyof typeof playButtonColorMap;
-
-const classifyChannelDatas = (
-  channelDatasWithoutVideos: ChannelDataWithoutVideos[]
-): {
-  diamond: ChannelDataWithoutVideos[];
-  gold: ChannelDataWithoutVideos[];
-  silver: ChannelDataWithoutVideos[];
-  bronze: ChannelDataWithoutVideos[];
-} => {
-  const diamond: ChannelDataWithoutVideos[] = [];
-  const gold: ChannelDataWithoutVideos[] = [];
-  const silver: ChannelDataWithoutVideos[] = [];
-  const bronze: ChannelDataWithoutVideos[] = [];
-
-  channelDatasWithoutVideos.forEach((channelDataWithoutVideos) => {
-    if (channelDataWithoutVideos.subscriberCount < 100000) {
-      bronze.push(channelDataWithoutVideos);
-    } else if (channelDataWithoutVideos.subscriberCount < 1000000) {
-      silver.push(channelDataWithoutVideos);
-    } else if (channelDataWithoutVideos.subscriberCount < 10000000) {
-      gold.push(channelDataWithoutVideos);
-    } else if (channelDataWithoutVideos.subscriberCount < 100000000) {
-      diamond.push(channelDataWithoutVideos);
-    }
-  });
-
-  return {
-    diamond,
-    gold,
-    silver,
-    bronze,
-  };
-};
+import { FixedSizeList } from "react-window";
 
 interface ChannelListProps {
   channelDatasWithoutVideos: ChannelDataWithoutVideos[];
@@ -105,11 +61,6 @@ const ChannelList = memo<ChannelListProps>((props) => {
     dispatch(userActions.updateFavoriteChannel({ checked, channelId }));
   };
 
-  const classifiedChannelDatas = useMemo(
-    () => classifyChannelDatas(channelDatasWithoutVideos),
-    [channelDatasWithoutVideos]
-  );
-
   if (channelDatasWithoutVideos.length === 0) {
     return (
       <Box
@@ -135,110 +86,70 @@ const ChannelList = memo<ChannelListProps>((props) => {
 
   return (
     <>
-      <List
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          p: 0,
-        }}
+      <FixedSizeList
+        height={window.innerHeight - 128}
+        width={"100%"}
+        itemSize={80}
+        itemCount={channelDatasWithoutVideos.length}
+        overscanCount={5}
       >
-        {Object.entries(classifiedChannelDatas).map(
-          ([playButtonColorKey, channelDatasWithoutVideos]) => {
-            if (channelDatasWithoutVideos.length === 0) {
-              return null;
-            }
+        {(listChildComponentProps) => {
+          const { index, style } = listChildComponentProps;
+          const channelDataWithoutVideos = channelDatasWithoutVideos[index];
 
-            return (
+          return (
+            <ListItem
+              style={style}
+              key={channelDataWithoutVideos.id}
+              component={"div"}
+              secondaryAction={
+                <Checkbox
+                  checked={favoriteChannels.includes(
+                    channelDataWithoutVideos.id
+                  )}
+                  icon={<StarOutlineRoundedIcon />}
+                  checkedIcon={<StarRoundedIcon />}
+                  onChange={(_, checked) => {
+                    handleCheckboxChange(checked, channelDataWithoutVideos.id);
+                  }}
+                  sx={{
+                    color: "favorite",
+                    "&.Mui-checked": {
+                      color: "favorite",
+                    },
+                  }}
+                />
+              }
+              disablePadding
+            >
               <Box
-                component={"li"}
-                key={playButtonColorKey}
-                sx={{
-                  "&:not(:last-child)": {
-                    borderBottom: 1,
-                    borderColor: "divider",
-                  },
-                }}
+                component={Link}
+                href={`/channel/${channelDataWithoutVideos.id}`}
+                sx={{ width: "100%" }}
               >
-                <Box component={"ul"}>
-                  <ListSubheader
-                    sx={{
-                      display: "flex",
-                      py: 2,
-                      alignItems: "center",
-                      gap: 0.5,
+                <ListItemButton sx={{ py: 2, gap: 2, pr: "74px" }}>
+                  <Image
+                    placeholder="blur"
+                    blurDataURL={channelDataWithoutVideos.thumbnail.blurDataURL}
+                    src={channelDataWithoutVideos.thumbnail.url}
+                    alt="thumbnail"
+                    width={48}
+                    height={48}
+                    style={{ borderRadius: "50%" }}
+                  />
+                  <ListItemText
+                    primaryTypographyProps={{
+                      noWrap: true,
                     }}
-                    disableSticky
                   >
-                    <YouTubeIcon sx={{ color: playButtonColorKey }} />
-                    <Typography color="GrayText" fontSize={14}>
-                      {
-                        playButtonColorMap[
-                          playButtonColorKey as PlayButtonColorKey
-                        ]
-                      }
-                      버튼
-                    </Typography>
-                  </ListSubheader>
-                  {channelDatasWithoutVideos.map((channelDataWithoutVideos) => (
-                    <ListItem
-                      key={channelDataWithoutVideos.id}
-                      secondaryAction={
-                        <Checkbox
-                          checked={favoriteChannels.includes(
-                            channelDataWithoutVideos.id
-                          )}
-                          icon={<StarOutlineRoundedIcon />}
-                          checkedIcon={<StarRoundedIcon />}
-                          onChange={(_, checked) => {
-                            handleCheckboxChange(
-                              checked,
-                              channelDataWithoutVideos.id
-                            );
-                          }}
-                          sx={{
-                            color: "favorite",
-                            "&.Mui-checked": {
-                              color: "favorite",
-                            },
-                          }}
-                        />
-                      }
-                      disablePadding
-                    >
-                      <Box
-                        component={Link}
-                        href={`/channel/${channelDataWithoutVideos.id}`}
-                        sx={{ width: "100%" }}
-                      >
-                        <ListItemButton sx={{ py: 2, gap: 2, pr: "74px" }}>
-                          <Image
-                            placeholder="blur"
-                            blurDataURL={
-                              channelDataWithoutVideos.thumbnail.blurDataURL
-                            }
-                            src={channelDataWithoutVideos.thumbnail.url}
-                            alt="thumbnail"
-                            width={48}
-                            height={48}
-                            style={{ borderRadius: "50%" }}
-                          />
-                          <ListItemText
-                            primaryTypographyProps={{
-                              noWrap: true,
-                            }}
-                          >
-                            {channelDataWithoutVideos.title}
-                          </ListItemText>
-                        </ListItemButton>
-                      </Box>
-                    </ListItem>
-                  ))}
-                </Box>
+                    {channelDataWithoutVideos.title}
+                  </ListItemText>
+                </ListItemButton>
               </Box>
-            );
-          }
-        )}
-      </List>
+            </ListItem>
+          );
+        }}
+      </FixedSizeList>
       <Snackbar
         open={isSnackbarOpen}
         anchorOrigin={{ horizontal: "center", vertical: "top" }}
