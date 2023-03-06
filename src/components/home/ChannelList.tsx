@@ -16,6 +16,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import InboxTwoToneIcon from "@mui/icons-material/InboxTwoTone";
 import { FixedSizeList } from "react-window";
+import { loginRequestSnackbarActions } from "@/redux/slices/loginRequestSnackbarSlice";
 
 const debounce = (cb: () => void) => {
   let id: number | null = null;
@@ -45,7 +46,6 @@ const ChannelList = memo<ChannelListProps>((props) => {
     })
   );
   const dispatch = useAppDispatch();
-  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [height, setHeight] = useState(816);
 
   const handleResize = () => {
@@ -62,28 +62,13 @@ const ChannelList = memo<ChannelListProps>((props) => {
     };
   }, []);
 
-  const handleSnackbarOpen = () => {
-    setIsSnackbarOpen(true);
-  };
-
-  const handleSnackbarClose = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setIsSnackbarOpen(false);
-  };
-
   const handleCheckboxChange = async (checked: boolean, channelId: string) => {
     if (!isInitialized) {
       return;
     }
 
     if (!isSignedIn) {
-      handleSnackbarOpen();
+      dispatch(loginRequestSnackbarActions.open());
       return;
     }
 
@@ -114,86 +99,68 @@ const ChannelList = memo<ChannelListProps>((props) => {
   }
 
   return (
-    <>
-      <FixedSizeList
-        height={height}
-        width={"100%"}
-        itemSize={80}
-        itemCount={channelDatasWithoutVideos.length}
-        overscanCount={5}
-      >
-        {(listChildComponentProps) => {
-          const { index, style } = listChildComponentProps;
-          const channelDataWithoutVideos = channelDatasWithoutVideos[index];
+    <FixedSizeList
+      height={height}
+      width={"100%"}
+      itemSize={80}
+      itemCount={channelDatasWithoutVideos.length}
+      overscanCount={5}
+    >
+      {(listChildComponentProps) => {
+        const { index, style } = listChildComponentProps;
+        const channelDataWithoutVideos = channelDatasWithoutVideos[index];
 
-          return (
-            <ListItem
-              style={style}
-              key={channelDataWithoutVideos.id}
-              component={"div"}
-              secondaryAction={
-                <Checkbox
-                  checked={favoriteChannels.includes(
-                    channelDataWithoutVideos.id
-                  )}
-                  icon={<StarOutlineRoundedIcon />}
-                  checkedIcon={<StarRoundedIcon />}
-                  onChange={(_, checked) => {
-                    handleCheckboxChange(checked, channelDataWithoutVideos.id);
-                  }}
-                  sx={{
+        return (
+          <ListItem
+            style={style}
+            key={channelDataWithoutVideos.id}
+            component={"div"}
+            secondaryAction={
+              <Checkbox
+                checked={favoriteChannels.includes(channelDataWithoutVideos.id)}
+                icon={<StarOutlineRoundedIcon />}
+                checkedIcon={<StarRoundedIcon />}
+                onChange={(_, checked) => {
+                  handleCheckboxChange(checked, channelDataWithoutVideos.id);
+                }}
+                sx={{
+                  color: "favorite",
+                  "&.Mui-checked": {
                     color: "favorite",
-                    "&.Mui-checked": {
-                      color: "favorite",
-                    },
-                  }}
-                />
-              }
-              disablePadding
+                  },
+                }}
+              />
+            }
+            disablePadding
+          >
+            <Box
+              component={Link}
+              href={`/channel/${channelDataWithoutVideos.id}`}
+              sx={{ width: "100%" }}
             >
-              <Box
-                component={Link}
-                href={`/channel/${channelDataWithoutVideos.id}`}
-                sx={{ width: "100%" }}
-              >
-                <ListItemButton sx={{ py: 2, gap: 2, pr: "74px" }}>
-                  <Image
-                    placeholder="blur"
-                    blurDataURL={channelDataWithoutVideos.thumbnail.blurDataURL}
-                    src={channelDataWithoutVideos.thumbnail.url}
-                    alt="thumbnail"
-                    width={48}
-                    height={48}
-                    style={{ borderRadius: "50%" }}
-                  />
-                  <ListItemText
-                    primaryTypographyProps={{
-                      noWrap: true,
-                    }}
-                  >
-                    {channelDataWithoutVideos.title}
-                  </ListItemText>
-                </ListItemButton>
-              </Box>
-            </ListItem>
-          );
-        }}
-      </FixedSizeList>
-      <Snackbar
-        open={isSnackbarOpen}
-        anchorOrigin={{ horizontal: "center", vertical: "top" }}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          로그인이 필요합니다.
-        </Alert>
-      </Snackbar>
-    </>
+              <ListItemButton sx={{ py: 2, gap: 2, pr: "74px" }}>
+                <Image
+                  placeholder="blur"
+                  blurDataURL={channelDataWithoutVideos.thumbnail.blurDataURL}
+                  src={channelDataWithoutVideos.thumbnail.url}
+                  alt="thumbnail"
+                  width={48}
+                  height={48}
+                  style={{ borderRadius: "50%" }}
+                />
+                <ListItemText
+                  primaryTypographyProps={{
+                    noWrap: true,
+                  }}
+                >
+                  {channelDataWithoutVideos.title}
+                </ListItemText>
+              </ListItemButton>
+            </Box>
+          </ListItem>
+        );
+      }}
+    </FixedSizeList>
   );
 });
 

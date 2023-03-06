@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import higherLowerGameSlice from "./slices/higherLowerGameSlice";
+import loginRequestSnackbarSlice from "./slices/loginRequestSnackbarSlice";
 import userSlice from "./slices/userSlice";
 
 export const store = configureStore({
   reducer: {
     higherLowerGame: higherLowerGameSlice.reducer,
     user: userSlice.reducer,
+    loginRequestSnackbar: loginRequestSnackbarSlice.reducer,
   },
 });
 
