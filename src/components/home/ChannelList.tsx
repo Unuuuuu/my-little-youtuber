@@ -9,13 +9,27 @@ import Link from "next/link";
 import Image from "next/image";
 import ListItemText from "@mui/material/ListItemText";
 import { ChannelDataWithoutVideos } from "@/types";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { userActions } from "@/redux/slices/userSlice";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import InboxTwoToneIcon from "@mui/icons-material/InboxTwoTone";
 import { FixedSizeList } from "react-window";
+
+const debounce = (cb: () => void) => {
+  let id: number | null = null;
+
+  return () => {
+    if (id) {
+      window.cancelAnimationFrame(id);
+    }
+
+    id = window.requestAnimationFrame(() => {
+      cb();
+    });
+  };
+};
 
 interface ChannelListProps {
   channelDatasWithoutVideos: ChannelDataWithoutVideos[];
@@ -32,6 +46,21 @@ const ChannelList = memo<ChannelListProps>((props) => {
   );
   const dispatch = useAppDispatch();
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [height, setHeight] = useState(816);
+
+  const handleResize = () => {
+    setHeight(window.innerHeight);
+  };
+
+  useEffect(() => {
+    setHeight(window.innerHeight - 128);
+
+    window.addEventListener("resize", debounce(handleResize));
+
+    return () => {
+      window.removeEventListener("resize", debounce(handleResize));
+    };
+  }, []);
 
   const handleSnackbarOpen = () => {
     setIsSnackbarOpen(true);
@@ -87,7 +116,7 @@ const ChannelList = memo<ChannelListProps>((props) => {
   return (
     <>
       <FixedSizeList
-        height={window.innerHeight - 128}
+        height={height}
         width={"100%"}
         itemSize={80}
         itemCount={channelDatasWithoutVideos.length}

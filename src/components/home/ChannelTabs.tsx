@@ -13,11 +13,7 @@ import GoogleIcon from "@mui/icons-material/Google";
 import Button from "@mui/material/Button";
 import { signInWithRedirect } from "firebase/auth";
 import { auth, provider } from "@/utils/firebase";
-import dynamic from "next/dynamic";
-
-const ChannelList = dynamic(() => import("./ChannelList"), {
-  ssr: false,
-});
+import ChannelList from "./ChannelList";
 
 interface TabPanelProps {
   children: ReactNode;
