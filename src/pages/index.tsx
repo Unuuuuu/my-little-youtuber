@@ -1,4 +1,4 @@
-import ChannelTabs from "@/components/home/ChannelTabs";
+import HomeTabs from "@/components/home/HomeTabs";
 import { GetStaticProps } from "next/types";
 import { ChannelData, ChannelDataWithoutVideos } from "@/types";
 import { collection, getDocs, QuerySnapshot } from "firebase/firestore";
@@ -18,7 +18,7 @@ const Home: React.FC<HomeProps> = (props) => {
     <>
       <Header pageType="HOME" />
       <Main>
-        <ChannelTabs channelDatasWithoutVideos={channelDatasWithoutVideos} />
+        <HomeTabs channelDatasWithoutVideos={channelDatasWithoutVideos} />
       </Main>
       <LoginRequestSnackbar />
     </>

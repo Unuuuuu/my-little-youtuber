@@ -14,6 +14,7 @@ import Button from "@mui/material/Button";
 import { signInWithRedirect } from "firebase/auth";
 import { auth, provider } from "@/utils/firebase";
 import ChannelList from "./ChannelList";
+import Empty from "../common/Empty";
 
 interface TabPanelProps {
   children: ReactNode;
@@ -35,11 +36,11 @@ const TabPanel: React.FC<TabPanelProps> = (props) => {
   );
 };
 
-interface ChannelTabsProps {
+interface HomeTabsProps {
   channelDatasWithoutVideos: ChannelDataWithoutVideos[];
 }
 
-const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
+const HomeTabs: React.FC<HomeTabsProps> = (props) => {
   const { channelDatasWithoutVideos } = props;
   const [value, setValue] = useState(0);
   const { favoriteChannels, isInitialized, isSignedIn } = useAppSelector(
@@ -133,44 +134,23 @@ const ChannelTabs: React.FC<ChannelTabsProps> = (props) => {
               channelDatasWithoutVideos={favoriteChannelDatasWithoutVideos}
             />
           ) : (
-            <Box
-              sx={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
+            <Empty
+              title="로그인 해주세요"
+              subtitle="즐겨찾기를 추가할 수 있습니다"
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 0.5,
-                  mb: 4,
-                  alignItems: "center",
-                }}
-              >
-                <Typography component={"h3"} fontSize={24} fontWeight={500}>
-                  로그인 해주세요
-                </Typography>
-                <Typography fontSize={16} fontWeight={400}>
-                  즐겨찾기를 추가할 수 있습니다
-                </Typography>
-              </Box>
               <Button
                 startIcon={<GoogleIcon sx={{ color: "google" }} />}
                 variant="outlined"
                 onClick={handleLoginButtonClick}
+                sx={{ mt: 2 }}
               >
                 구글 계정으로 로그인
               </Button>
-            </Box>
+            </Empty>
           ))}
       </TabPanel>
     </Box>
   );
 };
 
-export default ChannelTabs;
+export default HomeTabs;

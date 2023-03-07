@@ -1,5 +1,4 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import ListItem from "@mui/material/ListItem";
 import Checkbox from "@mui/material/Checkbox";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
@@ -12,11 +11,9 @@ import { ChannelDataWithoutVideos } from "@/types";
 import { memo, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { userActions } from "@/redux/slices/userSlice";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-import InboxTwoToneIcon from "@mui/icons-material/InboxTwoTone";
 import { FixedSizeList } from "react-window";
 import { loginRequestSnackbarActions } from "@/redux/slices/loginRequestSnackbarSlice";
+import Empty from "../common/Empty";
 
 const debounce = (cb: () => void) => {
   let id: number | null = null;
@@ -76,26 +73,7 @@ const ChannelList = memo<ChannelListProps>((props) => {
   };
 
   if (channelDatasWithoutVideos.length === 0) {
-    return (
-      <Box
-        sx={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 1,
-        }}
-      >
-        <InboxTwoToneIcon
-          sx={{ color: "GrayText", fontSize: 64, opacity: 0.75 }}
-        />
-        <Typography component={"h3"} fontSize={24} color="GrayText">
-          채널이 없습니다
-        </Typography>
-      </Box>
-    );
+    return <Empty title="채널이 없습니다" subtitle="즐겨찾기를 추가해주세요" />;
   }
 
   return (
