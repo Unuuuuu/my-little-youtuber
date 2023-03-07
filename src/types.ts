@@ -18,6 +18,9 @@ export interface ChannelData {
   };
   updateTime: string;
   videos: VideoData[];
+  scores: { userId: string; score: number }[];
 }
 
 export interface ChannelDataWithoutVideos extends Omit<ChannelData, "videos"> {}
+
+export type HigherLowerGameMode = "GENERAL" | "RANK";

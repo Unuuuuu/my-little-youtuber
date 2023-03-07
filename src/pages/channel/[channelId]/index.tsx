@@ -1,17 +1,7 @@
-import HigherLowerGameIcon from "@/components/higher-lower-game/HigherLowerGameIcon";
 import Header from "@/components/layout/Header";
 import Main from "@/components/layout/Main";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
 import { ChannelData, ChannelDataWithoutVideos } from "@/types";
 import { db } from "@/utils/firebase";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import ButtonBase from "@mui/material/ButtonBase";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import { SwitchBaseProps } from "@mui/material/internal/SwitchBase";
-import Typography from "@mui/material/Typography";
 import {
   collection,
   doc,
@@ -20,8 +10,9 @@ import {
   getDocs,
   QuerySnapshot,
 } from "firebase/firestore";
-import Link from "next/link";
 import { GetStaticPaths, GetStaticProps } from "next/types";
+import ChannelTabs from "@/components/channel/ChannelTabs";
+import { ChannelDataWithoutVideosContext } from "@/context/ChannelContext";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const querySnapshot = (await getDocs(
@@ -67,46 +58,14 @@ interface ChannelProps extends ChannelDataWithoutVideos {}
 
 const Channel: React.FC<ChannelProps> = (props) => {
   const channelDataWithoutVideos = props;
-  const { mode } = useAppSelector((state) => ({
-    mode: state.higherLowerGame.mode,
-  }));
-  const dispatch = useAppDispatch();
-
-  const handleCheckboxChange: SwitchBaseProps["onChange"] = (_, checked) => {
-    dispatch(higherLowerGameActions.updateMode(checked));
-  };
 
   return (
-    <>
-      <Header
-        channelDataWithoutVideos={channelDataWithoutVideos}
-        pageType="CHANNEL"
-      />
+    <ChannelDataWithoutVideosContext.Provider value={channelDataWithoutVideos}>
+      <Header pageType="CHANNEL" />
       <Main>
-        <Box sx={{ p: 2 }}>
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={mode === "RANK"}
-                  onChange={handleCheckboxChange}
-                />
-              }
-              label="랭크 게임"
-            />
-            <Link
-              href={`/channel/${channelDataWithoutVideos.id}/higher-lower-game`}
-            >
-              <Button variant="contained">더 많이 더 적게 플레이</Button>
-            </Link>
-            <Box>
-              {channelDataWithoutVideos.updateTime}에 업데이트된 데이터로 오차가
-              있을 수 있습니다.
-            </Box>
-          </Box>
-        </Box>
+        <ChannelTabs />
       </Main>
-    </>
+    </ChannelDataWithoutVideosContext.Provider>
   );
 };
 

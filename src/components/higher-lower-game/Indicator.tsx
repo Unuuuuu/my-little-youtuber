@@ -11,7 +11,6 @@ import { keyframes, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import IconButton from "@mui/material/IconButton";
 import { useEffect } from "react";
-import { red } from "@mui/material/colors";
 import LocalFireDepartmentTwoToneIcon from "@mui/icons-material/LocalFireDepartmentTwoTone";
 
 const scaleUpAndDown = keyframes`
@@ -29,13 +28,16 @@ const scaleUpAndDown = keyframes`
 const Indicator = () => {
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
-  const { status, streak, mode, score, time } = useAppSelector((state) => ({
-    status: state.higherLowerGame.status,
-    streak: state.higherLowerGame.streak,
-    mode: state.higherLowerGame.mode,
-    score: state.higherLowerGame.score,
-    time: state.higherLowerGame.time,
-  }));
+  const { userId, status, streak, mode, score, time } = useAppSelector(
+    (state) => ({
+      userId: state.user.uid,
+      status: state.higherLowerGame.status,
+      streak: state.higherLowerGame.streak,
+      mode: state.higherLowerGame.mode,
+      score: state.higherLowerGame.score,
+      time: state.higherLowerGame.time,
+    })
+  );
   const dispatch = useAppDispatch();
 
   const handleReplayButtonClick = () => {
@@ -52,7 +54,7 @@ const Indicator = () => {
     }
 
     if (time === 0) {
-      dispatch(higherLowerGameActions.fail());
+      dispatch(higherLowerGameActions.fail(userId));
       return;
     }
 
@@ -63,7 +65,7 @@ const Indicator = () => {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [dispatch, mode, status, time]);
+  }, [dispatch, mode, status, time, userId]);
 
   return (
     <Box
@@ -130,7 +132,7 @@ const Indicator = () => {
               },
             ]}
           >
-            <LocalFireDepartmentTwoToneIcon sx={{ color: red["600"] }} />
+            <LocalFireDepartmentTwoToneIcon sx={{ color: "fire" }} />
             <Typography
               component={"span"}
               fontWeight={500}

@@ -6,12 +6,20 @@ import localFont from "@next/font/local";
 import "@/utils/firebase";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { common, deepPurple, green, grey, yellow } from "@mui/material/colors";
+import {
+  common,
+  deepPurple,
+  green,
+  grey,
+  red,
+  yellow,
+} from "@mui/material/colors";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "@/utils/firebase";
 import { userActions } from "@/redux/slices/userSlice";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import LoginRequestSnackbar from "@/components/home/LoginRequestSnackbar";
 
 const pretendard = localFont({
   src: [
@@ -62,6 +70,9 @@ const theme = createTheme({
     primary: {
       main: grey[700],
     },
+    secondary: {
+      main: deepPurple[300],
+    },
     money: {
       main: green["400"],
       contrastText: common.white,
@@ -70,10 +81,15 @@ const theme = createTheme({
     google: "#EA4335",
     youtube: "#FF0000",
     favorite: yellow[800],
-    bronze: "#964B00",
-    silver: "#C0C0C0",
-    gold: "#FFD700",
-    diamond: "#D4F1F4",
+    bronzeTrophy: "#cd7f32",
+    silverTrophy: "#c0c0c0",
+    goldTrophy: "#E1D701",
+    bronzeButton: "#964B00",
+    silverButton: "#C0C0C0",
+    goldButton: "#FFD700",
+    diamondButton: "#D4F1F4",
+    fire: red[600],
+    tabsIndicator: grey["A700"],
   },
   typography: {
     fontFamily: pretendard.style.fontFamily,
@@ -87,10 +103,15 @@ declare module "@mui/material/styles" {
     google: React.CSSProperties["color"];
     youtube: React.CSSProperties["color"];
     favorite: React.CSSProperties["color"];
-    bronze: React.CSSProperties["color"];
-    silver: React.CSSProperties["color"];
-    gold: React.CSSProperties["color"];
-    diamond: React.CSSProperties["color"];
+    bronzeTrophy: React.CSSProperties["color"];
+    silverTrophy: React.CSSProperties["color"];
+    goldTrophy: React.CSSProperties["color"];
+    bronzeButton: React.CSSProperties["color"];
+    silverButton: React.CSSProperties["color"];
+    goldButton: React.CSSProperties["color"];
+    diamondButton: React.CSSProperties["color"];
+    fire: React.CSSProperties["color"];
+    tabsIndicator: React.CSSProperties["color"];
   }
 
   interface PaletteOptions {
@@ -99,10 +120,15 @@ declare module "@mui/material/styles" {
     google: React.CSSProperties["color"];
     youtube: React.CSSProperties["color"];
     favorite: React.CSSProperties["color"];
-    bronze: React.CSSProperties["color"];
-    silver: React.CSSProperties["color"];
-    gold: React.CSSProperties["color"];
-    diamond: React.CSSProperties["color"];
+    bronzeTrophy: React.CSSProperties["color"];
+    silverTrophy: React.CSSProperties["color"];
+    goldTrophy: React.CSSProperties["color"];
+    bronzeButton: React.CSSProperties["color"];
+    silverButton: React.CSSProperties["color"];
+    goldButton: React.CSSProperties["color"];
+    diamondButton: React.CSSProperties["color"];
+    fire: React.CSSProperties["color"];
+    tabsIndicator: React.CSSProperties["color"];
   }
 }
 
@@ -117,7 +143,7 @@ export default function App({ Component, pageProps }: AppProps) {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         // User is signed in
-        const { photoURL, uid } = user;
+        const { photoURL, uid, displayName, email } = user;
         const docRef = doc(db, "users", uid);
         const docSnap = await getDoc(docRef);
 
@@ -125,8 +151,10 @@ export default function App({ Component, pageProps }: AppProps) {
         if (docSnap.exists()) {
           favoriteChannels = docSnap.data().favoriteChannels;
         } else {
-          await setDoc(docRef, {
+          setDoc(docRef, {
             id: uid,
+            displayName,
+            email,
             favoriteChannels: [],
           });
           favoriteChannels = [];
@@ -146,6 +174,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <CssBaseline />
         <Global styles={globalCss} />
         <Component {...pageProps} />
+        <LoginRequestSnackbar />
       </Provider>
     </ThemeProvider>
   );

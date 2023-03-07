@@ -8,7 +8,7 @@ const HigherLowerGameIcon = () => {
     <Box sx={{ display: "flex" }}>
       <ThumbUpRoundedIcon
         sx={{
-          color: red[600],
+          color: red["500"],
           fontSize: 16,
           position: "relative",
           top: -4,
@@ -17,7 +17,7 @@ const HigherLowerGameIcon = () => {
       />
       <ThumbDownRoundedIcon
         sx={{
-          color: blue[600],
+          color: blue["500"],
           fontSize: 16,
           position: "relative",
           bottom: -4,

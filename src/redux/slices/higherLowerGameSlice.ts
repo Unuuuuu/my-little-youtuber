@@ -1,6 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { VideoData } from "@/types";
+import { ChannelData, HigherLowerGameMode, VideoData } from "@/types";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "@/utils/firebase";
+
+const updateScores = (channelId: string, userId: string, score: number) => {
+  const docRef = doc(db, "channels", channelId);
+  getDoc(docRef).then((docSnapshot) => {
+    const { scores } = docSnapshot.data() as ChannelData;
+    const targetIndex = scores.findIndex((value) => value.score < score);
+    let newScores: ChannelData["scores"];
+    if (targetIndex === -1) {
+      newScores = [...scores, { userId, score }];
+    } else {
+      newScores = [
+        ...scores.slice(0, targetIndex),
+        { userId, score },
+        ...scores.slice(targetIndex, scores.length),
+      ];
+    }
+    updateDoc(docRef, {
+      scores: newScores,
+    });
+  });
+};
 
 const getRamdomIndexOfArray = (lengthOfArray: number) => {
   return Math.floor(Math.random() * lengthOfArray);
@@ -52,13 +75,12 @@ const calculateVideos = (
 
 type Status = "IDLE" | "PENDING" | "FAILED" | "SUCCEEDED";
 
-type Mode = "GENERAL" | "RANK";
-
 const TIME = 10;
 
 interface HigherLowerGameState {
+  channelId?: string;
   isInitialized: boolean;
-  mode: Mode;
+  mode: HigherLowerGameMode;
   status: Status;
   originalVideos?: VideoData[];
   manipulatedVideos?: VideoData[];
@@ -95,14 +117,18 @@ const higherLowerGameSlice = createSlice({
   name: "higherLowerGame",
   initialState,
   reducers: {
-    initialize: (state, action: PayloadAction<VideoData[]>) => {
-      const videos = action.payload;
+    initialize: (
+      state,
+      action: PayloadAction<{ channelId: string; videos: VideoData[] }>
+    ) => {
+      const { channelId, videos } = action.payload;
       const {
         manipulatedVideos: newManipulatedVideos,
         randomVideos: newRandomVideos,
         higherRandomVideo: newHigherRandomVideo,
       } = calculateVideos(videos);
 
+      state.channelId = channelId;
       state.isInitialized = true;
       state.status = "IDLE";
       state.originalVideos = videos;
@@ -121,6 +147,7 @@ const higherLowerGameSlice = createSlice({
       state.time = TIME;
     },
     finalize: (state) => {
+      state.channelId = undefined;
       state.isInitialized = false;
       state.status = "IDLE";
       state.originalVideos = undefined;
@@ -146,12 +173,15 @@ const higherLowerGameSlice = createSlice({
       state.selectedVideoId = action.payload;
       state.status = "PENDING";
     },
-    compare: (state) => {
+    compare: (state, action: PayloadAction<string | undefined>) => {
+      const userId = action.payload;
+      const { score, channelId } = state;
       if (
         state.isInitialized === false ||
         state.status !== "PENDING" ||
         state.selectedVideoId === null ||
-        state.higherRandomVideo === undefined
+        state.higherRandomVideo === undefined ||
+        channelId === undefined
       ) {
         return;
       }
@@ -161,10 +191,14 @@ const higherLowerGameSlice = createSlice({
         state.streak++;
 
         if (state.mode === "RANK") {
-          state.score = state.score + state.time;
+          state.score = score + state.time;
         }
       } else {
         state.status = "FAILED";
+
+        if (state.mode === "RANK" && score > 0 && userId !== undefined) {
+          updateScores(channelId, userId, score);
+        }
       }
     },
     reset: (state) => {
@@ -243,22 +277,29 @@ const higherLowerGameSlice = createSlice({
     },
 
     // rank game
-    updateMode: (state, action: PayloadAction<boolean>) => {
-      if (action.payload) {
-        state.mode = "RANK";
-      } else {
-        state.mode = "GENERAL";
-      }
+    updateMode: (state, action: PayloadAction<HigherLowerGameMode>) => {
+      state.mode = action.payload;
     },
     updateTime: (state) => {
-      state.time--;
-    },
-    fail: (state) => {
       if (state.isInitialized === false) {
         return;
       }
 
+      state.time--;
+    },
+    fail: (state, action: PayloadAction<string | undefined>) => {
+      const userId = action.payload;
+      const { score, channelId } = state;
+
+      if (state.isInitialized === false || channelId === undefined) {
+        return;
+      }
+
       state.status = "FAILED";
+
+      if (state.mode === "RANK" && score > 0 && userId !== undefined) {
+        updateScores(channelId, userId, score);
+      }
     },
   },
 });

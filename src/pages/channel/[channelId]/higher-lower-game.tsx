@@ -3,7 +3,7 @@ import Indicator from "@/components/higher-lower-game/Indicator";
 import YouTubeModal from "@/components/higher-lower-game/YouTubeModal";
 import Header from "@/components/layout/Header";
 import Main from "@/components/layout/Main";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
 import { ChannelData } from "@/types";
 import { db } from "@/utils/firebase";
@@ -17,6 +17,10 @@ import {
 } from "firebase/firestore";
 import { GetStaticPaths, GetStaticProps } from "next/types";
 import React, { useEffect } from "react";
+import SideEffect from "@/components/higher-lower-game/SideEffect";
+import { ChannelDataWithoutVideosContext } from "@/context/ChannelContext";
+import { useRouter } from "next/router";
+import { loginRequestSnackbarActions } from "@/redux/slices/loginRequestSnackbarSlice";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const querySnapshot = (await getDocs(
@@ -61,28 +65,43 @@ interface HigherLowerGameProps extends ChannelData {}
 const HigherLowerGame: React.FC<HigherLowerGameProps> = (props) => {
   const channelData = props;
   const { videos, ...channelDataWithoutVideos } = channelData;
+  const { isSignedIn, mode } = useAppSelector((state) => ({
+    isSignedIn: state.user.isSignedIn,
+    mode: state.higherLowerGame.mode,
+  }));
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   useEffect(() => {
-    dispatch(higherLowerGameActions.initialize(videos));
+    if (!isSignedIn && mode === "RANK") {
+      router.push(`/channel/${channelData.id}`);
+      dispatch(loginRequestSnackbarActions.open());
+      return;
+    }
+
+    dispatch(
+      higherLowerGameActions.initialize({ channelId: channelData.id, videos })
+    );
 
     return () => {
       dispatch(higherLowerGameActions.finalize());
     };
-  }, [dispatch, videos]);
+  }, [channelData.id, dispatch, isSignedIn, mode, router, videos]);
+
+  if (!isSignedIn && mode === "RANK") {
+    return null;
+  }
 
   return (
-    <>
-      <Header
-        channelDataWithoutVideos={channelDataWithoutVideos}
-        pageType="GAME"
-      />
+    <ChannelDataWithoutVideosContext.Provider value={channelDataWithoutVideos}>
+      <Header pageType="GAME" />
       <Main>
         <Interface />
         <Indicator />
         <YouTubeModal />
+        <SideEffect />
       </Main>
-    </>
+    </ChannelDataWithoutVideosContext.Provider>
   );
 };
 

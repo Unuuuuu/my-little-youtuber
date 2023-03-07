@@ -1,14 +1,12 @@
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
+import Tabs, { TabsProps } from "@mui/material/Tabs";
 import { ReactNode, useMemo, useState } from "react";
 import SubscriptionsRoundedIcon from "@mui/icons-material/SubscriptionsRounded";
-import { grey } from "@mui/material/colors";
 import { ChannelDataWithoutVideos } from "@/types";
 import { useAppSelector } from "@/redux/hooks";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
 import GoogleIcon from "@mui/icons-material/Google";
 import Button from "@mui/material/Button";
 import { signInWithRedirect } from "firebase/auth";
@@ -51,7 +49,7 @@ const HomeTabs: React.FC<HomeTabsProps> = (props) => {
     })
   );
 
-  const handleTabsChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabsChange: TabsProps["onChange"] = (_, newValue) => {
     setValue(newValue);
   };
 
@@ -85,7 +83,7 @@ const HomeTabs: React.FC<HomeTabsProps> = (props) => {
           position: "relative",
           "& .MuiTabs-indicator": {
             height: 3,
-            backgroundColor: grey["A700"],
+            backgroundColor: "tabsIndicator",
           },
         }}
       >

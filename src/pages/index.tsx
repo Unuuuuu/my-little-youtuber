@@ -5,7 +5,6 @@ import { collection, getDocs, QuerySnapshot } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import Header from "@/components/layout/Header";
 import Main from "@/components/layout/Main";
-import LoginRequestSnackbar from "@/components/home/LoginRequestSnackbar";
 
 interface HomeProps {
   channelDatasWithoutVideos: ChannelDataWithoutVideos[];
@@ -20,7 +19,6 @@ const Home: React.FC<HomeProps> = (props) => {
       <Main>
         <HomeTabs channelDatasWithoutVideos={channelDatasWithoutVideos} />
       </Main>
-      <LoginRequestSnackbar />
     </>
   );
 };

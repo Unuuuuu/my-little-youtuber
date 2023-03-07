@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { grey, pink } from "@mui/material/colors";
-import { ChannelDataWithoutVideos } from "@/types";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -19,6 +18,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
 import GoogleIcon from "@mui/icons-material/Google";
+import { useChannelDataWithoutVideosContext } from "@/context/ChannelContext";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const Seperator = () => {
   return (
@@ -33,12 +34,11 @@ const Seperator = () => {
 };
 
 interface HeaderProps {
-  channelDataWithoutVideos?: ChannelDataWithoutVideos;
   pageType?: "HOME" | "CHANNEL" | "GAME";
 }
 
 const Header: React.FC<HeaderProps> = (props) => {
-  const { channelDataWithoutVideos, pageType } = props;
+  const { pageType } = props;
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
   const { isInitialized, isSignedIn, photoURL } = useAppSelector((state) => ({
@@ -48,6 +48,7 @@ const Header: React.FC<HeaderProps> = (props) => {
   }));
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isOpen = Boolean(anchorEl);
+  const channelDataWithoutVideos = useChannelDataWithoutVideosContext();
 
   const handleLoginButtonClick = () => {
     signInWithRedirect(auth, provider);
@@ -66,6 +67,7 @@ const Header: React.FC<HeaderProps> = (props) => {
     <Box
       component={"header"}
       sx={{
+        position: "relative",
         width: "100%",
         height: "56px",
         display: "flex",
@@ -107,7 +109,7 @@ const Header: React.FC<HeaderProps> = (props) => {
             </Box>
           )}
         </Box>
-        {channelDataWithoutVideos !== undefined && (
+        {channelDataWithoutVideos !== null && (
           <>
             <Seperator />
             <Box
@@ -251,6 +253,9 @@ const Header: React.FC<HeaderProps> = (props) => {
             <div></div>
           )}
         </Fade>
+      </Box>
+      <Box sx={{ position: "absolute", top: 0, left: 0, right: 0 }}>
+        {!isInitialized && <LinearProgress color="secondary" />}
       </Box>
     </Box>
   );
