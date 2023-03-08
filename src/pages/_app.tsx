@@ -20,6 +20,7 @@ import { auth, db } from "@/utils/firebase";
 import { userActions } from "@/redux/slices/userSlice";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import LoginRequestSnackbar from "@/components/home/LoginRequestSnackbar";
+import Script from "next/script";
 
 const pretendard = localFont({
   src: [
@@ -169,13 +170,19 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <CssBaseline />
-        <Global styles={globalCss} />
-        <Component {...pageProps} />
-        <LoginRequestSnackbar />
-      </Provider>
-    </ThemeProvider>
+    <>
+      <Script
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4440044743501222"
+        crossOrigin="anonymous"
+      />
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <CssBaseline />
+          <Global styles={globalCss} />
+          <Component {...pageProps} />
+          <LoginRequestSnackbar />
+        </Provider>
+      </ThemeProvider>
+    </>
   );
 }
