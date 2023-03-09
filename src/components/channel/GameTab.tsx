@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
 import Box from "@mui/material/Box";
-import { useChannelDataWithoutVideosContext } from "@/context/ChannelContext";
+import { useChannelDataWithoutVideosContext } from "@/context/ChannelDataWithoutVideosContext";
 import Button from "@mui/material/Button";
 import { useRouter } from "next/router";
 import { loginRequestSnackbarActions } from "@/redux/slices/loginRequestSnackbarSlice";
@@ -10,7 +10,6 @@ import ToggleButtonGroup, {
 } from "@mui/material/ToggleButtonGroup";
 import ToggleButton from "@mui/material/ToggleButton";
 import { useEffect } from "react";
-import HigherLowerGameIcon from "../higher-lower-game/HigherLowerGameIcon";
 import Typography from "@mui/material/Typography";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -19,6 +18,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
+import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 
 function createData(name: string, general: string, rank: string) {
   return { name, general, rank };
@@ -144,6 +144,7 @@ const GameTab = () => {
         onClick={handlePlayButtonClick}
         fullWidth
         size="large"
+        startIcon={<PlayArrowRoundedIcon />}
       >
         플레이
       </Button>

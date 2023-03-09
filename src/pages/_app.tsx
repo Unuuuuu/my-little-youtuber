@@ -84,7 +84,7 @@ const theme = createTheme({
     favorite: yellow[800],
     bronzeTrophy: "#cd7f32",
     silverTrophy: "#c0c0c0",
-    goldTrophy: "#E1D701",
+    goldTrophy: "#ffd700",
     bronzeButton: "#964B00",
     silverButton: "#C0C0C0",
     goldButton: "#FFD700",

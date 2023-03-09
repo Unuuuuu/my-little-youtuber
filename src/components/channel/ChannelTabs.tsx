@@ -1,26 +1,29 @@
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs, { TabsProps } from "@mui/material/Tabs";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import EmojiEventsRoundedIcon from "@mui/icons-material/EmojiEventsRounded";
 import RankingTab from "./RankingTab";
 import { teal } from "@mui/material/colors";
 import GameTab from "./GameTab";
 import SportsEsportsRoundedIcon from "@mui/icons-material/SportsEsportsRounded";
+import { useRouter } from "next/router";
+
+type Value = "game" | "ranking";
 
 interface TabPanelProps {
   children: ReactNode;
-  index: number;
-  value: number;
+  value: Value;
+  selectedValue: Value;
 }
 
 const TabPanel: React.FC<TabPanelProps> = (props) => {
-  const { children, value, index } = props;
+  const { children, value, selectedValue } = props;
 
   return (
     <Box
       role="tabpanel"
-      hidden={value !== index}
+      hidden={value !== selectedValue}
       sx={{ flexGrow: 1, overflowY: "scroll" }}
     >
       {children}
@@ -29,10 +32,24 @@ const TabPanel: React.FC<TabPanelProps> = (props) => {
 };
 
 const ChannelTabs = () => {
-  const [value, setValue] = useState(0);
+  const router = useRouter();
+  const valueFromQuery = router.query.tab as Value | undefined;
+  const [selectedValue, setSelectedValue] = useState<Value>(
+    valueFromQuery ?? "game"
+  );
+
+  useEffect(() => {
+    setSelectedValue(valueFromQuery ?? "game");
+  }, [valueFromQuery]);
 
   const handleTabsChange: TabsProps["onChange"] = (_, newValue) => {
-    setValue(newValue);
+    setSelectedValue(newValue);
+    router.push({
+      pathname: `/channel/${router.query.channelId}`,
+      query: {
+        tab: newValue,
+      },
+    });
   };
 
   return (
@@ -45,7 +62,7 @@ const ChannelTabs = () => {
       }}
     >
       <Tabs
-        value={value}
+        value={selectedValue}
         onChange={handleTabsChange}
         textColor="inherit"
         sx={{
@@ -58,12 +75,14 @@ const ChannelTabs = () => {
         }}
       >
         <Tab
+          value={"game"}
           icon={<SportsEsportsRoundedIcon sx={{ color: teal["300"] }} />}
           iconPosition="start"
           label="게임"
           sx={{ width: 120 }}
         />
         <Tab
+          value={"ranking"}
           icon={
             <EmojiEventsRoundedIcon
               sx={{
@@ -85,10 +104,10 @@ const ChannelTabs = () => {
           }}
         />
       </Tabs>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={"game"} selectedValue={selectedValue}>
         <GameTab />
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel value={"ranking"} selectedValue={selectedValue}>
         <RankingTab />
       </TabPanel>
     </Box>

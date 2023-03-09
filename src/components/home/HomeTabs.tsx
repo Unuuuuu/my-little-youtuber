@@ -1,32 +1,28 @@
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs, { TabsProps } from "@mui/material/Tabs";
-import { ReactNode, useMemo, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import SubscriptionsRoundedIcon from "@mui/icons-material/SubscriptionsRounded";
-import { ChannelDataWithoutVideos } from "@/types";
-import { useAppSelector } from "@/redux/hooks";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
-import CircularProgress from "@mui/material/CircularProgress";
-import GoogleIcon from "@mui/icons-material/Google";
-import Button from "@mui/material/Button";
-import { signInWithRedirect } from "firebase/auth";
-import { auth, provider } from "@/utils/firebase";
-import ChannelList from "./ChannelList";
-import Empty from "../common/Empty";
+import { useRouter } from "next/router";
+import AllTab from "./AllTab";
+import FavoriteTab from "./FavoriteTab";
+
+type Value = "all" | "favorite";
 
 interface TabPanelProps {
   children: ReactNode;
-  index: number;
-  value: number;
+  value: Value;
+  selectedValue: Value;
 }
 
 const TabPanel: React.FC<TabPanelProps> = (props) => {
-  const { children, value, index } = props;
+  const { children, value, selectedValue } = props;
 
   return (
     <Box
       role="tabpanel"
-      hidden={value !== index}
+      hidden={value !== selectedValue}
       sx={{ flexGrow: 1, overflowY: "scroll" }}
     >
       {children}
@@ -34,36 +30,26 @@ const TabPanel: React.FC<TabPanelProps> = (props) => {
   );
 };
 
-interface HomeTabsProps {
-  channelDatasWithoutVideos: ChannelDataWithoutVideos[];
-}
-
-const HomeTabs: React.FC<HomeTabsProps> = (props) => {
-  const { channelDatasWithoutVideos } = props;
-  const [value, setValue] = useState(0);
-  const { favoriteChannels, isInitialized, isSignedIn } = useAppSelector(
-    (state) => ({
-      favoriteChannels: state.user.favoriteChannels,
-      isInitialized: state.user.isInitialized,
-      isSignedIn: state.user.isSignedIn,
-    })
+const HomeTabs = () => {
+  const router = useRouter();
+  const valueFromQuery = router.query.tab as Value | undefined;
+  const [selectedValue, setSelectedValue] = useState<Value>(
+    valueFromQuery ?? "all"
   );
+
+  useEffect(() => {
+    setSelectedValue(valueFromQuery ?? "all");
+  }, [valueFromQuery]);
 
   const handleTabsChange: TabsProps["onChange"] = (_, newValue) => {
-    setValue(newValue);
+    setSelectedValue(newValue);
+    router.push({
+      pathname: router.pathname,
+      query: {
+        tab: newValue,
+      },
+    });
   };
-
-  const handleLoginButtonClick = () => {
-    signInWithRedirect(auth, provider);
-  };
-
-  const favoriteChannelDatasWithoutVideos = useMemo(
-    () =>
-      channelDatasWithoutVideos.filter((channelDataWithoutVidoes) =>
-        favoriteChannels.includes(channelDataWithoutVidoes.id)
-      ),
-    [channelDatasWithoutVideos, favoriteChannels]
-  );
 
   return (
     <Box
@@ -75,7 +61,7 @@ const HomeTabs: React.FC<HomeTabsProps> = (props) => {
       }}
     >
       <Tabs
-        value={value}
+        value={selectedValue}
         onChange={handleTabsChange}
         textColor="inherit"
         sx={{
@@ -88,12 +74,14 @@ const HomeTabs: React.FC<HomeTabsProps> = (props) => {
         }}
       >
         <Tab
+          value={"all"}
           icon={<SubscriptionsRoundedIcon sx={{ color: "youtube" }} />}
           iconPosition="start"
           label="모두"
           sx={{ width: 120 }}
         />
         <Tab
+          value={"favorite"}
           icon={<StarRoundedIcon sx={{ color: "favorite" }} />}
           iconPosition="start"
           label="즐겨찾기"
@@ -109,43 +97,11 @@ const HomeTabs: React.FC<HomeTabsProps> = (props) => {
           }}
         />
       </Tabs>
-      <TabPanel value={value} index={0}>
-        <ChannelList channelDatasWithoutVideos={channelDatasWithoutVideos} />
+      <TabPanel value={"all"} selectedValue={selectedValue}>
+        <AllTab />
       </TabPanel>
-      <TabPanel value={value} index={1}>
-        {!isInitialized && (
-          <Box
-            sx={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        )}
-        {isInitialized &&
-          (isSignedIn ? (
-            <ChannelList
-              channelDatasWithoutVideos={favoriteChannelDatasWithoutVideos}
-            />
-          ) : (
-            <Empty
-              title="로그인 해주세요"
-              subtitle="즐겨찾기를 추가할 수 있습니다"
-            >
-              <Button
-                startIcon={<GoogleIcon sx={{ color: "google" }} />}
-                variant="outlined"
-                onClick={handleLoginButtonClick}
-                sx={{ mt: 2 }}
-              >
-                구글 계정으로 로그인
-              </Button>
-            </Empty>
-          ))}
+      <TabPanel value={"favorite"} selectedValue={selectedValue}>
+        <FavoriteTab />
       </TabPanel>
     </Box>
   );

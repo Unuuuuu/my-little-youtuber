@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { GetStaticPaths, GetStaticProps } from "next/types";
 import ChannelTabs from "@/components/channel/ChannelTabs";
-import { ChannelDataWithoutVideosContext } from "@/context/ChannelContext";
+import { ChannelDataWithoutVideosContext } from "@/context/ChannelDataWithoutVideosContext";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const querySnapshot = (await getDocs(

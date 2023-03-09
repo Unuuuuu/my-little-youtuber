@@ -18,7 +18,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
 import GoogleIcon from "@mui/icons-material/Google";
-import { useChannelDataWithoutVideosContext } from "@/context/ChannelContext";
+import { useChannelDataWithoutVideosContext } from "@/context/ChannelDataWithoutVideosContext";
 import LinearProgress from "@mui/material/LinearProgress";
 
 const Seperator = () => {
@@ -26,7 +26,7 @@ const Seperator = () => {
     <Typography
       fontSize={24}
       fontWeight={500}
-      sx={{ color: grey["A400"], flexShrink: 0 }}
+      sx={{ color: grey["A200"], flexShrink: 0 }}
     >
       /
     </Typography>

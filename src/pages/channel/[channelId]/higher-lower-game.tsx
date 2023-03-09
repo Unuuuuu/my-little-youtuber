@@ -18,7 +18,7 @@ import {
 import { GetStaticPaths, GetStaticProps } from "next/types";
 import React, { useEffect } from "react";
 import SideEffect from "@/components/higher-lower-game/SideEffect";
-import { ChannelDataWithoutVideosContext } from "@/context/ChannelContext";
+import { ChannelDataWithoutVideosContext } from "@/context/ChannelDataWithoutVideosContext";
 import { useRouter } from "next/router";
 import { loginRequestSnackbarActions } from "@/redux/slices/loginRequestSnackbarSlice";
 
