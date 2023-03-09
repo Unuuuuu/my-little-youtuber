@@ -2,7 +2,7 @@ import { css, Global } from "@emotion/react";
 import type { AppProps } from "next/app";
 import { store } from "@/redux/store";
 import { Provider } from "react-redux";
-import localFont from "@next/font/local";
+import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 import "@/utils/firebase";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -22,31 +22,6 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import LoginRequestSnackbar from "@/components/common/LoginRequestSnackbar";
 import Script from "next/script";
 import KakaotalkGuideModal from "@/components/common/KakaotalkGuideModal";
-
-const pretendard = localFont({
-  src: [
-    {
-      path: "./Pretendard-Light.subset.woff2",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "./Pretendard-Regular.subset.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "./Pretendard-Medium.subset.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "./Pretendard-Bold.subset.woff2",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-});
 
 const globalCss = css({
   "#__next": {
@@ -94,7 +69,23 @@ const theme = createTheme({
     tabsIndicator: grey["A700"],
   },
   typography: {
-    fontFamily: pretendard.style.fontFamily,
+    fontFamily: [
+      "Pretendard Variable",
+      "Pretendard",
+      "-apple-system",
+      "BlinkMacSystemFont",
+      "system-ui",
+      "Roboto",
+      "Helvetica Neue",
+      "Segoe UI",
+      "Apple SD Gothic Neo",
+      "Noto Sans KR",
+      "Malgun Gothic",
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      "Segoe UI Symbol",
+      "sans-serif",
+    ].join(","),
   },
 });
 
