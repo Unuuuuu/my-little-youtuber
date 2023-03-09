@@ -19,8 +19,9 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "@/utils/firebase";
 import { userActions } from "@/redux/slices/userSlice";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import LoginRequestSnackbar from "@/components/home/LoginRequestSnackbar";
+import LoginRequestSnackbar from "@/components/common/LoginRequestSnackbar";
 import Script from "next/script";
+import KakaotalkGuideModal from "@/components/common/KakaotalkGuideModal";
 
 const pretendard = localFont({
   src: [
@@ -181,6 +182,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Global styles={globalCss} />
           <Component {...pageProps} />
           <LoginRequestSnackbar />
+          <KakaotalkGuideModal />
         </Provider>
       </ThemeProvider>
     </>

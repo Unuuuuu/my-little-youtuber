@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import higherLowerGameSlice from "./slices/higherLowerGameSlice";
 import loginRequestSnackbarSlice from "./slices/loginRequestSnackbarSlice";
+import kakaotalkGuideModalSlice from "./slices/kakaotalkGuideModalSlice";
 import userSlice from "./slices/userSlice";
 
 export const store = configureStore({
@@ -8,6 +9,7 @@ export const store = configureStore({
     higherLowerGame: higherLowerGameSlice.reducer,
     user: userSlice.reducer,
     loginRequestSnackbar: loginRequestSnackbarSlice.reducer,
+    kakaotalkGuideModal: kakaotalkGuideModalSlice.reducer,
   },
 });
 

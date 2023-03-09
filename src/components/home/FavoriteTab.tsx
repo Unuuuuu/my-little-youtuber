@@ -1,5 +1,4 @@
-import { ChannelDataWithoutVideos } from "@/types";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import CircularProgress from "@mui/material/CircularProgress";
 import GoogleIcon from "@mui/icons-material/Google";
 import Button from "@mui/material/Button";
@@ -10,6 +9,7 @@ import Empty from "../common/Empty";
 import { useMemo } from "react";
 import Box from "@mui/material/Box";
 import { useChannelDatasWithoutVideosContext } from "@/context/ChannelDatasWithoutVideosContext";
+import { kakaotalkGuideModalActions } from "@/redux/slices/kakaotalkGuideModalSlice";
 
 const FavoriteTab = () => {
   const { favoriteChannels, isInitialized, isSignedIn } = useAppSelector(
@@ -20,8 +20,14 @@ const FavoriteTab = () => {
     })
   );
   const channelDatasWithoutVideos = useChannelDatasWithoutVideosContext();
+  const dispatch = useAppDispatch();
 
   const handleLoginButtonClick = () => {
+    if (navigator.userAgent.includes("KAKAOTALK")) {
+      dispatch(kakaotalkGuideModalActions.open());
+      return;
+    }
+
     signInWithRedirect(auth, provider);
   };
 

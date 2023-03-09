@@ -6,7 +6,7 @@ import { grey, pink } from "@mui/material/colors";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import HigherLowerGameIcon from "../higher-lower-game/HigherLowerGameIcon";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { signInWithRedirect, signOut } from "firebase/auth";
@@ -20,6 +20,7 @@ import Fade from "@mui/material/Fade";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useChannelDataWithoutVideosContext } from "@/context/ChannelDataWithoutVideosContext";
 import LinearProgress from "@mui/material/LinearProgress";
+import { kakaotalkGuideModalActions } from "@/redux/slices/kakaotalkGuideModalSlice";
 
 const Seperator = () => {
   return (
@@ -49,8 +50,14 @@ const Header: React.FC<HeaderProps> = (props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isOpen = Boolean(anchorEl);
   const channelDataWithoutVideos = useChannelDataWithoutVideosContext();
+  const dispatch = useAppDispatch();
 
   const handleLoginButtonClick = () => {
+    if (navigator.userAgent.includes("KAKAOTALK")) {
+      dispatch(kakaotalkGuideModalActions.open());
+      return;
+    }
+
     signInWithRedirect(auth, provider);
   };
   const handleProfileClick: MouseEventHandler<HTMLElement> = (event) => {
