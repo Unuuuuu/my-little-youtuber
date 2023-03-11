@@ -1,29 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { ChannelData, HigherLowerGameMode, VideoData } from "@/types";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "@/utils/firebase";
-
-const updateScores = (channelId: string, userId: string, score: number) => {
-  const docRef = doc(db, "channels", channelId);
-  getDoc(docRef).then((docSnapshot) => {
-    const { scores } = docSnapshot.data() as ChannelData;
-    const targetIndex = scores.findIndex((value) => value.score < score);
-    let newScores: ChannelData["scores"];
-    if (targetIndex === -1) {
-      newScores = [...scores, { userId, score }];
-    } else {
-      newScores = [
-        ...scores.slice(0, targetIndex),
-        { userId, score },
-        ...scores.slice(targetIndex, scores.length),
-      ];
-    }
-    updateDoc(docRef, {
-      scores: newScores,
-    });
-  });
-};
+import { HigherLowerGameMode, VideoData } from "@/types";
 
 const getRamdomIndexOfArray = (lengthOfArray: number) => {
   return Math.floor(Math.random() * lengthOfArray);
@@ -96,6 +73,7 @@ interface HigherLowerGameState {
   // rank game
   score: number;
   time: number;
+  isResult: boolean;
 }
 
 const initialState: HigherLowerGameState = {
@@ -111,6 +89,7 @@ const initialState: HigherLowerGameState = {
   // rank game
   score: 0,
   time: TIME,
+  isResult: false,
 };
 
 const higherLowerGameSlice = createSlice({
@@ -145,6 +124,7 @@ const higherLowerGameSlice = createSlice({
       // rank game
       state.score = 0;
       state.time = TIME;
+      state.isResult = false;
     },
     finalize: (state) => {
       state.channelId = undefined;
@@ -164,6 +144,7 @@ const higherLowerGameSlice = createSlice({
       // rank game
       state.score = 0;
       state.time = TIME;
+      state.isResult = false;
     },
     click: (state, action: PayloadAction<string>) => {
       if (state.isInitialized === false || state.status !== "IDLE") {
@@ -197,7 +178,7 @@ const higherLowerGameSlice = createSlice({
         state.status = "FAILED";
 
         if (state.mode === "RANK" && score > 0 && userId !== undefined) {
-          updateScores(channelId, userId, score);
+          state.isResult = true;
         }
       }
     },
@@ -223,6 +204,7 @@ const higherLowerGameSlice = createSlice({
       if (state.mode === "RANK") {
         state.score = 0;
         state.time = TIME;
+        state.isResult = false;
       }
     },
     next: (state) => {
@@ -298,7 +280,7 @@ const higherLowerGameSlice = createSlice({
       state.status = "FAILED";
 
       if (state.mode === "RANK" && score > 0 && userId !== undefined) {
-        updateScores(channelId, userId, score);
+        state.isResult = true;
       }
     },
   },

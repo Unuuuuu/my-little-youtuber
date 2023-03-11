@@ -10,8 +10,48 @@ import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
 import { keyframes, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import IconButton from "@mui/material/IconButton";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import LocalFireDepartmentTwoToneIcon from "@mui/icons-material/LocalFireDepartmentTwoTone";
+import Fade from "@mui/material/Fade";
+import RankingListItem from "../common/RankingListItem";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "@/utils/firebase";
+import { ChannelData, ScoreData } from "@/types";
+import { getNicknameFromUserId } from "@/utils/function";
+import CircularProgress from "@mui/material/CircularProgress";
+import ButtonBase from "@mui/material/ButtonBase";
+import Link from "next/link";
+
+const getNewScoreDatas = (
+  prevScoreDatas: ScoreData[],
+  userId: string,
+  score: number
+) => {
+  let targetIndex = prevScoreDatas.findIndex((value) => value.score < score);
+  let newScoreDatas: ScoreData[];
+
+  if (targetIndex === -1) {
+    newScoreDatas = [
+      ...prevScoreDatas,
+      {
+        userId,
+        score,
+      },
+    ];
+    targetIndex = newScoreDatas.length - 1;
+  } else {
+    newScoreDatas = [
+      ...prevScoreDatas.slice(0, targetIndex),
+      { userId, score },
+      ...prevScoreDatas.slice(targetIndex),
+    ];
+  }
+
+  return {
+    newScoreDatas,
+    targetIndex,
+  };
+};
 
 const scaleUpAndDown = keyframes`
   0%{
@@ -28,17 +68,26 @@ const scaleUpAndDown = keyframes`
 const Indicator = () => {
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
-  const { userId, status, streak, mode, score, time } = useAppSelector(
-    (state) => ({
+  const { userId, channelId, status, streak, mode, score, time, isResult } =
+    useAppSelector((state) => ({
       userId: state.user.uid,
+      channelId: state.higherLowerGame.channelId,
       status: state.higherLowerGame.status,
       streak: state.higherLowerGame.streak,
       mode: state.higherLowerGame.mode,
       score: state.higherLowerGame.score,
       time: state.higherLowerGame.time,
-    })
-  );
+      isResult: state.higherLowerGame.isResult,
+    }));
   const dispatch = useAppDispatch();
+  const [state, setState] = useState<{
+    isInitialized: boolean;
+    rank?: number;
+    nickname?: string;
+    score?: number;
+  }>({
+    isInitialized: false,
+  });
 
   const handleReplayButtonClick = () => {
     dispatch(higherLowerGameActions.reset());
@@ -66,6 +115,80 @@ const Indicator = () => {
       clearTimeout(timeoutId);
     };
   }, [dispatch, mode, status, time, userId]);
+
+  useEffect(() => {
+    if (channelId === undefined || userId === undefined) {
+      return;
+    }
+
+    if (isResult) {
+      const channelDocRef = doc(db, "channels", channelId);
+      getDoc(channelDocRef).then(async (channelDocSnapshot) => {
+        const { scores: scoreDatas } = channelDocSnapshot.data() as ChannelData;
+        const nickname = await getNicknameFromUserId(userId);
+        const foundIndex = scoreDatas.findIndex(
+          (value) => value.userId === userId
+        );
+
+        if (foundIndex === -1) {
+          // 없는 경우
+          const { newScoreDatas, targetIndex } = getNewScoreDatas(
+            scoreDatas,
+            userId,
+            score
+          );
+
+          updateDoc(channelDocRef, {
+            scores: newScoreDatas,
+          });
+
+          setState({
+            isInitialized: true,
+            nickname,
+            rank: targetIndex + 1,
+            score,
+          });
+        } else {
+          // 있는 경우
+          if (scoreDatas[foundIndex].score < score) {
+            // 이번에 받은 점수가 더 높은 경우
+            const filteredScoreDatas = [
+              ...scoreDatas.slice(0, foundIndex),
+              ...scoreDatas.slice(foundIndex + 1),
+            ];
+            const { newScoreDatas, targetIndex } = getNewScoreDatas(
+              filteredScoreDatas,
+              userId,
+              score
+            );
+
+            updateDoc(channelDocRef, {
+              scores: newScoreDatas,
+            });
+
+            setState({
+              isInitialized: true,
+              nickname,
+              rank: targetIndex + 1,
+              score,
+            });
+          } else {
+            // 이번에 받은 점수가 같거나 낮은 경우
+            setState({
+              isInitialized: true,
+              nickname,
+              rank: foundIndex + 1,
+              score: scoreDatas[foundIndex].score,
+            });
+          }
+        }
+      });
+
+      return () => {
+        setState({ isInitialized: false });
+      };
+    }
+  }, [channelId, isResult, score, userId]);
 
   return (
     <Box
@@ -195,9 +318,55 @@ const Indicator = () => {
               justifyContent: "center",
             }}
           >
-            <CloseRoundedIcon />
+            {mode === "GENERAL" || !isResult || state.isInitialized ? (
+              <CloseRoundedIcon />
+            ) : (
+              <CircularProgress size={24} sx={{ color: "white" }} />
+            )}
           </Box>
         </Grow>
+        <Fade in={isResult && state.isInitialized}>
+          <Box>
+            <Box
+              component={Link}
+              href={`/channel/${channelId}?tab=ranking`}
+              sx={[
+                {
+                  width: 248,
+                  position: "absolute",
+                  left: 0,
+                  bottom: 64,
+                  transform: "translateX(calc(-50% + 24px))",
+                  borderRadius: 2,
+                  boxShadow: 2,
+                  bgcolor: "white",
+                },
+                isPc && {
+                  bottom: 128,
+                },
+              ]}
+            >
+              <ButtonBase
+                sx={{
+                  width: "100%",
+                  ":hover": {
+                    bgcolor: "action.hover",
+                  },
+                }}
+              >
+                {state.rank !== undefined &&
+                  state.nickname !== undefined &&
+                  state.score !== undefined && (
+                    <RankingListItem
+                      rank={state.rank}
+                      nickname={state.nickname}
+                      score={state.score}
+                    />
+                  )}
+              </ButtonBase>
+            </Box>
+          </Box>
+        </Fade>
       </Box>
       <Box
         sx={{
@@ -225,7 +394,12 @@ const Indicator = () => {
             </IconButton>
           </Box>
         </Grow>
-        <Grow in={status === "FAILED"}>
+        <Grow
+          in={
+            status === "FAILED" &&
+            (mode === "GENERAL" || !isResult || state.isInitialized)
+          }
+        >
           <Box
             sx={{
               position: "absolute",

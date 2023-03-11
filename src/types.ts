@@ -8,6 +8,11 @@ export interface VideoData {
   viewCount: number;
 }
 
+export interface ScoreData {
+  userId: string;
+  score: number;
+}
+
 export interface ChannelData {
   id: string;
   subscriberCount: number;
@@ -18,7 +23,7 @@ export interface ChannelData {
   };
   updateTime: string;
   videos: VideoData[];
-  scores: { userId: string; score: number }[];
+  scores: ScoreData[];
 }
 
 export interface ChannelDataWithoutVideos extends Omit<ChannelData, "videos"> {}

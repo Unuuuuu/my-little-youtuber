@@ -1,51 +1,45 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import LocalFireDepartmentTwoToneIcon from "@mui/icons-material/LocalFireDepartmentTwoTone";
-import EmojiEventsTwoToneIcon from "@mui/icons-material/EmojiEventsTwoTone";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
-import { ChannelData } from "@/types";
+import { ChannelData, ScoreData } from "@/types";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Empty from "../common/Empty";
+import RankingListItem from "../common/RankingListItem";
+import { getNicknameFromUserId } from "@/utils/function";
+import { useAppSelector } from "@/redux/hooks";
+
+interface ScoreDataWithNickname extends ScoreData {
+  nickname: string;
+}
 
 const RankingTab = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const [scores, setScores] = useState<
-    { displayName: string; score: number }[]
+  const [scoreDatasWithNickname, setScoreDatasWithNickname] = useState<
+    ScoreDataWithNickname[]
   >([]);
+  const userId = useAppSelector((state) => state.user.uid);
 
   useEffect(() => {
     const channelId = router.query.channelId as string;
     const channelDocRef = doc(db, "channels", channelId);
 
     getDoc(channelDocRef).then(async (channelDocSnapshot) => {
-      const { scores: scoresFromData } =
-        channelDocSnapshot.data() as ChannelData;
-      const nicknameCache: { [key: string]: string } = {};
-      const newScores = [];
-      for (const scoreFromData of scoresFromData) {
-        console.log(nicknameCache);
-        const { userId } = scoreFromData;
-        let displayName: string;
-        if (userId in nicknameCache) {
-          displayName = nicknameCache[userId];
-        } else {
-          const userDocRef = doc(db, "users", userId);
-          displayName =
-            (await getDoc(userDocRef)).data()?.displayName ??
-            "Empty display name";
-          nicknameCache[userId] = displayName;
-        }
-        newScores.push({ displayName, score: scoreFromData.score });
+      const { scores: scoreDatas } = channelDocSnapshot.data() as ChannelData;
+
+      const newScoreDatasWithNickname = [];
+      for (const scoreData of scoreDatas) {
+        const nickname = await getNicknameFromUserId(scoreData.userId);
+        newScoreDatasWithNickname.push({
+          userId: scoreData.userId,
+          nickname,
+          score: scoreData.score,
+        });
       }
-      setScores(newScores);
+
+      setScoreDatasWithNickname(newScoreDatasWithNickname);
       setIsLoading(false);
     });
   }, [router.query.channelId]);
@@ -66,126 +60,30 @@ const RankingTab = () => {
     );
   }
 
-  if (scores.length === 0) {
+  if (scoreDatasWithNickname.length === 0) {
     return <Empty title="랭킹이 없습니다" subtitle="순위권에 도전해보세요" />;
   }
 
   return (
-    <Table sx={{ display: "flex", flexDirection: "column" }}>
-      <TableHead sx={{ display: "flex" }}>
-        <TableRow sx={{ display: "flex", flexGrow: 1 }}>
-          <TableCell
-            sx={{
-              display: "flex",
-              flexBasis: 64,
-              flexShrink: 0,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            순위
-          </TableCell>
-          <TableCell
-            sx={{
-              display: "flex",
-              flexBasis: 64,
-              flexShrink: 0,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <LocalFireDepartmentTwoToneIcon sx={{ color: "fire" }} />
-          </TableCell>
-          <TableCell
-            sx={{
-              display: "flex",
-              flexGrow: 1,
-              alignItems: "center",
-            }}
-          >
-            닉네임
-          </TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {scores.map((row, index) => {
-          let rankingElement: JSX.Element | number;
-          switch (index + 1) {
-            case 1:
-              rankingElement = (
-                <EmojiEventsTwoToneIcon
-                  sx={{
-                    color: "goldTrophy",
-                  }}
-                />
-              );
-              break;
-            case 2:
-              rankingElement = (
-                <EmojiEventsTwoToneIcon
-                  sx={{
-                    color: "silverTrophy",
-                  }}
-                />
-              );
-              break;
-            case 3:
-              rankingElement = (
-                <EmojiEventsTwoToneIcon
-                  sx={{
-                    color: "bronzeTrophy",
-                  }}
-                />
-              );
-              break;
-            default:
-              rankingElement = index + 1;
-              break;
-          }
-
-          return (
-            <TableRow
-              key={index}
-              sx={{
-                display: "flex",
-              }}
-            >
-              <TableCell
-                sx={{
-                  display: "flex",
-                  flexBasis: 64,
-                  flexShrink: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                {rankingElement}
-              </TableCell>
-              <TableCell
-                sx={{
-                  display: "flex",
-                  flexBasis: 64,
-                  flexShrink: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                {row.score}
-              </TableCell>
-              <TableCell
-                sx={{
-                  display: "flex",
-                  flexGrow: 1,
-                  alignItems: "center",
-                }}
-              >
-                {row.displayName}
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+    <Box
+      component={"ul"}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        borderBottom: 1,
+        borderColor: "divider",
+      }}
+    >
+      {scoreDatasWithNickname.map((scoreDataWithNickname, index) => (
+        <RankingListItem
+          key={scoreDataWithNickname.userId}
+          rank={index + 1}
+          nickname={scoreDataWithNickname.nickname}
+          score={scoreDataWithNickname.score}
+          active={scoreDataWithNickname.userId === userId}
+        />
+      ))}
+    </Box>
   );
 };
 
