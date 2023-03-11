@@ -76,9 +76,10 @@ const HigherLowerGame: React.FC<HigherLowerGameProps> = (props) => {
     if (!isSignedIn && mode === "RANK") {
       router.push(`/channel/${channelData.id}`);
       dispatch(loginRequestSnackbarActions.open());
-      return;
     }
+  }, [channelData.id, dispatch, isSignedIn, mode, router]);
 
+  useEffect(() => {
     dispatch(
       higherLowerGameActions.initialize({ channelId: channelData.id, videos })
     );
@@ -86,7 +87,7 @@ const HigherLowerGame: React.FC<HigherLowerGameProps> = (props) => {
     return () => {
       dispatch(higherLowerGameActions.finalize());
     };
-  }, [channelData.id, dispatch, isSignedIn, mode, router, videos]);
+  }, [channelData.id, dispatch, videos]);
 
   if (!isSignedIn && mode === "RANK") {
     return null;
