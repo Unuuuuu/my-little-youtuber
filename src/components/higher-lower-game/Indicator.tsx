@@ -21,6 +21,10 @@ import { getNicknameFromUserId } from "@/utils/function";
 import CircularProgress from "@mui/material/CircularProgress";
 import ButtonBase from "@mui/material/ButtonBase";
 import Link from "next/link";
+import Checkbox from "@mui/material/Checkbox";
+import OpenInFullRoundedIcon from "@mui/icons-material/OpenInFullRounded";
+import CloseFullscreenRoundedIcon from "@mui/icons-material/CloseFullscreenRounded";
+import { SwitchBaseProps } from "@mui/material/internal/SwitchBase";
 
 const getNewScoreDatas = (
   prevScoreDatas: ScoreData[],
@@ -82,11 +86,13 @@ const Indicator = () => {
   const dispatch = useAppDispatch();
   const [state, setState] = useState<{
     isInitialized: boolean;
+    isExpanded: boolean;
     rank?: number;
     nickname?: string;
     score?: number;
   }>({
     isInitialized: false,
+    isExpanded: true,
   });
 
   const handleReplayButtonClick = () => {
@@ -95,6 +101,13 @@ const Indicator = () => {
 
   const handlePlayButtonClick = () => {
     dispatch(higherLowerGameActions.next());
+  };
+
+  const handleExpandCheckboxChange: SwitchBaseProps["onChange"] = (
+    _,
+    checked
+  ) => {
+    setState((prevState) => ({ ...prevState, isExpanded: checked }));
   };
 
   useEffect(() => {
@@ -144,6 +157,7 @@ const Indicator = () => {
 
           setState({
             isInitialized: true,
+            isExpanded: true,
             nickname,
             rank: targetIndex + 1,
             score,
@@ -168,6 +182,7 @@ const Indicator = () => {
 
             setState({
               isInitialized: true,
+              isExpanded: true,
               nickname,
               rank: targetIndex + 1,
               score,
@@ -176,6 +191,7 @@ const Indicator = () => {
             // 이번에 받은 점수가 같거나 낮은 경우
             setState({
               isInitialized: true,
+              isExpanded: true,
               nickname,
               rank: foundIndex + 1,
               score: scoreDatas[foundIndex].score,
@@ -185,7 +201,7 @@ const Indicator = () => {
       });
 
       return () => {
-        setState({ isInitialized: false });
+        setState({ isInitialized: false, isExpanded: true });
       };
     }
   }, [channelId, isResult, score, userId]);
@@ -214,6 +230,13 @@ const Indicator = () => {
         },
       ]}
     >
+      <Box
+        sx={{
+          position: "relative",
+          width: 48,
+          height: 48,
+        }}
+      ></Box>
       <Box
         sx={{
           position: "relative",
@@ -325,48 +348,6 @@ const Indicator = () => {
             )}
           </Box>
         </Grow>
-        <Fade in={isResult && state.isInitialized}>
-          <Box>
-            <Box
-              component={Link}
-              href={`/channel/${channelId}?tab=ranking`}
-              sx={[
-                {
-                  width: 248,
-                  position: "absolute",
-                  left: 0,
-                  bottom: 64,
-                  transform: "translateX(calc(-50% + 24px))",
-                  borderRadius: 2,
-                  boxShadow: 2,
-                  bgcolor: "white",
-                },
-                isPc && {
-                  bottom: 128,
-                },
-              ]}
-            >
-              <ButtonBase
-                sx={{
-                  width: "100%",
-                  ":hover": {
-                    bgcolor: "action.hover",
-                  },
-                }}
-              >
-                {state.rank !== undefined &&
-                  state.nickname !== undefined &&
-                  state.score !== undefined && (
-                    <RankingListItem
-                      rank={state.rank}
-                      nickname={state.nickname}
-                      score={state.score}
-                    />
-                  )}
-              </ButtonBase>
-            </Box>
-          </Box>
-        </Fade>
       </Box>
       <Box
         sx={{
@@ -418,6 +399,77 @@ const Indicator = () => {
             </IconButton>
           </Box>
         </Grow>
+      </Box>
+      <Box
+        sx={{
+          position: "relative",
+          width: 48,
+          height: 48,
+        }}
+      >
+        <Grow in={!isPc && isResult && state.isInitialized}>
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              bgcolor: "white",
+              borderRadius: "50%",
+              boxShadow: 2,
+            }}
+          >
+            <Checkbox
+              sx={{ p: "12px" }}
+              icon={<OpenInFullRoundedIcon />}
+              checkedIcon={<CloseFullscreenRoundedIcon />}
+              checked={state.isExpanded}
+              onChange={handleExpandCheckboxChange}
+            />
+          </Box>
+        </Grow>
+        <Fade
+          in={isResult && state.isInitialized && (state.isExpanded || isPc)}
+        >
+          <Box>
+            <Box
+              component={Link}
+              href={`/channel/${channelId}?tab=ranking`}
+              sx={[
+                {
+                  width: 276,
+                  position: "absolute",
+                  right: 0,
+                  bottom: 64,
+                  borderRadius: 2,
+                  boxShadow: 2,
+                  bgcolor: "white",
+                },
+                isPc && {
+                  bottom: 256,
+                  transform: "translateX(calc(50% - 24px))",
+                },
+              ]}
+            >
+              <ButtonBase
+                sx={{
+                  width: "100%",
+                  ":hover": {
+                    bgcolor: "action.hover",
+                  },
+                }}
+              >
+                {state.rank !== undefined &&
+                  state.nickname !== undefined &&
+                  state.score !== undefined && (
+                    <RankingListItem
+                      rank={state.rank}
+                      nickname={state.nickname}
+                      score={state.score}
+                    />
+                  )}
+              </ButtonBase>
+            </Box>
+          </Box>
+        </Fade>
       </Box>
     </Box>
   );
