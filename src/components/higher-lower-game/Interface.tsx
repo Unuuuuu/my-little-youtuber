@@ -175,24 +175,45 @@ const Interface = () => {
                       }}
                     >
                       {status !== "IDLE" && (
-                        <Typography
-                          variant={isPc ? "h3" : "h4"}
-                          component={CountUp}
-                          sx={{ color: "white" }}
-                          end={video.viewCount}
-                          separator=","
-                          suffix="회"
-                          useEasing={false}
-                          duration={getDurationFromViewCount(
-                            video.viewCount,
-                            higherRandomVideo.viewCount
-                          )}
-                          onEnd={() => {
-                            if (video.id === higherRandomVideo.id) {
-                              handleCountUpEnd();
-                            }
-                          }}
-                        />
+                        <Box
+                          sx={[
+                            {
+                              display: "flex",
+                              flexDirection: "column",
+                              color: "white",
+                              position: "relative",
+                              top: 16,
+                            },
+                          ]}
+                        >
+                          <Typography
+                            variant={isPc ? "h3" : "h4"}
+                            component={CountUp}
+                            end={video.viewCount}
+                            separator=","
+                            useEasing={false}
+                            duration={getDurationFromViewCount(
+                              video.viewCount,
+                              higherRandomVideo.viewCount
+                            )}
+                            onEnd={() => {
+                              if (video.id === higherRandomVideo.id) {
+                                handleCountUpEnd();
+                              }
+                            }}
+                          />
+                          <Fade in={status !== "PENDING"}>
+                            <Typography
+                              variant={isPc ? "h5" : "h6"}
+                              component={"span"}
+                            >
+                              {new Intl.NumberFormat("ko", {
+                                notation: "compact",
+                              }).format(video.viewCount)}
+                              회
+                            </Typography>
+                          </Fade>
+                        </Box>
                       )}
                     </Box>
                   </Fade>
