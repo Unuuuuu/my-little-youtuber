@@ -6,12 +6,16 @@ import Box from "@mui/material/Box";
 import CountUp from "react-countup";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { higherLowerGameActions } from "@/redux/slices/higherLowerGameSlice";
-import { useEffect, useRef } from "react";
 import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 import { SystemStyleObject } from "@mui/system";
 import Fade from "@mui/material/Fade";
 import Skeleton from "@mui/material/Skeleton";
 import ButtonBase from "@mui/material/ButtonBase";
+import Button from "@mui/material/Button";
+import Backdrop from "@mui/material/Backdrop";
+import { useEffect, useState } from "react";
+
+const LS_KEY_YOUTUBE_MODAL_GUIDE = "youtube_modal_guide";
 
 const getInterfaceCss = (isPc: boolean, index: number) => ({
   videoContainer: [
@@ -43,8 +47,7 @@ const getInterfaceCss = (isPc: boolean, index: number) => ({
     fontSize: 24,
     cursor: "pointer",
     position: "absolute",
-    top: "50%",
-    transform: "translateY(-50%)",
+    bottom: "4px",
     right: 0,
   } as SystemStyleObject,
 });
@@ -78,6 +81,8 @@ const Interface = () => {
     mode: state.higherLowerGame.mode,
   }));
   const dispatch = useAppDispatch();
+  const [isYoutubeModalGuideBackdropOpen, setIsYoutubeModalGuideBackdropOpen] =
+    useState(false);
 
   const handleVideoClick = (videoId: string) => {
     dispatch(higherLowerGameActions.click(videoId));
@@ -90,6 +95,20 @@ const Interface = () => {
   const handleCountUpEnd = () => {
     dispatch(higherLowerGameActions.compare(userId));
   };
+
+  const handleConfirmButtonClick = () => {
+    localStorage.setItem(LS_KEY_YOUTUBE_MODAL_GUIDE, "true");
+    setIsYoutubeModalGuideBackdropOpen(false);
+  };
+
+  useEffect(() => {
+    const youtubeModalGuideValue = localStorage.getItem(
+      LS_KEY_YOUTUBE_MODAL_GUIDE
+    );
+    if (youtubeModalGuideValue === null) {
+      setIsYoutubeModalGuideBackdropOpen(true);
+    }
+  }, []);
 
   return (
     <Box
@@ -189,7 +208,14 @@ const Interface = () => {
                   </Typography>
                   {mode === "GENERAL" && (
                     <PlayCircleRoundedIcon
-                      sx={interfaceCss.playCircleRoundedIcon}
+                      sx={[
+                        interfaceCss.playCircleRoundedIcon,
+                        index === 1 && {
+                          bgcolor: "white",
+                          borderRadius: "50%",
+                          zIndex: 2,
+                        },
+                      ]}
                       onClick={() => handleYoutubeModalButtonClick(video.id)}
                     />
                   )}
@@ -213,6 +239,35 @@ const Interface = () => {
               </Box>
             );
           })}
+      <Backdrop open={isYoutubeModalGuideBackdropOpen} sx={{ zIndex: 1 }}>
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 52,
+            right: 16,
+            bgcolor: "white",
+            borderRadius: 2,
+            boxShadow: 2,
+            py: 1,
+            pl: 2,
+            pr: 1,
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <Typography fontSize={14} sx={{ whiteSpace: "nowrap" }}>
+            유튜브 영상을 재생시켜 볼 수 있습니다.
+          </Typography>
+          <Button
+            size="small"
+            sx={{ minWidth: 48 }}
+            onClick={handleConfirmButtonClick}
+          >
+            확인
+          </Button>
+        </Box>
+      </Backdrop>
     </Box>
   );
 };
