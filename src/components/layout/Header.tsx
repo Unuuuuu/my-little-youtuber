@@ -155,7 +155,7 @@ const Header: React.FC<HeaderProps> = (props) => {
             </Box>
           </>
         )}
-        {pageType === "GAME" && (
+        {channelDataWithoutVideos !== null && pageType === "GAME" && (
           <>
             <Seperator />
             <Box
@@ -180,7 +180,9 @@ const Header: React.FC<HeaderProps> = (props) => {
                   sx={{ flexGrow: 1, width: "100%" }}
                   noWrap
                 >
-                  더 많이 더 적게
+                  {channelDataWithoutVideos.id === "UCV9WL7sW6_KjanYkUUaIDfQ"
+                    ? "좀 더 많이 좀 더 적게"
+                    : "더 많이 더 적게"}
                 </Typography>
               )}
             </Box>

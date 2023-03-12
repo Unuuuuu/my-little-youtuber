@@ -85,10 +85,16 @@ const GameTab = () => {
           mb: 0.5,
         }}
       >
-        더 많이 더 적게
+        {channelDataWithoutVideos.id === "UCV9WL7sW6_KjanYkUUaIDfQ"
+          ? "좀 더 많이 좀 더 적게"
+          : "더 많이 더 적게"}
       </Typography>
       <Typography sx={{ mb: 1 }}>
-        조회수가 더 높은 영상을 맞추는 게임입니다.
+        조회수가{" "}
+        {channelDataWithoutVideos.id === "UCV9WL7sW6_KjanYkUUaIDfQ"
+          ? "좀 더"
+          : "더"}{" "}
+        높은 영상을 맞추는 게임입니다.
       </Typography>
       <TableContainer component={Paper} variant="outlined" sx={{ mb: 1 }}>
         <Table>
