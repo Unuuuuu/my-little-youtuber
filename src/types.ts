@@ -29,3 +29,7 @@ export interface ChannelData {
 export interface ChannelDataWithoutVideos extends Omit<ChannelData, "videos"> {}
 
 export type HigherLowerGameMode = "GENERAL" | "RANK";
+
+export interface Nicknames {
+  [channelId: string]: string | undefined;
+}

@@ -156,7 +156,7 @@ const Request = () => {
                   요청 완료
                 </Typography>
                 <Typography sx={{ wordBreak: "keep-all", mb: 1 }}>
-                  일주일 이내로 추가하여 {email}로 연락드릴게요.
+                  일주일 이내로 추가하여 {email}로 연락드리겠습니다.
                 </Typography>
                 <Button fullWidth variant="contained" onClick={handleClose}>
                   닫기

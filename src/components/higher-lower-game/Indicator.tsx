@@ -17,7 +17,6 @@ import RankingListItem from "../common/RankingListItem";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { ChannelData, ScoreData } from "@/types";
-import { getNicknameFromUserId } from "@/utils/function";
 import CircularProgress from "@mui/material/CircularProgress";
 import Checkbox from "@mui/material/Checkbox";
 import OpenInFullRoundedIcon from "@mui/icons-material/OpenInFullRounded";
@@ -77,23 +76,34 @@ const scaleUpAndDown = keyframes`
 const Indicator = () => {
   const theme = useTheme();
   const isPc = useMediaQuery(theme.breakpoints.up("lg"));
-  const { userId, channelId, status, streak, mode, score, time, isResult } =
-    useAppSelector((state) => ({
-      userId: state.user.uid,
-      channelId: state.higherLowerGame.channelId,
-      status: state.higherLowerGame.status,
-      streak: state.higherLowerGame.streak,
-      mode: state.higherLowerGame.mode,
-      score: state.higherLowerGame.score,
-      time: state.higherLowerGame.time,
-      isResult: state.higherLowerGame.isResult,
-    }));
+  const {
+    userId,
+    displayName,
+    nicknames,
+    channelId,
+    status,
+    streak,
+    mode,
+    score,
+    time,
+    isResult,
+  } = useAppSelector((state) => ({
+    userId: state.user.uid,
+    displayName: state.user.displayName,
+    nicknames: state.user.nicknames,
+    channelId: state.higherLowerGame.channelId,
+    status: state.higherLowerGame.status,
+    streak: state.higherLowerGame.streak,
+    mode: state.higherLowerGame.mode,
+    score: state.higherLowerGame.score,
+    time: state.higherLowerGame.time,
+    isResult: state.higherLowerGame.isResult,
+  }));
   const dispatch = useAppDispatch();
   const [state, setState] = useState<{
     isInitialized: boolean;
     isExpanded: boolean;
     rank?: number;
-    nickname?: string;
     score?: number;
   }>({
     isInitialized: false,
@@ -129,7 +139,6 @@ const Indicator = () => {
       const channelDocRef = doc(db, "channels", channelId);
       getDoc(channelDocRef).then(async (channelDocSnapshot) => {
         const { scores: scoreDatas } = channelDocSnapshot.data() as ChannelData;
-        const nickname = await getNicknameFromUserId(userId);
         const foundIndex = scoreDatas.findIndex(
           (value) => value.userId === userId
         );
@@ -149,7 +158,6 @@ const Indicator = () => {
           setState({
             isInitialized: true,
             isExpanded: true,
-            nickname,
             rank: targetIndex + 1,
             score,
           });
@@ -174,7 +182,6 @@ const Indicator = () => {
             setState({
               isInitialized: true,
               isExpanded: true,
-              nickname,
               rank: targetIndex + 1,
               score,
             });
@@ -183,7 +190,6 @@ const Indicator = () => {
             setState({
               isInitialized: true,
               isExpanded: true,
-              nickname,
               rank: foundIndex + 1,
               score: scoreDatas[foundIndex].score,
             });
@@ -380,13 +386,14 @@ const Indicator = () => {
                 },
               ]}
             >
-              {state.rank !== undefined &&
-                state.nickname !== undefined &&
+              {displayName != null &&
+                channelId !== undefined &&
+                state.rank !== undefined &&
                 state.score !== undefined && (
                   <Box id="target" sx={{ pr: "100px" }}>
                     <RankingListItem
                       rank={state.rank}
-                      nickname={state.nickname}
+                      nickname={nicknames[channelId] ?? displayName}
                       score={state.score}
                     />
                   </Box>

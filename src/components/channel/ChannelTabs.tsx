@@ -4,12 +4,14 @@ import Tabs, { TabsProps } from "@mui/material/Tabs";
 import { ReactNode, useEffect, useState } from "react";
 import EmojiEventsRoundedIcon from "@mui/icons-material/EmojiEventsRounded";
 import RankingTab from "./RankingTab";
-import { teal } from "@mui/material/colors";
+import { grey, teal } from "@mui/material/colors";
 import GameTab from "./GameTab";
 import SportsEsportsRoundedIcon from "@mui/icons-material/SportsEsportsRounded";
 import { useRouter } from "next/router";
+import SettingsIcon from "@mui/icons-material/Settings";
+import SettingTab from "./SettingTab";
 
-type Value = "game" | "ranking";
+type Value = "game" | "ranking" | "setting";
 
 interface TabPanelProps {
   children: ReactNode;
@@ -73,13 +75,13 @@ const ChannelTabs = () => {
             backgroundColor: "tabsIndicator",
           },
         }}
+        variant="fullWidth"
       >
         <Tab
           value={"game"}
           icon={<SportsEsportsRoundedIcon sx={{ color: teal["300"] }} />}
           iconPosition="start"
           label="게임"
-          sx={{ width: 120 }}
         />
         <Tab
           value={"ranking"}
@@ -92,7 +94,18 @@ const ChannelTabs = () => {
           }
           iconPosition="start"
           label="랭킹"
-          sx={{ width: 120 }}
+        />
+        <Tab
+          value={"setting"}
+          icon={
+            <SettingsIcon
+              sx={{
+                color: grey["500"],
+              }}
+            />
+          }
+          iconPosition="start"
+          label="설정"
         />
         <Box
           sx={{
@@ -109,6 +122,9 @@ const ChannelTabs = () => {
       </TabPanel>
       <TabPanel value={"ranking"} selectedValue={selectedValue}>
         <RankingTab />
+      </TabPanel>
+      <TabPanel value={"setting"} selectedValue={selectedValue}>
+        <SettingTab />
       </TabPanel>
     </Box>
   );

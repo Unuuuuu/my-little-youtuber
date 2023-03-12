@@ -20,10 +20,30 @@ const RankingTab = () => {
   const [scoreDatasWithNickname, setScoreDatasWithNickname] = useState<
     ScoreDataWithNickname[]
   >([]);
-  const userId = useAppSelector((state) => state.user.uid);
+  const { userId, displayName, nicknames } = useAppSelector((state) => ({
+    userId: state.user.uid,
+    displayName: state.user.displayName,
+    nicknames: state.user.nicknames,
+  }));
+
+  const channelId = router.query.channelId as string;
 
   useEffect(() => {
-    const channelId = router.query.channelId as string;
+    setScoreDatasWithNickname((prev) =>
+      prev.map((value) => {
+        if (value.userId === userId) {
+          return {
+            ...value,
+            nickname: nicknames[channelId] ?? displayName ?? "Empty nickname",
+          };
+        }
+
+        return value;
+      })
+    );
+  }, [channelId, displayName, nicknames, userId]);
+
+  useEffect(() => {
     const channelDocRef = doc(db, "channels", channelId);
 
     getDoc(channelDocRef).then(async (channelDocSnapshot) => {
@@ -31,7 +51,10 @@ const RankingTab = () => {
 
       const newScoreDatasWithNickname = [];
       for (const scoreData of scoreDatas) {
-        const nickname = await getNicknameFromUserId(scoreData.userId);
+        const nickname = await getNicknameFromUserId(
+          scoreData.userId,
+          channelId
+        );
         newScoreDatasWithNickname.push({
           userId: scoreData.userId,
           nickname,
@@ -42,7 +65,7 @@ const RankingTab = () => {
       setScoreDatasWithNickname(newScoreDatasWithNickname);
       setIsLoading(false);
     });
-  }, [router.query.channelId]);
+  }, [channelId]);
 
   if (isLoading) {
     return (

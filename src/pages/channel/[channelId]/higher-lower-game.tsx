@@ -97,8 +97,8 @@ const HigherLowerGame: React.FC<HigherLowerGameProps> = (props) => {
   return (
     <ChannelDataWithoutVideosContext.Provider value={channelDataWithoutVideos}>
       <NextSeo
-        title={`나의 작은 유튜버 - ${channelDataWithoutVideos.title} - 더 많이 더 적게 게임`}
-        description={`${channelDataWithoutVideos.title} 유튜브 채널에서 조회수가 더 높은 영상을 맞추는 게임을 플레이해보세요.`}
+        title={`나의 작은 유튜버 - ${channelDataWithoutVideos.title} - 더 많이 더 적게 유튜브 버전`}
+        description={`${channelDataWithoutVideos.title} 유튜브 영상 조회수 비교 게임`}
         openGraph={{
           url: `https://www.mylittleyoutuber.com/channel/${channelDataWithoutVideos.id}/higher-lower-game`,
           images: [

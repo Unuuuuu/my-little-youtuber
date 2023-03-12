@@ -2,9 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserInfo } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
+import { Nicknames } from "@/types";
 
 interface UserData {
   favoriteChannels: string[];
+  nicknames: Nicknames;
   photoURL: UserInfo["photoURL"];
   uid: UserInfo["uid"];
   email: UserInfo["email"];
@@ -13,6 +15,7 @@ interface UserData {
 
 interface UserState {
   favoriteChannels: string[];
+  nicknames: Nicknames;
   isInitialized: boolean;
   isSignedIn: boolean;
   photoURL?: UserInfo["photoURL"];
@@ -25,6 +28,7 @@ const initialState: UserState = {
   isInitialized: false,
   isSignedIn: false,
   favoriteChannels: [],
+  nicknames: {},
 };
 
 const userSlice = createSlice({
@@ -35,6 +39,7 @@ const userSlice = createSlice({
       state.isInitialized = true;
       state.isSignedIn = true;
       state.favoriteChannels = action.payload.favoriteChannels;
+      state.nicknames = action.payload.nicknames;
       state.photoURL = action.payload.photoURL;
       state.uid = action.payload.uid;
       state.email = action.payload.email;
@@ -44,6 +49,7 @@ const userSlice = createSlice({
       state.isInitialized = true;
       state.isSignedIn = false;
       state.favoriteChannels = [];
+      state.nicknames = {};
       state.uid = undefined;
       state.photoURL = undefined;
       state.email = undefined;
@@ -80,6 +86,27 @@ const userSlice = createSlice({
         });
         state.favoriteChannels = newFavoriteChannels;
       }
+    },
+    updateNickname: (
+      state,
+      action: PayloadAction<{ nickname: string; channelId: string }>
+    ) => {
+      if (
+        !state.isInitialized ||
+        !state.isSignedIn ||
+        state.uid === undefined
+      ) {
+        return;
+      }
+
+      const { channelId, nickname } = action.payload;
+      const { nicknames, uid } = state;
+
+      const newNicknames = { ...nicknames, [channelId]: nickname };
+      updateDoc(doc(db, "users", uid), {
+        nicknames: newNicknames,
+      });
+      state.nicknames = newNicknames;
     },
   },
 });

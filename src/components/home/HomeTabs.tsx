@@ -72,20 +72,19 @@ const HomeTabs = () => {
             backgroundColor: "tabsIndicator",
           },
         }}
+        variant="fullWidth"
       >
         <Tab
           value={"all"}
           icon={<SubscriptionsRoundedIcon sx={{ color: "youtube" }} />}
           iconPosition="start"
           label="모두"
-          sx={{ width: 120 }}
         />
         <Tab
           value={"favorite"}
           icon={<StarRoundedIcon sx={{ color: "favorite" }} />}
           iconPosition="start"
           label="즐겨찾기"
-          sx={{ width: 120 }}
         />
         <Box
           sx={{

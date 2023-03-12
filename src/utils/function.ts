@@ -1,9 +1,18 @@
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
-export const getNicknameFromUserId = async (userId: string) => {
+export const getNicknameFromUserId = async (
+  userId: string,
+  channelId: string
+) => {
   const userDocRef = doc(db, "users", userId);
+  const data = (await getDoc(userDocRef)).data();
+  if (data === undefined) {
+    return "Empty nickname";
+  }
+  const displayName = data.displayName;
+  const nicknames = data.nicknames;
   const nickname: string =
-    (await getDoc(userDocRef)).data()?.displayName ?? "Empty display name";
+    nicknames[channelId] ?? displayName ?? "Empty nickname";
   return nickname;
 };

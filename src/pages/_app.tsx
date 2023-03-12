@@ -23,6 +23,7 @@ import LoginRequestSnackbar from "@/components/common/LoginRequestSnackbar";
 import Script from "next/script";
 import KakaotalkGuideModal from "@/components/common/KakaotalkGuideModal";
 import { DefaultSeo } from "next-seo";
+import { Nicknames } from "@/types";
 
 const globalCss = css({
   "#__next": {
@@ -141,17 +142,20 @@ export default function App({ Component, pageProps }: AppProps) {
         const docRef = doc(db, "users", uid);
         const docSnap = await getDoc(docRef);
 
-        let favoriteChannels: string[];
+        let favoriteChannels: string[] = [];
+        let nicknames: Nicknames = {};
         if (docSnap.exists()) {
-          favoriteChannels = docSnap.data().favoriteChannels;
+          const data = docSnap.data();
+          favoriteChannels = data.favoriteChannels;
+          nicknames = data.nicknames;
         } else {
           setDoc(docRef, {
             id: uid,
             displayName,
             email,
             favoriteChannels: [],
+            nicknames: {},
           });
-          favoriteChannels = [];
         }
 
         store.dispatch(
@@ -159,6 +163,7 @@ export default function App({ Component, pageProps }: AppProps) {
             photoURL,
             uid,
             favoriteChannels,
+            nicknames,
             email,
             displayName,
           })
@@ -173,8 +178,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <DefaultSeo
-        title="나의 작은 유튜버 - 더 많이 더 적게 게임"
-        description="좋아하는 유튜브 채널에서 조회수가 더 높은 영상을 맞추는 게임을 플레이해보세요."
+        title="나의 작은 유튜버 - 더 많이 더 적게 유튜브 버전"
+        description="유튜브 영상 조회수 비교 게임"
         openGraph={{
           type: "website",
           locale: "ko_KR",
