@@ -21,6 +21,7 @@ import SideEffect from "@/components/higher-lower-game/SideEffect";
 import { ChannelDataWithoutVideosContext } from "@/context/ChannelDataWithoutVideosContext";
 import { useRouter } from "next/router";
 import { loginRequestSnackbarActions } from "@/redux/slices/loginRequestSnackbarSlice";
+import { NextSeo } from "next-seo";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const querySnapshot = (await getDocs(
@@ -95,6 +96,20 @@ const HigherLowerGame: React.FC<HigherLowerGameProps> = (props) => {
 
   return (
     <ChannelDataWithoutVideosContext.Provider value={channelDataWithoutVideos}>
+      <NextSeo
+        title={`나의 작은 유튜버 - ${channelDataWithoutVideos.title} - 더 많이 더 적게 게임`}
+        description={`${channelDataWithoutVideos.title} 유튜브 채널에서 조회수가 더 높은 영상을 맞추는 게임을 플레이해보세요.`}
+        openGraph={{
+          url: `https://www.mylittleyoutuber.com/channel/${channelDataWithoutVideos.id}/higher-lower-game`,
+          images: [
+            {
+              url: channelDataWithoutVideos.thumbnail.url,
+              width: 800,
+              height: 800,
+            },
+          ],
+        }}
+      />
       <Header pageType="GAME" />
       <Main>
         <Interface />

@@ -22,6 +22,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import LoginRequestSnackbar from "@/components/common/LoginRequestSnackbar";
 import Script from "next/script";
 import KakaotalkGuideModal from "@/components/common/KakaotalkGuideModal";
+import { DefaultSeo } from "next-seo";
 
 const globalCss = css({
   "#__next": {
@@ -163,6 +164,23 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <DefaultSeo
+        title="나의 작은 유튜버 - 더 많이 더 적게 게임"
+        description="좋아하는 유튜브 채널에서 조회수가 더 높은 영상을 맞추는 게임을 플레이해보세요."
+        openGraph={{
+          type: "website",
+          locale: "ko_KR",
+          url: "https://www.mylittleyoutuber.com",
+          siteName: "나의 작은 유튜버",
+          images: [
+            {
+              url: "https://www.mylittleyoutuber.com/logo.png",
+              width: 512,
+              height: 353,
+            },
+          ],
+        }}
+      />
       <Script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4440044743501222"

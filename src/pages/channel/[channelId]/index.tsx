@@ -13,6 +13,7 @@ import {
 import { GetStaticPaths, GetStaticProps } from "next/types";
 import ChannelTabs from "@/components/channel/ChannelTabs";
 import { ChannelDataWithoutVideosContext } from "@/context/ChannelDataWithoutVideosContext";
+import { NextSeo } from "next-seo";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const querySnapshot = (await getDocs(
@@ -61,6 +62,20 @@ const Channel: React.FC<ChannelProps> = (props) => {
 
   return (
     <ChannelDataWithoutVideosContext.Provider value={channelDataWithoutVideos}>
+      <NextSeo
+        title={`나의 작은 유튜버 - ${channelDataWithoutVideos.title}`}
+        description={`${channelDataWithoutVideos.title} 유튜브 채널에서 조회수가 더 높은 영상을 맞추는 게임을 플레이해보세요.`}
+        openGraph={{
+          url: `https://www.mylittleyoutuber.com/channel/${channelDataWithoutVideos.id}`,
+          images: [
+            {
+              url: channelDataWithoutVideos.thumbnail.url,
+              width: 800,
+              height: 800,
+            },
+          ],
+        }}
+      />
       <Header pageType="CHANNEL" />
       <Main>
         <ChannelTabs />
