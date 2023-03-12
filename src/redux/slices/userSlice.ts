@@ -7,6 +7,8 @@ interface UserData {
   favoriteChannels: string[];
   photoURL: UserInfo["photoURL"];
   uid: UserInfo["uid"];
+  email: UserInfo["email"];
+  displayName: UserInfo["displayName"];
 }
 
 interface UserState {
@@ -15,6 +17,8 @@ interface UserState {
   isSignedIn: boolean;
   photoURL?: UserInfo["photoURL"];
   uid?: UserInfo["uid"];
+  email?: UserInfo["email"];
+  displayName?: UserInfo["displayName"];
 }
 
 const initialState: UserState = {
@@ -33,6 +37,8 @@ const userSlice = createSlice({
       state.favoriteChannels = action.payload.favoriteChannels;
       state.photoURL = action.payload.photoURL;
       state.uid = action.payload.uid;
+      state.email = action.payload.email;
+      state.displayName = action.payload.displayName;
     },
     signOut: (state) => {
       state.isInitialized = true;
@@ -40,6 +46,8 @@ const userSlice = createSlice({
       state.favoriteChannels = [];
       state.uid = undefined;
       state.photoURL = undefined;
+      state.email = undefined;
+      state.displayName = undefined;
     },
     updateFavoriteChannel: (
       state,

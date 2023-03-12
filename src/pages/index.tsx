@@ -6,6 +6,7 @@ import { db } from "@/utils/firebase";
 import Header from "@/components/layout/Header";
 import Main from "@/components/layout/Main";
 import { ChannelDatasWithoutVideosContext } from "@/context/ChannelDatasWithoutVideosContext";
+import Request from "@/components/home/Request";
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const querySnapshot = (await getDocs(
@@ -36,6 +37,7 @@ const Home: React.FC<HomeProps> = (props) => {
       <Header pageType="HOME" />
       <Main>
         <HomeTabs />
+        <Request />
       </Main>
     </ChannelDatasWithoutVideosContext.Provider>
   );

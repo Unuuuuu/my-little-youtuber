@@ -154,7 +154,15 @@ export default function App({ Component, pageProps }: AppProps) {
           favoriteChannels = [];
         }
 
-        store.dispatch(userActions.signIn({ photoURL, uid, favoriteChannels }));
+        store.dispatch(
+          userActions.signIn({
+            photoURL,
+            uid,
+            favoriteChannels,
+            email,
+            displayName,
+          })
+        );
       } else {
         // User is signed out
         store.dispatch(userActions.signOut());
