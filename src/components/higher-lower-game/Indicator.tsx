@@ -19,12 +19,17 @@ import { db } from "@/utils/firebase";
 import { ChannelData, ScoreData } from "@/types";
 import { getNicknameFromUserId } from "@/utils/function";
 import CircularProgress from "@mui/material/CircularProgress";
-import ButtonBase from "@mui/material/ButtonBase";
-import Link from "next/link";
 import Checkbox from "@mui/material/Checkbox";
 import OpenInFullRoundedIcon from "@mui/icons-material/OpenInFullRounded";
 import CloseFullscreenRoundedIcon from "@mui/icons-material/CloseFullscreenRounded";
 import { SwitchBaseProps } from "@mui/material/internal/SwitchBase";
+import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+
+const ShareButton = dynamic(() => import("./ShareButton"), {
+  ssr: false,
+});
 
 const getNewScoreDatas = (
   prevScoreDatas: ScoreData[],
@@ -94,21 +99,7 @@ const Indicator = () => {
     isInitialized: false,
     isExpanded: true,
   });
-
-  const handleReplayButtonClick = () => {
-    dispatch(higherLowerGameActions.reset());
-  };
-
-  const handlePlayButtonClick = () => {
-    dispatch(higherLowerGameActions.next());
-  };
-
-  const handleExpandCheckboxChange: SwitchBaseProps["onChange"] = (
-    _,
-    checked
-  ) => {
-    setState((prevState) => ({ ...prevState, isExpanded: checked }));
-  };
+  const router = useRouter();
 
   useEffect(() => {
     if (mode === "GENERAL" || status !== "IDLE") {
@@ -205,6 +196,25 @@ const Indicator = () => {
       };
     }
   }, [channelId, isResult, score, userId]);
+
+  const handleReplayButtonClick = () => {
+    dispatch(higherLowerGameActions.reset());
+  };
+
+  const handlePlayButtonClick = () => {
+    dispatch(higherLowerGameActions.next());
+  };
+
+  const handleExpandCheckboxChange: SwitchBaseProps["onChange"] = (
+    _,
+    checked
+  ) => {
+    setState((prevState) => ({ ...prevState, isExpanded: checked }));
+  };
+
+  const handleArrowButtonClick = () => {
+    router.push(`/channel/${channelId}?tab=ranking`);
+  };
 
   return (
     <Box
@@ -348,6 +358,57 @@ const Indicator = () => {
             )}
           </Box>
         </Grow>
+        <Fade
+          in={isResult && state.isInitialized && (state.isExpanded || isPc)}
+        >
+          <Box>
+            <Box
+              sx={[
+                {
+                  maxWidth: 304,
+                  width: "calc(100vw - 32px)",
+                  position: "absolute",
+                  bottom: 64,
+                  left: 0,
+                  borderRadius: 2,
+                  boxShadow: 2,
+                  bgcolor: "white",
+                  transform: "translateX(calc(-50% + 24px))",
+                },
+                isPc && {
+                  bottom: 128,
+                },
+              ]}
+            >
+              {state.rank !== undefined &&
+                state.nickname !== undefined &&
+                state.score !== undefined && (
+                  <Box id="target" sx={{ pr: "100px" }}>
+                    <RankingListItem
+                      rank={state.rank}
+                      nickname={state.nickname}
+                      score={state.score}
+                    />
+                  </Box>
+                )}
+              <Box
+                sx={{
+                  position: "absolute",
+                  right: 12,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  display: "flex",
+                  gap: 1,
+                }}
+              >
+                <ShareButton />
+                <IconButton onClick={handleArrowButtonClick}>
+                  <ArrowForwardIosRoundedIcon fontSize="small" />
+                </IconButton>
+              </Box>
+            </Box>
+          </Box>
+        </Fade>
       </Box>
       <Box
         sx={{
@@ -426,50 +487,6 @@ const Indicator = () => {
             />
           </Box>
         </Grow>
-        <Fade
-          in={isResult && state.isInitialized && (state.isExpanded || isPc)}
-        >
-          <Box>
-            <Box
-              component={Link}
-              href={`/channel/${channelId}?tab=ranking`}
-              sx={[
-                {
-                  width: 276,
-                  position: "absolute",
-                  right: 0,
-                  bottom: 64,
-                  borderRadius: 2,
-                  boxShadow: 2,
-                  bgcolor: "white",
-                },
-                isPc && {
-                  bottom: 256,
-                  transform: "translateX(calc(50% - 24px))",
-                },
-              ]}
-            >
-              <ButtonBase
-                sx={{
-                  width: "100%",
-                  ":hover": {
-                    bgcolor: "action.hover",
-                  },
-                }}
-              >
-                {state.rank !== undefined &&
-                  state.nickname !== undefined &&
-                  state.score !== undefined && (
-                    <RankingListItem
-                      rank={state.rank}
-                      nickname={state.nickname}
-                      score={state.score}
-                    />
-                  )}
-              </ButtonBase>
-            </Box>
-          </Box>
-        </Fade>
       </Box>
     </Box>
   );

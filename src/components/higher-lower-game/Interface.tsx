@@ -102,13 +102,17 @@ const Interface = () => {
   };
 
   useEffect(() => {
+    if (mode === "RANK") {
+      return;
+    }
+
     const youtubeModalGuideValue = localStorage.getItem(
       LS_KEY_YOUTUBE_MODAL_GUIDE
     );
     if (youtubeModalGuideValue === null) {
       setIsYoutubeModalGuideBackdropOpen(true);
     }
-  }, []);
+  }, [mode]);
 
   return (
     <Box
@@ -126,10 +130,10 @@ const Interface = () => {
         },
       ]}
     >
-      {isInitialized &&
-      randomVideos !== undefined &&
-      higherRandomVideo !== undefined
-        ? randomVideos.map((video, index) => {
+      {isInitialized
+        ? randomVideos !== undefined &&
+          higherRandomVideo !== undefined &&
+          randomVideos.map((video, index) => {
             const interfaceCss = getInterfaceCss(isPc, index);
 
             return (
