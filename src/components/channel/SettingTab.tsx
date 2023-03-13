@@ -130,7 +130,7 @@ const SettingTab = () => {
             placeholder="닉네임을 입력해주세요"
           />
           <Typography variant="caption" color={"GrayText"}>
-            부적절한 닉네임은 제재의 대상입니다.
+            부적절한 닉네임은 서비스 이용에 제한이 있을 수 있습니다.
           </Typography>
         </Box>
         <Button fullWidth variant="contained" type="submit" size="large">
