@@ -14,15 +14,12 @@ const SideEffect = () => {
     }
 
     switch (status) {
-      case "PENDING":
-        failAudioRef.current.load();
-        successAudioRef.current.load();
-        break;
       case "FAILED":
-        failAudioRef.current.volume = 0.25;
+        failAudioRef.current.load();
         failAudioRef.current.play();
         break;
       case "SUCCEEDED":
+        successAudioRef.current.load();
         successAudioRef.current.play();
         break;
     }
