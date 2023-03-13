@@ -46,7 +46,7 @@ const ChannelList = memo<ChannelListProps>((props) => {
   const [height, setHeight] = useState(816);
 
   const handleResize = () => {
-    setHeight(window.innerHeight);
+    setHeight(window.innerHeight - 128);
   };
 
   useEffect(() => {
