@@ -8,7 +8,7 @@ import { FormEventHandler, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { addDoc, collection } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import Fade from "@mui/material/Fade";
 
@@ -54,7 +54,7 @@ const Request = () => {
       return;
     }
 
-    addDoc(collection(db, "requests"), {
+    setDoc(doc(db, "requests", new Date().toISOString()), {
       email,
       uid,
       displayName,
