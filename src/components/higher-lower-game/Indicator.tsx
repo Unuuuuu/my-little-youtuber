@@ -13,7 +13,6 @@ import IconButton from "@mui/material/IconButton";
 import { useEffect, useState } from "react";
 import LocalFireDepartmentTwoToneIcon from "@mui/icons-material/LocalFireDepartmentTwoTone";
 import Fade from "@mui/material/Fade";
-import RankingListItem from "../common/RankingListItem";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { ChannelData, ScoreData } from "@/types";
@@ -22,11 +21,10 @@ import Checkbox from "@mui/material/Checkbox";
 import OpenInFullRoundedIcon from "@mui/icons-material/OpenInFullRounded";
 import CloseFullscreenRoundedIcon from "@mui/icons-material/CloseFullscreenRounded";
 import { SwitchBaseProps } from "@mui/material/internal/SwitchBase";
-import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
-const ShareButton = dynamic(() => import("./ShareButton"), {
+const Result = dynamic(() => import("./Result"), {
   ssr: false,
 });
 
@@ -386,33 +384,13 @@ const Indicator = () => {
                 },
               ]}
             >
-              {displayName != null &&
-                channelId !== undefined &&
-                state.rank !== undefined &&
-                state.score !== undefined && (
-                  <Box id="target" sx={{ pr: "100px" }}>
-                    <RankingListItem
-                      rank={state.rank}
-                      nickname={nicknames[channelId] ?? displayName}
-                      score={state.score}
-                    />
-                  </Box>
-                )}
-              <Box
-                sx={{
-                  position: "absolute",
-                  right: 12,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  display: "flex",
-                  gap: 1,
-                }}
-              >
-                <ShareButton />
-                <IconButton onClick={handleArrowButtonClick}>
-                  <ArrowForwardIosRoundedIcon fontSize="small" />
-                </IconButton>
-              </Box>
+              <Result
+                nicknames={nicknames}
+                channelId={channelId}
+                displayName={displayName}
+                rank={state.rank}
+                score={state.score}
+              />
             </Box>
           </Box>
         </Fade>

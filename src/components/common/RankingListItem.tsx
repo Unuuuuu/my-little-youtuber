@@ -19,21 +19,36 @@ const RankingListItem: React.FC<RankingListItemProps> = (props) => {
     case 1:
       rankElement = (
         <EmojiEventsTwoToneIcon
-          sx={{ color: "goldTrophy", fontSize: 32, flexBasis: 40 }}
+          sx={{
+            color: "goldTrophy",
+            fontSize: 32,
+            flexBasis: 40,
+            flexShrink: 0,
+          }}
         />
       );
       break;
     case 2:
       rankElement = (
         <EmojiEventsTwoToneIcon
-          sx={{ color: "silverTrophy", fontSize: 32, flexBasis: 40 }}
+          sx={{
+            color: "silverTrophy",
+            fontSize: 32,
+            flexBasis: 40,
+            flexShrink: 0,
+          }}
         />
       );
       break;
     case 3:
       rankElement = (
         <EmojiEventsTwoToneIcon
-          sx={{ color: "bronzeTrophy", fontSize: 32, flexBasis: 40 }}
+          sx={{
+            color: "bronzeTrophy",
+            fontSize: 32,
+            flexBasis: 40,
+            flexShrink: 0,
+          }}
         />
       );
       break;
@@ -68,10 +83,17 @@ const RankingListItem: React.FC<RankingListItemProps> = (props) => {
       ]}
     >
       {rankElement}
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-          <Typography fontWeight={500}>{nickname}</Typography>
-        </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          flexGrow: 1,
+          overflow: "hidden",
+        }}
+      >
+        <Typography fontWeight={500} noWrap>
+          {nickname}
+        </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
           <LocalFireDepartmentTwoToneIcon
             sx={{ color: "fire", fontSize: 16 }}
