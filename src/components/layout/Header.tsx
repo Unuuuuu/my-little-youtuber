@@ -243,6 +243,9 @@ const Header: React.FC<HeaderProps> = (props) => {
                 <MenuItem onClick={handleLogoutMenuItemClick} dense>
                   로그아웃
                 </MenuItem>
+                <a href="mailto:mylittley0utuber@gmail.com">
+                  <MenuItem dense>문의하기</MenuItem>
+                </a>
               </Menu>
             </Box>
           ) : (
