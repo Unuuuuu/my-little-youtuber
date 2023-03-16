@@ -1,4 +1,5 @@
 import "@/lib/firebase";
+import Provider from "./components/Provider";
 
 export const metadata = {
   title: "나의 작은 유튜버 - 유튜브 영상 조회수 대결 게임",
@@ -15,7 +16,9 @@ export default function Layout(props: Props) {
 
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <Provider>{children}</Provider>
+      </body>
     </html>
   );
 }
