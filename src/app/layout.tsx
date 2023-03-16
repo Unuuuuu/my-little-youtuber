@@ -1,3 +1,5 @@
+import "@/lib/firebase";
+
 export const metadata = {
   title: "나의 작은 유튜버 - 유튜브 영상 조회수 대결 게임",
   description:
