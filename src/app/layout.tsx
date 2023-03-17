@@ -1,4 +1,7 @@
 import "@/lib/firebase";
+import Header from "./components/Header";
+import Initialize from "./components/Initialize";
+import Main from "./components/Main";
 import Provider from "./components/Provider";
 
 export const metadata = {
@@ -11,13 +14,17 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default function Layout(props: Props) {
+export default async function Layout(props: Props) {
   const { children } = props;
 
   return (
     <html lang="ko">
       <body>
-        <Provider>{children}</Provider>
+        <Provider>
+          <Initialize />
+          <Header />
+          <Main>{children}</Main>
+        </Provider>
       </body>
     </html>
   );
