@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserInfo } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { Nicknames } from "@/types";
 
@@ -101,6 +101,15 @@ const userSlice = createSlice({
 
       const { channelId, nickname } = action.payload;
       const { nicknames, uid } = state;
+
+      const scoreDocRef = doc(db, "channels", channelId, "scores", uid);
+      getDoc(scoreDocRef).then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          updateDoc(scoreDocRef, {
+            nickname,
+          });
+        }
+      });
 
       const newNicknames = { ...nicknames, [channelId]: nickname };
       updateDoc(doc(db, "users", uid), {

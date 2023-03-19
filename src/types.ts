@@ -15,6 +15,8 @@ export interface ScoreData {
 
 export interface ChannelData {
   id: string;
+  scores: ScoreData[];
+  scoresSize: number;
   subscriberCount: number;
   title: string;
   thumbnail: {
@@ -23,7 +25,6 @@ export interface ChannelData {
   };
   updateTime: string;
   videos: VideoData[];
-  scores: ScoreData[];
 }
 
 export interface ChannelDataWithoutVideos extends Omit<ChannelData, "videos"> {}

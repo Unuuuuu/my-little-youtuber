@@ -13,7 +13,7 @@ import IconButton from "@mui/material/IconButton";
 import { useEffect, useState } from "react";
 import LocalFireDepartmentTwoToneIcon from "@mui/icons-material/LocalFireDepartmentTwoTone";
 import Fade from "@mui/material/Fade";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { ChannelData, ScoreData } from "@/types";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -133,10 +133,13 @@ const Indicator = () => {
       return;
     }
 
+    const nickname = nicknames[channelId];
+
     if (isResult) {
       const channelDocRef = doc(db, "channels", channelId);
       getDoc(channelDocRef).then(async (channelDocSnapshot) => {
-        const { scores: scoreDatas } = channelDocSnapshot.data() as ChannelData;
+        const { scores: scoreDatas, scoresSize = 0 } =
+          channelDocSnapshot.data() as ChannelData;
         const foundIndex = scoreDatas.findIndex(
           (value) => value.userId === userId
         );
@@ -149,8 +152,15 @@ const Indicator = () => {
             score
           );
 
+          setDoc(doc(db, "channels", channelId, "scores", userId), {
+            userId,
+            nickname: nickname ?? displayName,
+            score,
+          });
+
           updateDoc(channelDocRef, {
             scores: newScoreDatas,
+            scoresSize: scoresSize + 1,
           });
 
           setState({
@@ -172,6 +182,10 @@ const Indicator = () => {
               userId,
               score
             );
+
+            updateDoc(doc(db, "channels", channelId, "scores", userId), {
+              score,
+            });
 
             updateDoc(channelDocRef, {
               scores: newScoreDatas,
