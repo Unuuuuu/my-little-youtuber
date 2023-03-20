@@ -10,7 +10,16 @@ export default function Main(props: Props) {
   const { children } = props;
 
   return (
-    <Box component={"main"} sx={{ mt: "56px" }}>
+    <Box
+      component={"main"}
+      sx={{
+        flex: 1,
+        overflowY: "scroll",
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       {children}
     </Box>
   );

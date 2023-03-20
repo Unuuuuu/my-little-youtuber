@@ -1,11 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import channelSlice from "./slices/channelSlice";
+import gameSlice from "./slices/gameSlice";
+import modalSlice from "./slices/modalSlice";
+import snackbarSlice from "./slices/snackbarSlice";
 import userSlice from "./slices/userSlice";
 
 export const store = configureStore({
   reducer: {
     channel: channelSlice.reducer,
     user: userSlice.reducer,
+    snackbar: snackbarSlice.reducer,
+    modal: modalSlice.reducer,
+    game: gameSlice.reducer,
   },
 });
 

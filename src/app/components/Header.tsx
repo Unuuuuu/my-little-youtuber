@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppSelector } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import Typography from "@mui/material/Typography";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import Link from "next/link";
@@ -24,6 +24,7 @@ import Button from "@mui/material/Button";
 import GoogleIcon from "@mui/icons-material/Google";
 import { usePathname } from "next/navigation";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import { modalSliceActions } from "@/lib/slices/modalSlice";
 
 export default function Header() {
   const { channel, isInitialized, isSignedIn, photoURL } = useAppSelector(
@@ -42,13 +43,13 @@ export default function Header() {
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
   const isOpen = Boolean(anchorElement);
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
 
   const handleLoginButtonClick = () => {
-    // TODO
-    // if (navigator.userAgent.includes("KAKAOTALK")) {
-    //   dispatch(kakaotalkGuideModalActions.open());
-    //   return;
-    // }
+    if (navigator.userAgent.includes("KAKAOTALK")) {
+      dispatch(modalSliceActions.openKakaotalkGuideModal());
+      return;
+    }
 
     signInWithRedirect(auth, provider);
   };
@@ -66,17 +67,16 @@ export default function Header() {
     <Box
       component={"header"}
       sx={{
+        flexShrink: 0,
         width: "100%",
         height: 56,
-        position: "fixed",
-        top: 0,
         pl: 2,
         pr: "11px",
         display: "flex",
         alignItems: "center",
         bgcolor: "white",
-        zIndex: 10,
         gap: 2,
+        position: "relative",
       }}
     >
       <Box
@@ -91,7 +91,7 @@ export default function Header() {
           <YouTubeIcon
             fontSize="large"
             sx={{
-              color: "brand",
+              color: "primary.main",
             }}
           />
           {(pathname === "/" || isSm) && (
@@ -100,7 +100,8 @@ export default function Header() {
             </Typography>
           )}
         </Box>
-        {channel.id !== undefined &&
+        {pathname !== "/" &&
+          channel.id !== undefined &&
           channel.title !== undefined &&
           channel.thumbnail !== undefined && (
             <Fade in={true}>

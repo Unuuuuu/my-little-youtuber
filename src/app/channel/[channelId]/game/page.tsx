@@ -1,4 +1,3 @@
-import GameModeModal from "@/app/components/GameModeModal";
 import { db } from "@/lib/firebase";
 import {
   collection,
@@ -9,12 +8,12 @@ import {
   QuerySnapshot,
 } from "firebase/firestore";
 import { Metadata } from "next";
-import BannerSection from "./components/BannerSection";
+import YoutubePlayerModal from "../components/YoutubePlayerModal";
 import { ChannelContextProvider } from "./components/ChannelContext";
-import ChannelTabs from "./components/ChannelTabs";
-import Header from "./components/Header";
+import Control from "./components/Control";
 import Initialize from "./components/Initialize";
-import YoutubePlayerModal from "./components/YoutubePlayerModal";
+import SoundEffect from "./components/SoundEffect";
+import Videos from "./components/Videos";
 
 export async function generateStaticParams() {
   const querySnapshot = (await getDocs(
@@ -31,19 +30,12 @@ async function getChannel(channelId: string) {
     doc(db, "channels", channelId)
   )) as DocumentSnapshot<ChannelData>;
 
-  const { id, thumbnail, title, updateTime, videos } = docSnapshot.data()!;
-  const channel: {
-    id: ChannelData["id"];
-    thumbnail: ChannelData["thumbnail"];
-    title: ChannelData["title"];
-    updateTime: ChannelData["updateTime"];
-    video: VideoData;
-  } = {
+  const { id, thumbnail, title, videos } = docSnapshot.data()!;
+  const channel: Pick<ChannelData, "id" | "thumbnail" | "title" | "videos"> = {
     id,
     thumbnail,
     title,
-    updateTime,
-    video: videos[0],
+    videos,
   };
   return channel;
 }
@@ -63,7 +55,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: `https://www.mylittleyoutuber.com/channel/${channel.id}`,
+      url: `https://www.mylittleyoutuber.com/channel/${channel.id}/game`,
       images: {
         url: channel.thumbnail.url,
         width: 800,
@@ -87,11 +79,10 @@ export default async function Page(props: Props) {
     <>
       <ChannelContextProvider value={channel}>
         <Initialize />
-        <BannerSection />
-        <Header />
-        <ChannelTabs />
+        <Videos />
+        <Control />
+        <SoundEffect />
       </ChannelContextProvider>
-      <GameModeModal />
       <YoutubePlayerModal />
     </>
   );

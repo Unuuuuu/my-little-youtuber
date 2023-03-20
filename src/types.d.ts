@@ -1,5 +1,10 @@
+interface Nicknames {
+  [channelId: string]: string | undefined;
+}
+
 interface ScoreData {
   userId: string;
+  nickname: string;
   score: number;
 }
 
@@ -15,7 +20,7 @@ interface VideoData {
 
 interface ChannelData {
   id: string;
-  scores: ScoreData[];
+  scoresSize: number;
   subscriberCount: number;
   thumbnail: {
     blurDataURL: string;
@@ -25,3 +30,6 @@ interface ChannelData {
   updateTime: string;
   videos: VideoData[];
 }
+
+type HomeTabsValue = "all" | "favorite";
+type ChannelTabsValue = "ranking" | "setting";

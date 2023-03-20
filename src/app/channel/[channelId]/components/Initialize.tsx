@@ -3,22 +3,19 @@
 import { useAppDispatch } from "@/lib/hooks";
 import { channelSliceActions } from "@/lib/slices/channelSlice";
 import { useEffect } from "react";
+import { useChannelContext } from "./ChannelContext";
 
-interface Props {
-  channel: Pick<ChannelData, "id" | "thumbnail" | "title">;
-}
-
-export default function Initialize(props: Props) {
-  const { channel } = props;
+export default function Initialize() {
+  const { id, thumbnail, title } = useChannelContext();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(channelSliceActions.initialize(channel));
+    dispatch(channelSliceActions.initialize({ id, thumbnail, title }));
 
     return () => {
       dispatch(channelSliceActions.finalize());
     };
-  }, [channel, dispatch]);
+  }, [dispatch, id, thumbnail, title]);
 
   return null;
 }

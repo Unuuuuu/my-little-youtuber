@@ -2,31 +2,11 @@
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import xsBgImage from "@/assets/hero-section-xs-bg-image.png";
-import smBgImage from "@/assets/hero-section-sm-bg-image.png";
-import mdBgImage from "@/assets/hero-section-md-bg-image.png";
+import vsImageSrc from "@/assets/vs-image.svg";
+import bgImageSrc from "@/assets/hero-section-bg-image.svg";
 import Image from "next/image";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useEffect, useState } from "react";
-
-const xsBgImageBlurDataUrl =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAIAAAA7ljmRAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAMElEQVR4nGOIzUydvH5N1a4jJj2LGRg4OJ98+f7k/38GbUsGIXZuf09vR1dPHRsHAFPcDxlm7bGaAAAAAElFTkSuQmCC";
-const smBgImageBlurDataUrl =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAIAAADwyuo0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAI0lEQVR4nGNgEOAsXbzQ0Nblwrf/DGrW5sf//dcxNGNgEwAAe4cJTxeRUJcAAAAASUVORK5CYII=";
-const mdBgImageBlurDataUrl =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAABCAIAAAB2XpiaAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAFUlEQVR4nGMQt7DY+e1/Znkds4wKACIJBNffNqsRAAAAAElFTkSuQmCC";
 
 export default function HeroSection() {
-  const theme = useTheme();
-  const isSm = useMediaQuery(theme.breakpoints.up("sm"));
-  const isMd = useMediaQuery(theme.breakpoints.up("md"));
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  useEffect(() => {
-    setIsInitialized(true);
-  }, []);
-
   return (
     <Box
       component={"section"}
@@ -34,61 +14,44 @@ export default function HeroSection() {
         position: "relative",
         width: "100%",
         height: 270,
-        color: "white",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        bgcolor: "black",
+        backgroundImage: `url(${bgImageSrc.src})`,
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        flexShrink: 0,
       }}
     >
-      <Box sx={{ zIndex: 1, textAlign: "center" }}>
-        <Typography component={"h1"} fontSize={24} fontWeight={700}>
-          나의 작은 유튜버
+      <Box sx={{ zIndex: 1, textAlign: "center", color: "#4A4453" }}>
+        <Typography component={"h1"} fontSize={24}>
+          <Typography component={"b"} fontSize={24} fontWeight={500}>
+            좋아하는 유튜버
+          </Typography>
+          의 영상으로
         </Typography>
-        <Typography component={"h1"} fontSize={24} fontWeight={700}>
-          유튜브 영상 조회수 맞추기 게임
+        <Typography component={"h1"} fontSize={24}>
+          <Typography component={"b"} fontSize={24} fontWeight={500}>
+            조회수 맞추기 게임
+          </Typography>
+          을 해보세요
         </Typography>
       </Box>
-      <Box
-        sx={[
-          {
-            position: "absolute",
-            inset: 0,
-            maxWidth: 360,
-            margin: "auto",
-          },
-          isSm && {
-            maxWidth: 600,
-          },
-          isMd && {
-            maxWidth: 900,
-          },
-        ]}
-      >
-        {isInitialized && (
-          <Image
-            src={isMd ? mdBgImage : isSm ? smBgImage : xsBgImage}
-            alt="hero section background image"
-            fill
-            style={{ objectFit: "cover" }}
-            placeholder="blur"
-            blurDataURL={
-              isMd
-                ? mdBgImageBlurDataUrl
-                : isSm
-                ? smBgImageBlurDataUrl
-                : xsBgImageBlurDataUrl
-            }
-          />
-        )}
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            bgcolor: "rgba(0,0,0,0.75)",
-          }}
-        />
-      </Box>
+      <Image
+        src={vsImageSrc}
+        alt="hero section background image"
+        width={298}
+        height={374}
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          opacity: 0.2,
+          color: "white",
+        }}
+      />
     </Box>
   );
 }

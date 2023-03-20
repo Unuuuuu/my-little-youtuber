@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface ChannelState
+interface ChannelState
   extends Partial<Pick<ChannelData, "id" | "thumbnail" | "title">> {}
 
 const initialState: ChannelState = {};
