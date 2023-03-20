@@ -196,7 +196,7 @@ export default function ChannelGrid(props: Props) {
                     color="GrayText"
                     fontSize={14}
                   >
-                    {channel.scoresSize}명이 참여 중
+                    {channel.scoresSize}명 넘게 참여 중
                     <ChevronRightRoundedIcon
                       fontSize="small"
                       sx={{ ml: 0.5 }}
