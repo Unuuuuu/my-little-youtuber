@@ -22,15 +22,16 @@ async function getAllChannels() {
     .map<
       Pick<
         ChannelData,
-        "id" | "scoresSize" | "thumbnail" | "title" | "updateTime"
+        "id" | "scoresSize" | "tags" | "thumbnail" | "title" | "updateTime"
       >
     >((docSnapshot) => {
-      const { id, scoresSize, thumbnail, title, updateTime } =
+      const { id, scoresSize, tags, thumbnail, title, updateTime } =
         docSnapshot.data();
 
       return {
         id,
         scoresSize,
+        tags,
         thumbnail,
         title,
         updateTime,

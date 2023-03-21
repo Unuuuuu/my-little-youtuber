@@ -7,6 +7,7 @@ import Tab from "@mui/material/Tab";
 import AllTabPanel from "./AllTabPanel";
 import FavoriteTabPanel from "./FavoriteTabPanel";
 import { useAppSelector } from "@/lib/hooks";
+import TagTabPanel from "./TagTabPanel";
 
 export default function HomeTabs() {
   const { isInitialized, isSignedIn } = useAppSelector((state) => ({
@@ -44,8 +45,9 @@ export default function HomeTabs() {
           zIndex: 10,
         }}
       >
-        <Tab value={"all"} label="전체" />
         {isSignedIn && <Tab value={"favorite"} label="즐겨찾기" />}
+        <Tab value={"all"} label="전체" />
+        <Tab value={"woowakgood"} label="우왁굳" />
         <Box
           sx={{
             position: "absolute",
@@ -58,6 +60,11 @@ export default function HomeTabs() {
       </Tabs>
       <AllTabPanel value={"all"} selectedValue={selectedValue} />
       <FavoriteTabPanel value={"favorite"} selectedValue={selectedValue} />
+      <TagTabPanel
+        tagName={"woowakgood"}
+        value={"woowakgood"}
+        selectedValue={selectedValue}
+      />
     </Box>
   );
 }

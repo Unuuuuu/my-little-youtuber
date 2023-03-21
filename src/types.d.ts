@@ -22,6 +22,7 @@ interface ChannelData {
   id: string;
   scoresSize: number;
   subscriberCount: number;
+  tags: string[];
   thumbnail: {
     blurDataURL: string;
     url: string;
@@ -31,5 +32,5 @@ interface ChannelData {
   videos: VideoData[];
 }
 
-type HomeTabsValue = "all" | "favorite";
+type HomeTabsValue = "favorite" | "all" | "woowakgood";
 type ChannelTabsValue = "ranking" | "setting";
