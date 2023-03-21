@@ -5,7 +5,7 @@ import { createContext, useContext } from "react";
 export const AllChannelsContext = createContext<
   Pick<
     ChannelData,
-    "id" | "scoresSize" | "tags" | "thumbnail" | "title" | "updateTime"
+    "id" | "scoresSize" | "thumbnail" | "title" | "updateTime"
   >[]
 >([]);
 
@@ -18,7 +18,7 @@ interface Props {
   children?: React.ReactNode;
   value: Pick<
     ChannelData,
-    "id" | "scoresSize" | "tags" | "thumbnail" | "title" | "updateTime"
+    "id" | "scoresSize" | "thumbnail" | "title" | "updateTime"
   >[];
 }
 

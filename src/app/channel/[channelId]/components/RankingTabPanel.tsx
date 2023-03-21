@@ -17,8 +17,6 @@ import Typography from "@mui/material/Typography";
 import { useAppSelector } from "@/lib/hooks";
 import CircularProgress from "@mui/material/CircularProgress";
 
-interface Props extends Omit<TabPanelProps<ChannelTabsValue>, "children"> {}
-
 function generateTopRankingListItemElement({
   nickname,
   score,
@@ -86,6 +84,8 @@ function generateTopRankingListItemElement({
     </Box>
   );
 }
+
+interface Props extends Omit<TabPanelProps<ChannelTabsValue>, "children"> {}
 
 export default function RankingTabPanel(props: Props) {
   const { selectedValue, value } = props;

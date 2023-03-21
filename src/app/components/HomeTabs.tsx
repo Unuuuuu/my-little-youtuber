@@ -9,12 +9,17 @@ import FavoriteTabPanel from "./FavoriteTabPanel";
 import { useAppSelector } from "@/lib/hooks";
 import TagTabPanel from "./TagTabPanel";
 
-export default function HomeTabs() {
+interface Props {
+  allTags: TagData[];
+}
+
+export default function HomeTabs(props: Props) {
+  const { allTags } = props;
   const { isInitialized, isSignedIn } = useAppSelector((state) => ({
     isInitialized: state.user.isInitialized,
     isSignedIn: state.user.isSignedIn,
   }));
-  const [selectedValue, setSelectedValue] = useState<HomeTabsValue>(
+  const [selectedValue, setSelectedValue] = useState(
     isInitialized && isSignedIn ? "favorite" : "all"
   );
   const targetElementRef = useRef<HTMLDivElement>(null);
@@ -47,7 +52,9 @@ export default function HomeTabs() {
       >
         {isSignedIn && <Tab value={"favorite"} label="즐겨찾기" />}
         <Tab value={"all"} label="전체" />
-        <Tab value={"woowakgood"} label="우왁굳" />
+        {allTags.map((tag) => (
+          <Tab key={tag.id} value={tag.id} label={tag.label} />
+        ))}
         <Box
           sx={{
             position: "absolute",
@@ -58,13 +65,16 @@ export default function HomeTabs() {
           }}
         />
       </Tabs>
-      <AllTabPanel value={"all"} selectedValue={selectedValue} />
       <FavoriteTabPanel value={"favorite"} selectedValue={selectedValue} />
-      <TagTabPanel
-        tagName={"woowakgood"}
-        value={"woowakgood"}
-        selectedValue={selectedValue}
-      />
+      <AllTabPanel value={"all"} selectedValue={selectedValue} />
+      {allTags.map((tag) => (
+        <TagTabPanel
+          key={tag.id}
+          value={tag.id}
+          selectedValue={selectedValue}
+          channelIds={tag.channelIds}
+        />
+      ))}
     </Box>
   );
 }

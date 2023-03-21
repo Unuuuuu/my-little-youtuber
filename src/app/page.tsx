@@ -22,16 +22,15 @@ async function getAllChannels() {
     .map<
       Pick<
         ChannelData,
-        "id" | "scoresSize" | "tags" | "thumbnail" | "title" | "updateTime"
+        "id" | "scoresSize" | "thumbnail" | "title" | "updateTime"
       >
     >((docSnapshot) => {
-      const { id, scoresSize, tags, thumbnail, title, updateTime } =
+      const { id, scoresSize, thumbnail, title, updateTime } =
         docSnapshot.data();
 
       return {
         id,
         scoresSize,
-        tags,
         thumbnail,
         title,
         updateTime,
@@ -40,14 +39,24 @@ async function getAllChannels() {
   return allChannels;
 }
 
+async function getAllTags() {
+  const querySnapshot = (await getDocs(
+    query(collection(db, "tags"))
+  )) as QuerySnapshot<TagData>;
+
+  const allTags = querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
+  return allTags;
+}
+
 export default async function Page() {
   const allChannels = await getAllChannels();
+  const allTags = await getAllTags();
 
   return (
     <>
       <AllChannelsContextProvider value={allChannels}>
         <HeroSection />
-        <HomeTabs />
+        <HomeTabs allTags={allTags} />
         <YoutuberAddRequestModal />
       </AllChannelsContextProvider>
       <GameModeModal />

@@ -4,7 +4,7 @@ import { useAllChannelsContext } from "./AllChannelsContext";
 import ChannelGrid from "./ChannelGrid";
 import TabPanel, { Props as TabPanelProps } from "./TabPanel";
 
-interface Props extends Omit<TabPanelProps<HomeTabsValue>, "children"> {}
+interface Props extends Omit<TabPanelProps, "children"> {}
 
 export default function FavoriteTabPanel(props: Props) {
   const { selectedValue, value } = props;
@@ -25,7 +25,7 @@ export default function FavoriteTabPanel(props: Props) {
   }
 
   return (
-    <TabPanel<HomeTabsValue> value={value} selectedValue={selectedValue}>
+    <TabPanel value={value} selectedValue={selectedValue}>
       <ChannelGrid channels={favoriteChannels} />
     </TabPanel>
   );

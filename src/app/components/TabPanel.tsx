@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 
-export interface Props<T> {
+export interface Props<T = string> {
   children?: React.ReactNode;
   selectedValue: T;
   value: T;
