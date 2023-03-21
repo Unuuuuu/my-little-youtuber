@@ -52,6 +52,15 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: [
+      "나작유",
+      "나의 작은 유튜버",
+      `나의 작은 유튜버 ${channel.title}`,
+      "유튜브 영상 조회수 맞추기 게임",
+      `${channel.title} 유튜브 영상 조회수 맞추기 게임`,
+      "더 많이 더 적게",
+      "더 많이 더 적게 유튜브 버전",
+    ],
     openGraph: {
       title,
       description,
