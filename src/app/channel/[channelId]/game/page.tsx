@@ -11,6 +11,7 @@ import { Metadata } from "next";
 import YoutubePlayerModal from "../components/YoutubePlayerModal";
 import { ChannelContextProvider } from "./components/ChannelContext";
 import Control from "./components/Control";
+import Guide from "./components/Guide";
 import Initialize from "./components/Initialize";
 import SoundEffect from "./components/SoundEffect";
 import Videos from "./components/Videos";
@@ -91,6 +92,7 @@ export default async function Page(props: Props) {
         <Videos />
         <Control />
         <SoundEffect />
+        <Guide />
       </ChannelContextProvider>
       <YoutubePlayerModal />
     </>

@@ -29,7 +29,6 @@ const getDurationFromViewCount = (
 export default function Videos() {
   const {
     isSignedIn,
-    userId,
     isInitialized,
     gameMode,
     gameStatus,
@@ -199,6 +198,7 @@ export default function Videos() {
                       }
                     >
                       <IconButton
+                        id="guide-youtube-player-modal"
                         sx={{
                           color: "youtube",
                           position: "absolute",
