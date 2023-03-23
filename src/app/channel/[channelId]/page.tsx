@@ -54,8 +54,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   } = props;
   const channel = await getChannel(channelId);
 
-  const title = `${channel.title} | 나의 작은 유튜버 - 유튜브 영상 조회수 맞추기 게임`;
-  const description = `${channel.title}의 영상으로 조회수 맞추기 게임을 해보세요! 더 많이 더 적게의 유튜브 버전입니다.`;
+  const title = `${channel.title} | 나의 작은 유튜버 - 조회수 높은 영상 맞추기 게임`;
+  const description = `${channel.title}의 영상으로 조회수가 더 높은 영상을 맞추는 게임을 해보세요! 더 많이 더 적게의 유튜브 버전입니다.`;
 
   return {
     title,
@@ -64,8 +64,11 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       "나작유",
       "나의 작은 유튜버",
       `나의 작은 유튜버 ${channel.title}`,
-      "유튜브 영상 조회수 맞추기 게임",
-      `${channel.title} 유튜브 영상 조회수 맞추기 게임`,
+      "조회수 높은 영상 맞추기 게임",
+      `${channel.title} 조회수 높은 영상 맞추기 게임`,
+      "유튜브 맞추기",
+      "유튜버 맞추기",
+      "조회수 맞추기",
       "더 많이 더 적게",
       "더 많이 더 적게 유튜브 버전",
     ],

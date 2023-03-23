@@ -25,17 +25,9 @@ export default function HeroSection() {
       }}
     >
       <Box sx={{ zIndex: 1, textAlign: "center", color: "#4A4453" }}>
-        <Typography component={"h1"} fontSize={24}>
-          <Typography component={"b"} fontSize={24} fontWeight={500}>
-            좋아하는 유튜버
-          </Typography>
-          의 영상으로
-        </Typography>
-        <Typography component={"h1"} fontSize={24}>
-          <Typography component={"b"} fontSize={24} fontWeight={500}>
-            조회수 맞추기 게임
-          </Typography>
-          을 해보세요
+        <Typography component={"h1"} fontSize={24} fontWeight={500}>
+          나의 작은 유튜버, <br />
+          조회수 높은 영상 맞추기 게임
         </Typography>
       </Box>
       <Image
