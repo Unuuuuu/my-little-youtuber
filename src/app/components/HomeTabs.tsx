@@ -48,22 +48,19 @@ export default function HomeTabs(props: Props) {
           top: 0,
           bgcolor: "white",
           zIndex: 10,
+          borderBottom: 1,
+          borderColor: "divider",
+          ".MuiTabs-scrollButtons.Mui-disabled": {
+            opacity: 0.3,
+          },
         }}
+        allowScrollButtonsMobile
       >
         {isSignedIn && <Tab value={"favorite"} label="즐겨찾기" />}
         <Tab value={"all"} label="전체" />
         {allTags.map((tag) => (
           <Tab key={tag.id} value={tag.id} label={tag.label} />
         ))}
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-            height: "1px",
-            bgcolor: "divider",
-          }}
-        />
       </Tabs>
       <FavoriteTabPanel value={"favorite"} selectedValue={selectedValue} />
       <AllTabPanel value={"all"} selectedValue={selectedValue} />
