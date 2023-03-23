@@ -8,6 +8,7 @@ import AllTabPanel from "./AllTabPanel";
 import FavoriteTabPanel from "./FavoriteTabPanel";
 import { useAppSelector } from "@/lib/hooks";
 import TagTabPanel from "./TagTabPanel";
+import { useSearchParams } from "next/navigation";
 
 interface Props {
   allTags: TagData[];
@@ -19,8 +20,10 @@ export default function HomeTabs(props: Props) {
     isInitialized: state.user.isInitialized,
     isSignedIn: state.user.isSignedIn,
   }));
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab");
   const [selectedValue, setSelectedValue] = useState(
-    isInitialized && isSignedIn ? "favorite" : "all"
+    tab ?? (isInitialized && isSignedIn ? "favorite" : "all")
   );
   const targetElementRef = useRef<HTMLDivElement>(null);
 
