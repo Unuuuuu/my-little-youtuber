@@ -8,7 +8,7 @@ import AllTabPanel from "./AllTabPanel";
 import FavoriteTabPanel from "./FavoriteTabPanel";
 import { useAppSelector } from "@/lib/hooks";
 import TagTabPanel from "./TagTabPanel";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
   allTags: TagData[];
@@ -26,13 +26,24 @@ export default function HomeTabs(props: Props) {
     tab ?? (isInitialized && isSignedIn ? "favorite" : "all")
   );
   const targetElementRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   const handleChange: TabsProps["onChange"] = (_, newValue) => {
     if (document.querySelector("main")!.scrollTop > 270) {
       targetElementRef.current!.scrollIntoView();
     }
+    router.replace(`${pathname}?tab=${newValue}`);
     setSelectedValue(newValue);
   };
+
+  useEffect(() => {
+    if (tab === null) {
+      return;
+    }
+
+    setSelectedValue(tab);
+  }, [tab]);
 
   useEffect(() => {
     if (!isSignedIn && selectedValue === "favorite") {
