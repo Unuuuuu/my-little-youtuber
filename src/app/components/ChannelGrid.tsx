@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { userSliceActions } from "@/lib/slices/userSlice";
 import { snackbarSliceActions } from "@/lib/slices/snackbarSlice";
 import { modalSliceActions } from "@/lib/slices/modalSlice";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -27,7 +27,7 @@ interface Props {
   >[];
 }
 
-export default function ChannelGrid(props: Props) {
+const ChannelGrid = memo((props: Props) => {
   const { channels } = props;
   const [end, setEnd] = useState(23);
   const targetElementRef = useRef<HTMLDivElement | null>(null);
@@ -93,7 +93,7 @@ export default function ChannelGrid(props: Props) {
   };
 
   return (
-    <Grid container spacing={2} sx={{ p: 2 }}>
+    <Grid container spacing={2}>
       <Grid xs={12} sm={6} md={4} lg={3}>
         <Paper
           variant="outlined"
@@ -126,7 +126,7 @@ export default function ChannelGrid(props: Props) {
                 noWrap
                 sx={{ width: "100%" }}
               >
-                좋아하는 유튜브 채널 추가를 요청해보세요
+                좋아하는 유튜버 추가를 요청해보세요
               </Typography>
             </Box>
           </Box>
@@ -277,4 +277,8 @@ export default function ChannelGrid(props: Props) {
         ))}
     </Grid>
   );
-}
+});
+
+ChannelGrid.displayName = "ChannelGrid";
+
+export default ChannelGrid;
