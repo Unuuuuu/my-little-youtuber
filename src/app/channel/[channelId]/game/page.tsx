@@ -59,9 +59,6 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       `나의 작은 유튜버 ${channel.title}`,
       "조회수 높은 영상 맞추기 게임",
       `${channel.title} 조회수 높은 영상 맞추기 게임`,
-      "유튜브 맞추기",
-      "유튜버 맞추기",
-      "조회수 맞추기",
       "더 많이 더 적게",
       "더 많이 더 적게 유튜브 버전",
     ],
@@ -74,6 +71,10 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
         width: 800,
         height: 800,
       },
+    },
+    robots: {
+      index: false,
+      follow: false,
     },
   };
 }
