@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Image from "next/image";
+import Fade from "@mui/material/Fade";
 
 const SESSION_STORAGE_KEY = "NO_MORE_GUIDE";
 
@@ -70,7 +71,7 @@ export default function Guide() {
 
   return (
     <Backdrop open={isInitialized && isOpen}>
-      {step === 0 && (
+      <Fade in={step === 0}>
         <Box
           sx={{
             position: "absolute",
@@ -127,8 +128,8 @@ export default function Guide() {
             </Box>
           </Box>
         </Box>
-      )}
-      {step === 1 && (
+      </Fade>
+      <Fade in={step === 1}>
         <Box
           sx={[
             {
@@ -198,7 +199,7 @@ export default function Guide() {
             </Box>
           </Box>
         </Box>
-      )}
+      </Fade>
     </Backdrop>
   );
 }
