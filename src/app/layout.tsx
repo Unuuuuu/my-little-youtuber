@@ -36,6 +36,12 @@ export const metadata: Metadata = {
       height: 353,
     },
   },
+  twitter: {
+    card: "summary",
+    title,
+    description,
+    images: "https://www.mylittleyoutuber.com/logo.png",
+  },
 };
 
 interface Props {

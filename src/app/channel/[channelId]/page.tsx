@@ -79,6 +79,12 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
         height: 800,
       },
     },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      images: channel.thumbnail.url,
+    },
     robots: {
       index: false,
       follow: false,
