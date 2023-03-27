@@ -58,7 +58,7 @@ export default function Guide() {
         );
       });
     };
-  }, [isInitialized]);
+  }, [gameMode, isInitialized]);
 
   const handleNextButtonClick = () => {
     setStep((prev) => prev + 1);

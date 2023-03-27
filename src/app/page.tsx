@@ -11,6 +11,8 @@ import HeroSection from "./components/HeroSection";
 import YoutuberAddRequestModal from "./components/YoutuberAddRequestModal";
 import { AllChannelsContextProvider } from "./components/AllChannelsContext";
 import GameModeModal from "./components/GameModeModal";
+import { Suspense } from "react";
+import HomeTabsFallback from "./components/HomeTabsFallback";
 
 async function getAllChannels() {
   const querySnapshot = (await getDocs(
@@ -56,7 +58,9 @@ export default async function Page() {
     <>
       <AllChannelsContextProvider value={allChannels}>
         <HeroSection />
-        <HomeTabs allTags={allTags} />
+        <Suspense fallback={<HomeTabsFallback />}>
+          <HomeTabs allTags={allTags} />
+        </Suspense>
         <YoutuberAddRequestModal />
       </AllChannelsContextProvider>
       <GameModeModal />

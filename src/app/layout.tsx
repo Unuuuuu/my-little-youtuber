@@ -15,7 +15,6 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
-  viewport: { width: "device-width", initialScale: 1 },
   keywords: [
     "나작유",
     "나의 작은 유튜버",
