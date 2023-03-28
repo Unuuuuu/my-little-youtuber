@@ -38,3 +38,7 @@ interface TagData {
 }
 
 type ChannelTabsValue = "ranking" | "setting";
+
+interface Window {
+  adsbygoogle: { [key: string]: unknown }[];
+}

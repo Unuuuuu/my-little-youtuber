@@ -25,13 +25,14 @@ export default function HomeTabs(props: Props) {
   const [selectedValue, setSelectedValue] = useState(
     tab ?? (isInitialized && isSignedIn ? "favorite" : "all")
   );
-  const targetElementRef = useRef<HTMLDivElement>(null);
+  const scrollTargetElementRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
+  const isIntersectingRef = useRef(true);
 
   const handleChange: TabsProps["onChange"] = (_, newValue) => {
-    if (document.querySelector("main")!.scrollTop > 270) {
-      targetElementRef.current!.scrollIntoView();
+    if (!isIntersectingRef.current) {
+      scrollTargetElementRef.current!.scrollIntoView();
     }
     router.replace(`${pathname}?tab=${newValue}`);
     setSelectedValue(newValue);
@@ -51,8 +52,29 @@ export default function HomeTabs(props: Props) {
     }
   }, [isSignedIn, selectedValue]);
 
+  useEffect(() => {
+    const observeTargetElement = document.querySelector("section#hero");
+    if (observeTargetElement === null) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        isIntersectingRef.current = entry.isIntersecting;
+      },
+      { root: document.querySelector("main") }
+    );
+
+    observer.observe(observeTargetElement);
+
+    return () => {
+      observer.unobserve(observeTargetElement);
+    };
+  }, []);
+
   return (
-    <Box ref={targetElementRef} sx={{ flex: 1 }}>
+    <Box ref={scrollTargetElementRef} sx={{ flex: 1 }}>
       <Tabs
         value={selectedValue}
         onChange={handleChange}

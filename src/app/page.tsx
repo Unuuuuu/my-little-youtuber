@@ -61,8 +61,8 @@ export default async function Page() {
         <Suspense fallback={<HomeTabsFallback />}>
           <HomeTabs allTags={allTags} />
         </Suspense>
-        <YoutuberAddRequestModal />
       </AllChannelsContextProvider>
+      <YoutuberAddRequestModal />
       <GameModeModal />
     </>
   );

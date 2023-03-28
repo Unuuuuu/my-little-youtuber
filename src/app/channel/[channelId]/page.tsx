@@ -9,10 +9,9 @@ import {
   QuerySnapshot,
 } from "firebase/firestore";
 import { Metadata } from "next";
-import BannerSection from "./components/BannerSection";
 import { ChannelContextProvider } from "./components/ChannelContext";
 import ChannelTabs from "./components/ChannelTabs";
-import Header from "./components/Header";
+import InfoSection from "./components/InfoSection";
 import Initialize from "./components/Initialize";
 import YoutubePlayerModal from "./components/YoutubePlayerModal";
 
@@ -105,8 +104,7 @@ export default async function Page(props: Props) {
     <>
       <ChannelContextProvider value={channel}>
         <Initialize />
-        <BannerSection />
-        <Header />
+        <InfoSection />
         <ChannelTabs />
       </ChannelContextProvider>
       <GameModeModal />

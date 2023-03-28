@@ -11,14 +11,15 @@ import { useAppSelector } from "@/lib/hooks";
 export default function ChannelTabs() {
   const [selectedValue, setSelectedValue] =
     useState<ChannelTabsValue>("ranking");
-  const targetElementRef = useRef<HTMLDivElement>(null);
+  const scrollTargetElementRef = useRef<HTMLDivElement>(null);
   const { isSignedIn } = useAppSelector((state) => ({
     isSignedIn: state.user.isSignedIn,
   }));
+  const isIntersectingRef = useRef(true);
 
   const handleChange: TabsProps["onChange"] = (_, newValue) => {
-    if (document.querySelector("main")!.scrollTop > 395) {
-      targetElementRef.current!.scrollIntoView();
+    if (!isIntersectingRef.current) {
+      scrollTargetElementRef.current!.scrollIntoView();
     }
     setSelectedValue(newValue);
   };
@@ -29,9 +30,30 @@ export default function ChannelTabs() {
     }
   }, [isSignedIn, selectedValue]);
 
+  useEffect(() => {
+    const observeTargetElement = document.querySelector("section#info");
+    if (observeTargetElement === null) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        isIntersectingRef.current = entry.isIntersecting;
+      },
+      { root: document.querySelector("main") }
+    );
+
+    observer.observe(observeTargetElement);
+
+    return () => {
+      observer.unobserve(observeTargetElement);
+    };
+  }, []);
+
   return (
     <Box
-      ref={targetElementRef}
+      ref={scrollTargetElementRef}
       sx={{ flex: 1, display: "flex", flexDirection: "column" }}
     >
       <Tabs
@@ -43,19 +65,12 @@ export default function ChannelTabs() {
           top: 0,
           bgcolor: "white",
           zIndex: 10,
+          borderBottom: 1,
+          borderColor: "divider",
         }}
       >
         <Tab value={"ranking"} label="랭킹" />
         {isSignedIn && <Tab value={"setting"} label="설정" />}
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-            height: "1px",
-            bgcolor: "divider",
-          }}
-        />
       </Tabs>
       <RankingTabPanel value={"ranking"} selectedValue={selectedValue} />
       <SettingTabPanel value={"setting"} selectedValue={selectedValue} />
