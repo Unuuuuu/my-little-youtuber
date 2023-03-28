@@ -87,7 +87,6 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     },
     robots: {
       index: false,
-      follow: false,
     },
   };
 }
