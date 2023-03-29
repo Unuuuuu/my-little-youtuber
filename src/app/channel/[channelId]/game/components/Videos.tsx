@@ -15,6 +15,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Skeleton from "@mui/material/Skeleton";
 import Tooltip from "@mui/material/Tooltip";
+import Control from "./Control";
 
 const getDurationFromViewCount = (
   viewCount: number,
@@ -67,6 +68,7 @@ export default function Videos() {
     <Box
       sx={[
         {
+          position: "relative",
           width: "100%",
           height: "100%",
           px: 2,
@@ -250,6 +252,7 @@ export default function Videos() {
               </Box>
             );
           })}
+      <Control />
     </Box>
   );
 }
