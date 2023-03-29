@@ -87,9 +87,6 @@ export default function Provider(props: Props) {
             padding: 0,
             listStyle: "none",
           },
-          "ins.adsbygoogle[data-ad-status='unfilled']": {
-            display: "none !important",
-          },
         }}
       />
       <ThemeProvider theme={theme}>

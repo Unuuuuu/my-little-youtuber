@@ -10,7 +10,8 @@ import {
 import { Metadata } from "next";
 import YoutubePlayerModal from "../components/YoutubePlayerModal";
 import { ChannelContextProvider } from "./components/ChannelContext";
-import Control from "./components/Control";
+import GameBottomDisplayAd from "./components/GameBottomDisplayAd";
+import GameTopDisplayAd from "./components/GameTopDisplayAd";
 import Guide from "./components/Guide";
 import Initialize from "./components/Initialize";
 import SoundEffect from "./components/SoundEffect";
@@ -98,8 +99,9 @@ export default async function Page(props: Props) {
     <>
       <ChannelContextProvider value={channel}>
         <Initialize />
+        <GameTopDisplayAd />
         <Videos />
-        <Control />
+        <GameBottomDisplayAd />
         <SoundEffect />
         <Guide />
       </ChannelContextProvider>
