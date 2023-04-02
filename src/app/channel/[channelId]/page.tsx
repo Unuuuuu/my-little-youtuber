@@ -84,9 +84,6 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       description,
       images: channel.thumbnail.url,
     },
-    robots: {
-      index: false,
-    },
   };
 }
 
