@@ -101,7 +101,8 @@ export default function RankingTabPanel(props: Props) {
     getDocs(
       query(
         collection(db, "channels", channelId, "scores"),
-        orderBy("score", "desc")
+        orderBy("score", "desc"),
+        orderBy("createdAt")
       )
     ).then((querySnapshot) => {
       const newScores = (
