@@ -10,6 +10,7 @@ import {
   orderBy,
   query,
   QueryDocumentSnapshot,
+  serverTimestamp,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
@@ -74,6 +75,7 @@ export default function RankGameResult(props: Props) {
             userId,
             nickname: nickname ?? displayName,
             score,
+            createdAt: serverTimestamp(),
           });
 
           updateDoc(doc(db, "channels", channelId), {
@@ -96,6 +98,7 @@ export default function RankGameResult(props: Props) {
 
             updateDoc(scoreDocRef, {
               score,
+              createdAt: serverTimestamp(),
             });
 
             const targetIndex = scores.findIndex(
