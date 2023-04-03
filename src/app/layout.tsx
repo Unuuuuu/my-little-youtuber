@@ -10,7 +10,7 @@ import Provider from "./components/Provider";
 
 const title = "나의 작은 유튜버 - 조회수 높은 영상 맞추기 게임";
 const description =
-  "좋아하는 유튜버의 영상으로 조회수가 더 높은 영상을 맞추는 게임을 해보세요! 더 많이 더 적게의 유튜브 버전입니다.";
+  "좋아하는 유튜버의 영상으로 조회수가 더 높은 영상을 맞추는 게임을 해보세요. (유튜브 월드컵, 조회수 월드컵, 더 많이 더 적게 유튜브 버전)";
 
 export const metadata: Metadata = {
   title,
@@ -19,6 +19,8 @@ export const metadata: Metadata = {
     "나작유",
     "나의 작은 유튜버",
     "조회수 높은 영상 맞추기 게임",
+    "유튜브 월드컵",
+    "조회수 월드컵",
     "더 많이 더 적게",
     "더 많이 더 적게 유튜브 버전",
   ],

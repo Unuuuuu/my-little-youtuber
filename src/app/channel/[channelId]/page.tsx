@@ -54,7 +54,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const channel = await getChannel(channelId);
 
   const title = `${channel.title} | 나의 작은 유튜버 - 조회수 높은 영상 맞추기 게임`;
-  const description = `${channel.title}의 영상으로 조회수가 더 높은 영상을 맞추는 게임을 해보세요! 더 많이 더 적게의 유튜브 버전입니다.`;
+  const description = `${channel.title}의 영상으로 조회수가 더 높은 영상을 맞추는 게임을 해보세요. (${channel.title} 유튜브 월드컵, ${channel.title} 조회수 월드컵, 더 많이 더 적게 ${channel.title} 유튜브 버전)`;
 
   return {
     title,
@@ -65,8 +65,13 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       `나의 작은 유튜버 ${channel.title}`,
       "조회수 높은 영상 맞추기 게임",
       `${channel.title} 조회수 높은 영상 맞추기 게임`,
+      "유튜브 월드컵",
+      "조회수 월드컵",
+      `${channel.title} 유튜브 월드컵`,
+      `${channel.title} 조회수 월드컵`,
       "더 많이 더 적게",
       "더 많이 더 적게 유튜브 버전",
+      `더 많이 더 적게 ${channel.title} 유튜브 버전`,
     ],
     openGraph: {
       title,
