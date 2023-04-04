@@ -12,6 +12,7 @@ import YoutubePlayerModal from "../components/YoutubePlayerModal";
 import { ChannelContextProvider } from "./components/ChannelContext";
 import GameBottomDisplayAd from "./components/GameBottomDisplayAd";
 import GameTopDisplayAd from "./components/GameTopDisplayAd";
+import Guide from "./components/Guide";
 import Initialize from "./components/Initialize";
 import SoundEffect from "./components/SoundEffect";
 import Videos from "./components/Videos";
@@ -107,7 +108,7 @@ export default async function Page(props: Props) {
         <Videos />
         {/* <GameBottomDisplayAd /> */}
         <SoundEffect />
-        {/* <Guide /> 광고로 레이아웃이 깨져서 제외시킴 */}
+        <Guide />
       </ChannelContextProvider>
       <YoutubePlayerModal />
     </>
