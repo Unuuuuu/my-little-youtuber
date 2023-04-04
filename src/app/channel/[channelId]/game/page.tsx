@@ -103,9 +103,9 @@ export default async function Page(props: Props) {
     <>
       <ChannelContextProvider value={channel}>
         <Initialize />
-        <GameTopDisplayAd />
+        {/* <GameTopDisplayAd /> */}
         <Videos />
-        <GameBottomDisplayAd />
+        {/* <GameBottomDisplayAd /> */}
         <SoundEffect />
         {/* <Guide /> 광고로 레이아웃이 깨져서 제외시킴 */}
       </ChannelContextProvider>

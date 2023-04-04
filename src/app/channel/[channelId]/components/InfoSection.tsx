@@ -55,7 +55,7 @@ export default function Header() {
 
   return (
     <section id="info">
-      <ChannelDisplayAd />
+      {/* <ChannelDisplayAd /> */}
       <Box
         sx={{
           height: 270,

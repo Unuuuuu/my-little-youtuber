@@ -20,7 +20,7 @@ export default function HeroSection() {
         flexShrink: 0,
       }}
     >
-      <HomeDisplayAd />
+      {/* <HomeDisplayAd /> */}
       <Box
         sx={{
           position: "relative",
