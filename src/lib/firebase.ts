@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAnalytics, isSupported } from "firebase/analytics";
+import { Analytics, getAnalytics, isSupported } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 
@@ -17,12 +17,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
-const analytics = isSupported().then((value) => {
+let analytics: Analytics | null = null;
+isSupported().then((value) => {
   if (value) {
-    return getAnalytics(app);
+    analytics = getAnalytics(app);
   }
-
-  return null;
 });
 const auth = getAuth();
 auth.languageCode = "ko";
