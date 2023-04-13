@@ -1,9 +1,11 @@
 "use client";
 
+import { analytics } from "@/lib/firebase";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { channelSliceActions } from "@/lib/slices/channelSlice";
 import { gameSliceActions } from "@/lib/slices/gameSlice";
 import { snackbarSliceActions } from "@/lib/slices/snackbarSlice";
+import { logEvent } from "firebase/analytics";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useChannelContext } from "./ChannelContext";
@@ -21,6 +23,18 @@ export default function Initialize() {
     if (!isSignedIn && gameMode === "RANK") {
       router.push(`/channel/${id}`);
       dispatch(snackbarSliceActions.openLoginRequestSnackbar());
+      return;
+    }
+
+    if (analytics === null) {
+      return;
+    }
+
+    logEvent(analytics, "v1_game");
+    if (gameMode === "GENERAL") {
+      logEvent(analytics, "v1_general_game");
+    } else if (gameMode === "RANK") {
+      logEvent(analytics, "v1_rank_game");
     }
   }, [dispatch, gameMode, id, isSignedIn, router]);
 
