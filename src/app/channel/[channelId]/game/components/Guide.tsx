@@ -13,7 +13,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Image from "next/image";
 import Fade from "@mui/material/Fade";
 
-const SESSION_STORAGE_KEY = "NO_MORE_GUIDE";
+const LOCAL_STORAGE_KEY = "NO_MORE_GUIDE";
 
 export default function Guide() {
   const { isInitialized, randomVideos, gameMode } = useAppSelector((state) => ({
@@ -28,7 +28,7 @@ export default function Guide() {
   const isLg = useMediaQuery(theme.breakpoints.up("lg"));
 
   useEffect(() => {
-    const isNoMoreGuide = window.sessionStorage.getItem(SESSION_STORAGE_KEY);
+    const isNoMoreGuide = window.localStorage.getItem(LOCAL_STORAGE_KEY);
 
     if (!isInitialized || isNoMoreGuide === "true" || gameMode === "RANK") {
       return;
@@ -65,7 +65,7 @@ export default function Guide() {
   };
 
   const handleConfirmButtonClick = () => {
-    window.sessionStorage.setItem(SESSION_STORAGE_KEY, "true");
+    window.localStorage.setItem(LOCAL_STORAGE_KEY, "true");
     setIsOpen(false);
   };
 
