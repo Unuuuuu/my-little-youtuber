@@ -1,3 +1,5 @@
+import Provider from "./components/Provider";
+
 interface Props {
   children: React.ReactNode;
 }
@@ -7,7 +9,9 @@ export default function Layout(props: Props) {
 
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <Provider>{children}</Provider>
+      </body>
     </html>
   );
 }
