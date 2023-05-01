@@ -1,3 +1,4 @@
+import Header from "./components/Header";
 import Provider from "./components/Provider";
 
 interface Props {
@@ -10,7 +11,10 @@ export default function Layout(props: Props) {
   return (
     <html lang="ko">
       <body>
-        <Provider>{children}</Provider>
+        <Provider>
+          <Header />
+          {children}
+        </Provider>
       </body>
     </html>
   );
