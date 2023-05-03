@@ -4,11 +4,20 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import { gmarketSans, notoSansKR } from "@/lib/fonts";
+import { Provider as ReduxProvider } from "react-redux";
+import { store } from "@/lib/store";
+import { grey } from "@mui/material/colors";
 
 const theme = createTheme({
   palette: {
     primary: {
       main: "#9254de",
+    },
+    buttonSecondary: {
+      main: grey[700],
+    },
+    error: {
+      main: "#DE5454",
     },
   },
   typography: {
@@ -90,9 +99,25 @@ const theme = createTheme({
       },
     },
   },
+  breakpoints: {
+    values: {
+      mobile: 0,
+      tablet: 768,
+      desktop: 1024,
+    },
+  },
 });
 
 declare module "@mui/material/styles" {
+  interface Palette {
+    buttonSecondary: Palette["primary"];
+    // google: React.CSSProperties["color"];
+  }
+
+  interface PaletteOptions {
+    buttonSecondary: PaletteOptions["primary"];
+    // google: React.CSSProperties["color"];
+  }
   interface TypographyVariants {
     detail1: React.CSSProperties;
     detail2: React.CSSProperties;
@@ -102,12 +127,28 @@ declare module "@mui/material/styles" {
     detail1?: React.CSSProperties;
     detail2?: React.CSSProperties;
   }
+  interface BreakpointOverrides {
+    xs: false;
+    sm: false;
+    md: false;
+    lg: false;
+    xl: false;
+    mobile: true;
+    tablet: true;
+    desktop: true;
+  }
 }
 
 declare module "@mui/material/Typography" {
   interface TypographyPropsVariantOverrides {
     detail1: true;
     detail2: true;
+  }
+}
+
+declare module "@mui/material/Button" {
+  interface ButtonPropsColorOverrides {
+    buttonSecondary: true;
   }
 }
 
@@ -137,7 +178,9 @@ export default function Provider(props: Props) {
           },
         }}
       />
-      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <ReduxProvider store={store}>{children}</ReduxProvider>
+      </ThemeProvider>
     </>
   );
 }

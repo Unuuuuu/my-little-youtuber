@@ -5,8 +5,15 @@ import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import MagnifyingGlassIcon from "./MagnifyingGlassIcon";
 import CirclePlusIcon from "./CirclePlusIcon";
+import { useAppDispatch } from "@/lib/hooks";
+import { youtuberAddRequestSliceActions } from "@/lib/slices/youtuberAddRequestSlice";
 
 export default function Header() {
+  const dispatch = useAppDispatch();
+  const handleCirclePlusButtonClick = () => {
+    dispatch(youtuberAddRequestSliceActions.open());
+  };
+
   return (
     <Box
       component={"header"}
@@ -53,6 +60,7 @@ export default function Header() {
             justifyContent: "center",
             cursor: "pointer",
           }}
+          onClick={handleCirclePlusButtonClick}
         >
           <CirclePlusIcon
             sx={{

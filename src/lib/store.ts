@@ -1,7 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
+import youtuberAddRequestSlice from "./slices/youtuberAddRequestSlice";
+import breakpointSlice from "./slices/breakpointSlice";
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    youtuberAddRequest: youtuberAddRequestSlice.reducer,
+    breakpoint: breakpointSlice.reducer,
+  },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
