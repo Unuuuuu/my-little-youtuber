@@ -1,5 +1,6 @@
 import Header from "./components/Header";
 import Provider from "./components/Provider";
+import "@/lib/firebase";
 
 interface Props {
   children: React.ReactNode;
