@@ -16,10 +16,10 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 let analytics: Analytics | null = null;
-isSupported().then((value) => {
-  if (value) {
-    analytics = getAnalytics(app);
-  }
-});
+// isSupported().then((value) => {
+//   if (value) {
+//     analytics = getAnalytics(app);
+//   }
+// });
 
 export { db, analytics };
