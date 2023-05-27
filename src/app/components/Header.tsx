@@ -1,12 +1,13 @@
 "use client";
 
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import MagnifyingGlassIcon from "./MagnifyingGlassIcon";
 import CirclePlusIcon from "./CirclePlusIcon";
 import { useAppDispatch } from "@/lib/hooks";
 import { youtuberAddRequestSliceActions } from "@/lib/slices/youtuberAddRequestSlice";
+import logoWithNameImageSrc from "../../assets/logo-with-name.png";
+import Image from "next/image";
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -30,8 +31,12 @@ export default function Header() {
         href={"/"}
         sx={{ display: "flex", alignItems: "center", gap: 1 }}
       >
-        <Box sx={{ width: 32, height: 32, bgcolor: "#d9d9d9" }} />
-        <Typography variant="h2">나의 작은 유튜버</Typography>
+        <Image
+          src={logoWithNameImageSrc}
+          alt="logo with name"
+          width={170}
+          height={28}
+        />
       </Box>
       <Box sx={{ display: "flex" }}>
         <Box
