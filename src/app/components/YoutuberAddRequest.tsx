@@ -38,14 +38,17 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export default function YoutuberAddRequest() {
-  const { isTablet, isOpen, isComplete, completeType } = useAppSelector(
-    (state) => ({
-      isTablet: state.breakpoint.isTablet,
-      isOpen: state.youtuberAddRequest.isOpen,
-      isComplete: state.youtuberAddRequest.isComplete,
-      completeType: state.youtuberAddRequest.completeType,
-    })
-  );
+  const {
+    // isTablet,
+    isOpen,
+    isComplete,
+    completeType,
+  } = useAppSelector((state) => ({
+    // isTablet: state.breakpoint.isTablet,
+    isOpen: state.youtuberAddRequest.isOpen,
+    isComplete: state.youtuberAddRequest.isComplete,
+    completeType: state.youtuberAddRequest.completeType,
+  }));
   const dispatch = useAppDispatch();
 
   const {
@@ -252,35 +255,35 @@ export default function YoutuberAddRequest() {
     </Box>
   );
 
-  if (isTablet) {
-    return (
-      <Dialog
-        open={isOpen}
-        onClose={handleClose}
-        sx={{
-          ".MuiDialog-paper": {
-            width: "360px",
-            borderRadius: "16px",
-          },
-        }}
-      >
-        {headerElement}
-        <Box
-          component={"main"}
-          sx={
-            !isComplete
-              ? { p: "12px 24px 24px" }
-              : {
-                  p: "28px 24px 24px",
-                  height: "396px",
-                }
-          }
-        >
-          {!isComplete ? addElement : completeElement}
-        </Box>
-      </Dialog>
-    );
-  }
+  // if (isTablet) {
+  //   return (
+  //     <Dialog
+  //       open={isOpen}
+  //       onClose={handleClose}
+  //       sx={{
+  //         ".MuiDialog-paper": {
+  //           width: "360px",
+  //           borderRadius: "16px",
+  //         },
+  //       }}
+  //     >
+  //       {headerElement}
+  //       <Box
+  //         component={"main"}
+  //         sx={
+  //           !isComplete
+  //             ? { p: "12px 24px 24px" }
+  //             : {
+  //                 p: "28px 24px 24px",
+  //                 height: "396px",
+  //               }
+  //         }
+  //       >
+  //         {!isComplete ? addElement : completeElement}
+  //       </Box>
+  //     </Dialog>
+  //   );
+  // }
 
   return (
     <Drawer

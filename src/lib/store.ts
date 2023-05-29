@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import youtuberAddRequestSlice from "./slices/youtuberAddRequestSlice";
-import breakpointSlice from "./slices/breakpointSlice";
+import homeTabsSlice from "./slices/homeTabsSlice";
+// import breakpointSlice from "./slices/breakpointSlice";
 
 export const store = configureStore({
   reducer: {
     youtuberAddRequest: youtuberAddRequestSlice.reducer,
-    breakpoint: breakpointSlice.reducer,
+    homeTabs: homeTabsSlice.reducer,
+    // breakpoint: breakpointSlice.reducer,
   },
 });
 
