@@ -16,12 +16,11 @@ import { db } from "@/lib/firebase";
 import { youtuberAddRequestSliceActions } from "@/lib/slices/youtuberAddRequestSlice";
 import Button from "./Button";
 import Drawer from "@mui/material/Drawer";
-import CloseIcon from "./CloseIcon";
 import Dialog from "@mui/material/Dialog";
-import InputLabel from "./InputLabel";
-import OutlinedInput from "./OutlinedInput";
-import FormHelperText from "./FormHelperText";
-import FormControl from "./FormControl";
+import TextField from "./TextField";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import CloseIcon from "@/components/CloseIcon";
 
 const schema = z.object({
   channelTitle: z
@@ -38,18 +37,14 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export default function YoutuberAddRequest() {
-  const {
-    // isTablet,
-    isOpen,
-    isComplete,
-    completeType,
-  } = useAppSelector((state) => ({
-    // isTablet: state.breakpoint.isTablet,
+  const { isOpen, isComplete, completeType } = useAppSelector((state) => ({
     isOpen: state.youtuberAddRequest.isOpen,
     isComplete: state.youtuberAddRequest.isComplete,
     completeType: state.youtuberAddRequest.completeType,
   }));
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const isMd = useMediaQuery(theme.breakpoints.up("md"));
 
   const {
     control,
@@ -114,6 +109,7 @@ export default function YoutuberAddRequest() {
       </Typography>
       <CloseIcon
         sx={{
+          stroke: grey[700],
           fontSize: "28px",
           position: "absolute",
           right: 12,
@@ -147,14 +143,16 @@ export default function YoutuberAddRequest() {
             const isError = !!formState.errors.channelTitle;
 
             return (
-              <FormControl
-                formControlContextProps={{ fontSize: 14, ...field }}
-                formControlProps={{ required: true, sx: { mb: "8px" } }}
-              >
-                <InputLabel>채널명</InputLabel>
-                <OutlinedInput label="채널명" error={isError} />
-                <FormHelperText>요청할 채널명을 입력해주세요.</FormHelperText>
-              </FormControl>
+              <TextField
+                {...field}
+                size="small"
+                variant="outlined"
+                helperText="요청할 채널명을 입력해주세요."
+                label="채널명"
+                required
+                sx={{ mb: "8px" }}
+                error={isError}
+              />
             );
           }}
         />
@@ -166,20 +164,26 @@ export default function YoutuberAddRequest() {
             const message = formState.errors.email?.message;
 
             return (
-              <FormControl
-                formControlContextProps={{ fontSize: 14, ...field }}
-                formControlProps={{ sx: { mb: "8px" } }}
-              >
-                <InputLabel>이메일</InputLabel>
-                <OutlinedInput label="이메일" error={isError} />
-                <FormHelperText>
-                  {isError ? message : "결과를 안내받을 이메일을 입력해주세요."}
-                </FormHelperText>
-              </FormControl>
+              <TextField
+                {...field}
+                size="small"
+                variant="outlined"
+                helperText={
+                  isError ? message : "결과를 안내받을 이메일을 입력해주세요."
+                }
+                label="이메일"
+                sx={{ mb: "8px" }}
+                error={isError}
+              />
             );
           }}
         />
-        <Button variant="contained" type="submit">
+        <Button
+          fullWidth
+          variant="contained"
+          type="submit"
+          sx={{ height: "48px", fontSize: "18px", borderRadius: "8px" }}
+        >
           요청하기
         </Button>
       </Box>
@@ -242,48 +246,56 @@ export default function YoutuberAddRequest() {
       </Box>
       <Box sx={{ display: "flex", gap: "12px" }}>
         <Button
+          fullWidth
           variant="outlined"
           onClick={handleAddRequestButtonClick}
           color="buttonSecondary"
+          sx={{ height: "48px", fontSize: "18px", borderRadius: "8px" }}
         >
           더 요청하기
         </Button>
-        <Button variant="contained" onClick={handleClose}>
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={handleClose}
+          sx={{ height: "48px", fontSize: "18px", borderRadius: "8px" }}
+        >
           닫기
         </Button>
       </Box>
     </Box>
   );
 
-  // if (isTablet) {
-  //   return (
-  //     <Dialog
-  //       open={isOpen}
-  //       onClose={handleClose}
-  //       sx={{
-  //         ".MuiDialog-paper": {
-  //           width: "360px",
-  //           borderRadius: "16px",
-  //         },
-  //       }}
-  //     >
-  //       {headerElement}
-  //       <Box
-  //         component={"main"}
-  //         sx={
-  //           !isComplete
-  //             ? { p: "12px 24px 24px" }
-  //             : {
-  //                 p: "28px 24px 24px",
-  //                 height: "396px",
-  //               }
-  //         }
-  //       >
-  //         {!isComplete ? addElement : completeElement}
-  //       </Box>
-  //     </Dialog>
-  //   );
-  // }
+  if (isMd) {
+    return (
+      <Dialog
+        open={isOpen}
+        onClose={handleClose}
+        sx={{
+          ".MuiDialog-paper": {
+            width: "380px",
+            maxWidth: "auto",
+            borderRadius: "16px",
+          },
+        }}
+      >
+        {headerElement}
+        <Box
+          component={"main"}
+          sx={
+            !isComplete
+              ? { p: "12px 24px 24px" }
+              : {
+                  p: "28px 24px 24px",
+                  height: "396px",
+                }
+          }
+        >
+          {!isComplete ? addElement : completeElement}
+        </Box>
+      </Dialog>
+    );
+  }
 
   return (
     <Drawer

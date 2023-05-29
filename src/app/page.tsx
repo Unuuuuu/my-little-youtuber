@@ -12,6 +12,7 @@ import {
 } from "./components/ChannelsContext";
 import Footer from "./components/Footer";
 import formatter from "@/lib/formatter";
+import YoutuberAddRequest from "./components/YoutuberAddRequest";
 
 async function getTagsContextValue(): Promise<TagsContextValue> {
   const querySnapshot = (await getDocs(
@@ -75,6 +76,7 @@ export default async function Page() {
         </ChannelsContextProvider>
       </TagsContextProvider>
       <Footer />
+      <YoutuberAddRequest />
     </>
   );
 }

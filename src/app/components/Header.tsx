@@ -1,8 +1,7 @@
 "use client";
 
 import Box from "@mui/material/Box";
-import Link from "next/link";
-import MagnifyingGlassIcon from "./MagnifyingGlassIcon";
+import SearchIcon from "../../components/SearchIcon";
 import { useAppDispatch } from "@/lib/hooks";
 import { youtuberAddRequestSliceActions } from "@/lib/slices/youtuberAddRequestSlice";
 import logoWithNameImageSrc from "../../assets/logo-with-name.png";
@@ -11,9 +10,23 @@ import Button from "./Button";
 import PlusCircleIcon from "@/components/PlusCircleIcon";
 import { grey } from "@mui/material/colors";
 import TextField from "@mui/material/TextField";
+// import { searchSliceActions } from "@/lib/slices/searchSlice";
+import { useRouter } from "next/navigation";
+import { homeTabsSliceActions } from "@/lib/slices/homeTabsSlice";
 
 export default function Header() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const handleLogoClick = () => {
+    router.push("/");
+    dispatch(homeTabsSliceActions.updateValue("home"));
+  };
+
+  // const handleSearchButtonClick = () => {
+  //   dispatch(searchSliceActions.openDialog());
+  // };
+
   const handleCirclePlusButtonClick = () => {
     dispatch(youtuberAddRequestSliceActions.open());
   };
@@ -44,18 +57,15 @@ export default function Header() {
         },
       }}
     >
-      <Box
-        component={Link}
-        href={"/"}
-        sx={{ display: "flex", alignItems: "center", gap: 1 }}
-      >
-        <Image
-          src={logoWithNameImageSrc}
-          alt="logo with name"
-          width={170}
-          height={28}
-        />
-      </Box>
+      <Image
+        src={logoWithNameImageSrc}
+        alt="logo with name"
+        width={170}
+        height={28}
+        style={{ cursor: "pointer" }}
+        onClick={handleLogoClick}
+      />
+      {/* TODO TextField, Button */}
       <TextField
         placeholder="검색어를 입력해주세요"
         fullWidth
@@ -72,12 +82,13 @@ export default function Header() {
       <Button
         variant="outlined"
         color="buttonSecondary"
-        startIcon={<PlusCircleIcon />}
+        startIcon={<PlusCircleIcon sx={{ stroke: grey[700] }} />}
         sx={{
           display: { sm: "none", md: "inline-flex" },
           flexShrink: 0,
           height: "48px",
         }}
+        onClick={handleCirclePlusButtonClick}
       >
         유튜버 추가 요청
       </Button>
@@ -98,11 +109,12 @@ export default function Header() {
             justifyContent: "center",
             cursor: "pointer",
           }}
+          // onClick={handleSearchButtonClick}
         >
-          <MagnifyingGlassIcon
+          <SearchIcon
             sx={{
-              color: "white",
-              fontSize: "28px",
+              fontSize: "32px",
+              stroke: grey[700],
             }}
           />
         </Box>
@@ -117,12 +129,12 @@ export default function Header() {
           }}
           onClick={handleCirclePlusButtonClick}
         >
-          {/* <CirclePlusIcon
+          <PlusCircleIcon
             sx={{
-              color: "white",
-              fontSize: "28px",
+              fontSize: "32px",
+              stroke: grey[700],
             }}
-          /> */}
+          />
         </Box>
       </Box>
     </Box>

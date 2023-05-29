@@ -4,12 +4,11 @@ export default function CaretRightIcon(props: SvgIconProps) {
   return (
     <SvgIcon
       {...props}
-      viewBox="0 0 24 24"
-      sx={{ color: "white", ...props.sx }}
+      viewBox="0 0 32 32"
+      sx={{ color: "transparent", ...props.sx }}
     >
       <path
-        d="M9 4.5L16.5 12L9 19.5"
-        stroke="#222222"
+        d="M12 6L22 16L12 26"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"

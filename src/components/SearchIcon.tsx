@@ -1,6 +1,6 @@
 import SvgIcon, { SvgIconProps } from "@mui/material/SvgIcon";
 
-export default function PlusCircleIcon(props: SvgIconProps) {
+export default function SearchIcon(props: SvgIconProps) {
   return (
     <SvgIcon
       {...props}
@@ -8,19 +8,13 @@ export default function PlusCircleIcon(props: SvgIconProps) {
       sx={{ color: "transparent", ...props.sx }}
     >
       <path
-        d="M16 26.5C21.799 26.5 26.5 21.799 26.5 16C26.5 10.201 21.799 5.5 16 5.5C10.201 5.5 5.5 10.201 5.5 16C5.5 21.799 10.201 26.5 16 26.5Z"
+        d="M14.6875 23.875C19.7616 23.875 23.875 19.7616 23.875 14.6875C23.875 9.61338 19.7616 5.5 14.6875 5.5C9.61338 5.5 5.5 9.61338 5.5 14.6875C5.5 19.7616 9.61338 23.875 14.6875 23.875Z"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       <path
-        d="M11.625 16H20.375"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M16 11.625V20.375"
+        d="M21.1836 21.1844L26.4992 26.5"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"

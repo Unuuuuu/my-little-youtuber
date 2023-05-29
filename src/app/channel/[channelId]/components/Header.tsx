@@ -4,8 +4,9 @@ import Box from "@mui/material/Box";
 import { useChannelContext } from "./ChannelContext";
 import Typography from "@mui/material/Typography";
 import CaretLeftIcon from "@/components/CaretLeftIcon";
-import ShareIcon from "@/components/ShareIcon";
+import ExportIcon from "@/components/ExportIcon";
 import Link from "next/link";
+import { grey } from "@mui/material/colors";
 
 export default function Header() {
   const { channel } = useChannelContext();
@@ -24,11 +25,31 @@ export default function Header() {
         borderColor: "divider",
       }}
     >
-      <Box component={Link} href="/" sx={{ display: "flex" }}>
-        <CaretLeftIcon sx={{ fontSize: "48px" }} />
+      <Box
+        component={Link}
+        href="/"
+        sx={{
+          display: "flex",
+          width: "48px",
+          height: "48px",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <CaretLeftIcon sx={{ fontSize: "32px", stroke: grey[700] }} />
       </Box>
       <Typography noWrap>{channel.title}</Typography>
-      <ShareIcon sx={{ fontSize: "48px" }} />
+      <Box
+        sx={{
+          display: "flex",
+          width: "48px",
+          height: "48px",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <ExportIcon sx={{ fontSize: "32px", stroke: grey[700] }} />
+      </Box>
     </Box>
   );
 }
