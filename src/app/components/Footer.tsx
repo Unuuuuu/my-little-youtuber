@@ -22,7 +22,8 @@ export default function Footer() {
           이메일 문의
         </Typography>
         <Typography
-          component={"span"}
+          component={"a"}
+          href="mailto:mylittley0tuber@gmail.com"
           variant="body2"
           sx={{ color: grey[600] }}
         >

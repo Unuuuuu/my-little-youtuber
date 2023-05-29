@@ -39,102 +39,109 @@ export default function Header() {
           sm: 48,
           md: 112,
         },
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        p: {
-          sm: "0 12px 0 24px",
-          md: "40px 24px 23px",
-        },
         position: "sticky",
         top: 0,
         bgcolor: "white",
         borderBottom: `1px solid`,
         borderColor: "divider",
-        gap: {
-          sm: 0,
-          md: "24px",
-        },
       }}
     >
-      <Image
-        src={logoWithNameImageSrc}
-        alt="logo with name"
-        width={170}
-        height={28}
-        style={{ cursor: "pointer" }}
-        onClick={handleLogoClick}
-      />
-      {/* TODO TextField, Button */}
-      <TextField
-        placeholder="검색어를 입력해주세요"
-        fullWidth
-        sx={{
-          display: { sm: "none", md: "inline-flex" },
-          maxWidth: "600px",
-        }}
-        InputProps={{
-          sx: {
-            height: "48px",
-          },
-        }}
-      />
-      <Button
-        variant="outlined"
-        color="buttonSecondary"
-        startIcon={<PlusCircleIcon sx={{ stroke: grey[700] }} />}
-        sx={{
-          display: { sm: "none", md: "inline-flex" },
-          flexShrink: 0,
-          height: "48px",
-        }}
-        onClick={handleCirclePlusButtonClick}
-      >
-        유튜버 추가 요청
-      </Button>
       <Box
         sx={{
-          display: {
-            sm: "flex",
-            md: "none",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          p: {
+            sm: "0 12px 0 24px",
+            md: "40px 24px 23px",
+          },
+          maxWidth: "1144px",
+          margin: "0 auto",
+          gap: {
+            sm: 0,
+            md: "24px",
           },
         }}
       >
-        <Box
+        <Image
+          src={logoWithNameImageSrc}
+          alt="logo with name"
+          width={170}
+          height={28}
+          style={{ cursor: "pointer" }}
+          onClick={handleLogoClick}
+        />
+        {/* TODO TextField, Button */}
+        <TextField
+          placeholder="검색어를 입력해주세요"
+          fullWidth
           sx={{
-            width: "48px",
-            height: "48px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
+            display: { sm: "none", md: "inline-flex" },
+            maxWidth: "600px",
           }}
-          // onClick={handleSearchButtonClick}
-        >
-          <SearchIcon
-            sx={{
-              fontSize: "32px",
-              stroke: grey[700],
-            }}
-          />
-        </Box>
-        <Box
+          InputProps={{
+            sx: {
+              height: "48px",
+            },
+          }}
+        />
+        <Button
+          variant="outlined"
+          color="buttonSecondary"
+          startIcon={<PlusCircleIcon sx={{ stroke: grey[700] }} />}
           sx={{
-            width: "48px",
+            display: { sm: "none", md: "inline-flex" },
+            flexShrink: 0,
             height: "48px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
           }}
           onClick={handleCirclePlusButtonClick}
         >
-          <PlusCircleIcon
+          유튜버 추가 요청
+        </Button>
+        <Box
+          sx={{
+            display: {
+              sm: "flex",
+              md: "none",
+            },
+          }}
+        >
+          <Box
             sx={{
-              fontSize: "32px",
-              stroke: grey[700],
+              width: "48px",
+              height: "48px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
             }}
-          />
+            // onClick={handleSearchButtonClick}
+          >
+            <SearchIcon
+              sx={{
+                fontSize: "32px",
+                stroke: grey[700],
+              }}
+            />
+          </Box>
+          <Box
+            sx={{
+              width: "48px",
+              height: "48px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+            }}
+            onClick={handleCirclePlusButtonClick}
+          >
+            <PlusCircleIcon
+              sx={{
+                fontSize: "32px",
+                stroke: grey[700],
+              }}
+            />
+          </Box>
         </Box>
       </Box>
     </Box>

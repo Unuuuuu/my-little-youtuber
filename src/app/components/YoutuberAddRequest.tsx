@@ -274,7 +274,7 @@ export default function YoutuberAddRequest() {
         sx={{
           ".MuiDialog-paper": {
             width: "380px",
-            maxWidth: "auto",
+            maxWidth: "none",
             borderRadius: "16px",
           },
         }}

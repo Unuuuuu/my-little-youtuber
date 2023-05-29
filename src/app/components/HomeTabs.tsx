@@ -35,6 +35,7 @@ export default function HomeTabs() {
             sm: 48,
             md: 112,
           },
+          bgcolor: "tab",
         }}
       >
         <Tabs
@@ -44,11 +45,12 @@ export default function HomeTabs() {
           scrollButtons={true}
           allowScrollButtonsMobile
           sx={{
+            maxWidth: "1144px",
+            margin: "0 auto",
             minHeight: {
               sm: "48px",
               md: "60px",
             },
-            bgcolor: "tab",
             ".MuiTab-root": {
               p: {
                 sm: 0,

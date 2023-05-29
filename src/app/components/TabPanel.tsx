@@ -14,6 +14,8 @@ export default function TabPanel(props: Props) {
       role="tabpanel"
       hidden={value !== selectedValue}
       sx={{
+        maxWidth: "1144px",
+        margin: "0 auto",
         minHeight: {
           sm: "calc(100vh - (48px + 48px + 128px))",
           md: "calc(100vh - (112px + 60px + 128px))",
