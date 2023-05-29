@@ -10,7 +10,7 @@ import Button from "./Button";
 import PlusCircleIcon from "@/components/PlusCircleIcon";
 import { grey } from "@mui/material/colors";
 import TextField from "@mui/material/TextField";
-// import { searchSliceActions } from "@/lib/slices/searchSlice";
+import { searchSliceActions } from "@/lib/slices/searchSlice";
 import { useRouter } from "next/navigation";
 import { homeTabsSliceActions } from "@/lib/slices/homeTabsSlice";
 
@@ -23,9 +23,9 @@ export default function Header() {
     dispatch(homeTabsSliceActions.updateValue("home"));
   };
 
-  // const handleSearchButtonClick = () => {
-  //   dispatch(searchSliceActions.openDialog());
-  // };
+  const handleSearchButtonClick = () => {
+    dispatch(searchSliceActions.openDialog());
+  };
 
   const handleCirclePlusButtonClick = () => {
     dispatch(youtuberAddRequestSliceActions.open());
@@ -115,7 +115,7 @@ export default function Header() {
               justifyContent: "center",
               cursor: "pointer",
             }}
-            // onClick={handleSearchButtonClick}
+            onClick={handleSearchButtonClick}
           >
             <SearchIcon
               sx={{
