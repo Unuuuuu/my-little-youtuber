@@ -34,7 +34,9 @@ export default function TagTabPanel(props: Props) {
               mb: "10px",
             }}
           >
-            <Typography variant="h2">{tag.label} 유튜버</Typography>
+            <Typography sx={{ typography: { sm: "h2", md: "h1" } }}>
+              {tag.label} 유튜버
+            </Typography>
           </Box>
           <ChannelList tag={tag} channels={filteredChannels} />
         </Box>

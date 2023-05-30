@@ -2,7 +2,7 @@
 
 import Box from "@mui/material/Box";
 import SearchIcon from "../../components/SearchIcon";
-import { useAppDispatch } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { youtuberAddRequestSliceActions } from "@/lib/slices/youtuberAddRequestSlice";
 import logoWithNameImageSrc from "../../assets/logo-with-name.png";
 import Image from "next/image";
@@ -13,10 +13,21 @@ import TextField from "@mui/material/TextField";
 import { searchSliceActions } from "@/lib/slices/searchSlice";
 import { useRouter } from "next/navigation";
 import { homeTabsSliceActions } from "@/lib/slices/homeTabsSlice";
+import Autocomplete from "@mui/material/Autocomplete";
+import { useChannelsContext } from "./ChannelsContext";
+import filterOptions from "@/lib/filterOptions";
+import MenuCloseIcon from "@/components/MenuCloseIcon";
+import { UseAutocompleteProps } from "@mui/material/useAutocomplete";
+import { FormEventHandler, useRef } from "react";
 
 export default function Header() {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { channels } = useChannelsContext();
+  const autocompleteRef = useRef<HTMLDivElement>();
+  const { inputValue } = useAppSelector((state) => ({
+    inputValue: state.search.inputValue,
+  }));
 
   const handleLogoClick = () => {
     router.push("/");
@@ -27,8 +38,42 @@ export default function Header() {
     dispatch(searchSliceActions.openDialog());
   };
 
-  const handleCirclePlusButtonClick = () => {
+  const handleYoutuberAddRequestButtonClick = () => {
     dispatch(youtuberAddRequestSliceActions.open());
+  };
+
+  const handleAutocompleteChange: UseAutocompleteProps<
+    ChannelDataWithTotalPlayCount,
+    false,
+    false,
+    false
+  >["onInputChange"] = (_, newInputValue, reason) => {
+    if (reason === "input") {
+      dispatch(searchSliceActions.updateInputValue(newInputValue));
+    }
+  };
+
+  const handleAutocompleteSubmit: FormEventHandler<HTMLFormElement> = (
+    event
+  ) => {
+    event.preventDefault();
+    if (inputValue === "") {
+      return;
+    }
+
+    autocompleteRef.current?.querySelector("input")?.blur();
+    dispatch(searchSliceActions.submit());
+    dispatch(homeTabsSliceActions.updateValue("search"));
+  };
+
+  const handleAutocompleteValueChange: UseAutocompleteProps<
+    ChannelDataWithTotalPlayCount,
+    false,
+    false,
+    false
+  >["onChange"] = (_, __, ___, details) => {
+    router.push(`/channel/${details?.option.id}`);
+    dispatch(searchSliceActions.updateInputValue(""));
   };
 
   return (
@@ -72,19 +117,59 @@ export default function Header() {
           onClick={handleLogoClick}
         />
         {/* TODO TextField, Button */}
-        <TextField
-          placeholder="검색어를 입력해주세요"
-          fullWidth
+        <Box
+          component={"form"}
+          onSubmit={handleAutocompleteSubmit}
           sx={{
-            display: { sm: "none", md: "inline-flex" },
+            display: { sm: "none", md: "block" },
+            width: "100%",
             maxWidth: "600px",
           }}
-          InputProps={{
-            sx: {
-              height: "48px",
-            },
-          }}
-        />
+        >
+          <Autocomplete
+            ref={autocompleteRef}
+            clearOnBlur={false}
+            fullWidth
+            options={channels}
+            filterOptions={filterOptions}
+            getOptionLabel={(option: ChannelDataWithTotalPlayCount) =>
+              option.title
+            }
+            inputValue={inputValue}
+            onInputChange={handleAutocompleteChange}
+            size="small"
+            sx={{
+              ".MuiAutocomplete-popupIndicatorOpen": {
+                transform: "none",
+              },
+            }}
+            onChange={handleAutocompleteValueChange}
+            clearIcon={
+              <MenuCloseIcon sx={{ fontSize: "24px", fill: grey[500] }} />
+            }
+            noOptionsText="해당하는 유튜버가 없습니다."
+            popupIcon={
+              <SearchIcon
+                sx={{
+                  fontSize: "24px",
+                  stroke: "#9254DE", // SearchIcon에서 sx를 spread하고 있어서 함수를 사용할 수 없었고, 그래서 하드 코딩으로 값을 입력함.
+                }}
+              />
+            }
+            renderInput={(params) => (
+              <TextField
+                placeholder="검색어를 입력해주세요"
+                {...params}
+                InputProps={{
+                  ...params.InputProps,
+                  sx: {
+                    height: "48px",
+                  },
+                }}
+              />
+            )}
+          />
+        </Box>
         <Button
           variant="outlined"
           color="buttonSecondary"
@@ -94,7 +179,7 @@ export default function Header() {
             flexShrink: 0,
             height: "48px",
           }}
-          onClick={handleCirclePlusButtonClick}
+          onClick={handleYoutuberAddRequestButtonClick}
         >
           유튜버 추가 요청
         </Button>
@@ -133,7 +218,7 @@ export default function Header() {
               justifyContent: "center",
               cursor: "pointer",
             }}
-            onClick={handleCirclePlusButtonClick}
+            onClick={handleYoutuberAddRequestButtonClick}
           >
             <PlusCircleIcon
               sx={{

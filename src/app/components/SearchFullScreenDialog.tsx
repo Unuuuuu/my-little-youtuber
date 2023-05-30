@@ -16,6 +16,8 @@ import MenuCloseIcon from "@/components/MenuCloseIcon";
 import { useChannelsContext } from "./ChannelsContext";
 import ChannelList from "./ChannelList";
 import SearchIcon from "@/components/SearchIcon";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function SearchFullScreenDialog() {
   const { isOpen, inputValue } = useAppSelector((state) => ({
@@ -24,6 +26,8 @@ export default function SearchFullScreenDialog() {
   }));
   const dispatch = useAppDispatch();
   const { channels } = useChannelsContext();
+  const theme = useTheme();
+  const isMd = useMediaQuery(theme.breakpoints.up("md"));
 
   const handleTextFieldChange: TextFieldProps["onChange"] = (event) => {
     dispatch(searchSliceActions.updateInputValue(event.target.value));
@@ -50,6 +54,10 @@ export default function SearchFullScreenDialog() {
     dispatch(searchSliceActions.closeDialog());
     dispatch(searchSliceActions.updateInputValue(""));
   }, [dispatch]);
+
+  if (isMd) {
+    return null;
+  }
 
   return (
     <Dialog open={isOpen} fullScreen>

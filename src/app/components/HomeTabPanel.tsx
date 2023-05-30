@@ -66,7 +66,9 @@ export default function HomeTabPanel(props: Props) {
               onClick={() => handleTagTitleClick(tag.id)}
             >
               <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                <Typography variant="h2">{tag.label} 유튜버</Typography>
+                <Typography sx={{ typography: { sm: "h2", md: "h1" } }}>
+                  {tag.label} 유튜버
+                </Typography>
                 <CaretRightIcon sx={{ fontSize: "24px", stroke: grey[900] }} />
               </Box>
               <Typography

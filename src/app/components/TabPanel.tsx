@@ -9,10 +9,13 @@ export interface Props {
 export default function TabPanel(props: Props) {
   const { selectedValue, value, children } = props;
 
+  if (value !== selectedValue) {
+    return null;
+  }
+
   return (
     <Box
       role="tabpanel"
-      hidden={value !== selectedValue}
       sx={{
         maxWidth: "1144px",
         margin: "0 auto",
@@ -22,7 +25,7 @@ export default function TabPanel(props: Props) {
         },
       }}
     >
-      {value === selectedValue && children}
+      {children}
     </Box>
   );
 }

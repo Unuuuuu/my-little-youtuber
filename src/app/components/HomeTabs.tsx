@@ -10,6 +10,7 @@ import TagTabPanel from "./TagTabPanel";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { homeTabsSliceActions } from "@/lib/slices/homeTabsSlice";
 import { useEffect, useRef } from "react";
+import SearchTabPanel from "./SearchTabPanel";
 
 export default function HomeTabs() {
   const { tags, generalTags, etcTags } = useTagsContext();
@@ -113,6 +114,7 @@ export default function HomeTabs() {
         />
       </Box>
       <HomeTabPanel value="home" selectedValue={value} />
+      <SearchTabPanel value="search" selectedValue={value} />
       {tags.map((tag) => (
         <TagTabPanel
           key={tag.id}

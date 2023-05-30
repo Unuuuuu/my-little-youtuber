@@ -6,7 +6,7 @@ export default function filterOptions<T>(
   state: FilterOptionsState<T>
 ): T[] {
   const { getOptionLabel } = state;
-  const inputValue = state.inputValue.toLowerCase();
+  const inputValue = state.inputValue.toLowerCase().trim();
 
   if (inputValue === "") {
     return [];
