@@ -34,7 +34,7 @@ export default function HomeTabs() {
           position: "sticky",
           top: {
             sm: 48,
-            md: 112,
+            md: 96,
           },
           bgcolor: "tab",
         }}

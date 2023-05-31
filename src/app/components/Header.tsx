@@ -85,27 +85,33 @@ export default function Header() {
       component={"header"}
       sx={{
         height: {
-          sm: 48,
-          md: 112,
+          sm: 56,
+          md: 96,
         },
         position: "sticky",
         top: 0,
         bgcolor: "white",
         borderBottom: `1px solid`,
         borderColor: "divider",
+        display: "flex",
+        alignItems: "center",
       }}
     >
       <Box
         sx={{
+          flexGrow: 1,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           p: {
             sm: "0 12px 0 24px",
-            md: "40px 24px 23px",
+            md: "0 24px 0",
           },
           maxWidth: "1144px",
-          margin: "0 auto",
+          margin: {
+            sm: "0",
+            md: "0 auto",
+          },
           gap: {
             sm: 0,
             md: "24px",

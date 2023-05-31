@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import { useChannelContext } from "./ChannelContext";
 import Typography from "@mui/material/Typography";
 import CaretLeftIcon from "@/components/CaretLeftIcon";
-import ExportIcon from "@/components/ExportIcon";
+// import ExportIcon from "@/components/ExportIcon";
 import Link from "next/link";
 import { grey } from "@mui/material/colors";
 
@@ -16,7 +16,7 @@ export default function Header() {
       component={"header"}
       sx={{
         px: "8px",
-        height: "48px",
+        height: "56px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -48,7 +48,7 @@ export default function Header() {
           justifyContent: "center",
         }}
       >
-        <ExportIcon sx={{ fontSize: "32px", stroke: grey[700] }} />
+        {/* <ExportIcon sx={{ fontSize: "32px", stroke: grey[700] }} /> */}
       </Box>
     </Box>
   );

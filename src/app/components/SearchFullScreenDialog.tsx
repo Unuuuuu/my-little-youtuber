@@ -64,6 +64,8 @@ export default function SearchFullScreenDialog() {
       <Box
         component={"header"}
         sx={{
+          flexShrink: 0,
+          height: "56px",
           p: "0px 24px 0px 16px",
           display: "flex",
           alignItems: "center",
