@@ -11,19 +11,13 @@ interface Props extends Omit<TabPanelProps, "children"> {
 
 export default function TagTabPanel(props: Props) {
   const { selectedValue, value, tag } = props;
-  const { channels } = useChannelsContext();
+  const { channelsSortedByPlayCount } = useChannelsContext();
 
   const filteredChannels = useMemo(() => {
-    return channels
-      .filter((channel) => tag.channelIds.includes(channel.id))
-      .sort(
-        (a, b) =>
-          b.playCount.general +
-          b.playCount.timeAttack -
-          a.playCount.general +
-          a.playCount.timeAttack
-      );
-  }, [channels, tag.channelIds]);
+    return channelsSortedByPlayCount.filter((channel) =>
+      tag.channelIds.includes(channel.id)
+    );
+  }, [channelsSortedByPlayCount, tag.channelIds]);
 
   return (
     <TabPanel value={value} selectedValue={selectedValue}>

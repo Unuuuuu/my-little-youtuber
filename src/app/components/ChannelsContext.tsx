@@ -3,7 +3,8 @@
 import { createContext, useContext } from "react";
 
 export interface ChannelsContextValue {
-  channels: ChannelDataWithTotalPlayCount[];
+  channelsSortedByPlayCount: ChannelDataWithTotalPlayCount[];
+  channelsSortedByTitle: ChannelDataWithTotalPlayCount[];
 }
 
 const ChannelsContext = createContext<ChannelsContextValue | null>(null);

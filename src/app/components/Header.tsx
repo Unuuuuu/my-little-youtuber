@@ -18,12 +18,14 @@ import { useChannelsContext } from "./ChannelsContext";
 import filterOptions from "@/lib/filterOptions";
 import MenuCloseIcon from "@/components/MenuCloseIcon";
 import { UseAutocompleteProps } from "@mui/material/useAutocomplete";
-import { FormEventHandler, useRef } from "react";
+import { useRef } from "react";
+import InputAdornment from "@mui/material/InputAdornment";
+import { BaseSyntheticEvent } from "react";
 
 export default function Header() {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { channels } = useChannelsContext();
+  const { channelsSortedByTitle } = useChannelsContext();
   const autocompleteRef = useRef<HTMLDivElement>();
   const { inputValue } = useAppSelector((state) => ({
     inputValue: state.search.inputValue,
@@ -53,9 +55,7 @@ export default function Header() {
     }
   };
 
-  const handleAutocompleteSubmit: FormEventHandler<HTMLFormElement> = (
-    event
-  ) => {
+  const handleAutocompleteSubmit = (event: BaseSyntheticEvent) => {
     event.preventDefault();
     if (inputValue === "") {
       return;
@@ -73,6 +73,10 @@ export default function Header() {
     false
   >["onChange"] = (_, __, ___, details) => {
     router.push(`/channel/${details?.option.id}`);
+    dispatch(searchSliceActions.updateInputValue(""));
+  };
+
+  const handleClearButtonClick = () => {
     dispatch(searchSliceActions.updateInputValue(""));
   };
 
@@ -127,10 +131,11 @@ export default function Header() {
           }}
         >
           <Autocomplete
+            forcePopupIcon={false}
             ref={autocompleteRef}
             clearOnBlur={false}
             fullWidth
-            options={channels}
+            options={channelsSortedByTitle}
             filterOptions={filterOptions}
             getOptionLabel={(option: ChannelDataWithTotalPlayCount) =>
               option.title
@@ -138,24 +143,11 @@ export default function Header() {
             inputValue={inputValue}
             onInputChange={handleAutocompleteChange}
             size="small"
-            sx={{
-              ".MuiAutocomplete-popupIndicatorOpen": {
-                transform: "none",
-              },
-            }}
             onChange={handleAutocompleteValueChange}
             clearIcon={
               <MenuCloseIcon sx={{ fontSize: "24px", fill: grey[500] }} />
             }
             noOptionsText="해당하는 유튜버가 없습니다."
-            popupIcon={
-              <SearchIcon
-                sx={{
-                  fontSize: "24px",
-                  stroke: "#9254DE", // SearchIcon에서 sx를 spread하고 있어서 함수를 사용할 수 없었고, 그래서 하드 코딩으로 값을 입력함.
-                }}
-              />
-            }
             renderInput={(params) => (
               <TextField
                 placeholder="검색어를 입력해주세요"
@@ -165,6 +157,28 @@ export default function Header() {
                   sx: {
                     height: "48px",
                   },
+                  endAdornment: (
+                    <InputAdornment position="end" sx={{ gap: "12px" }}>
+                      {inputValue !== "" && (
+                        <MenuCloseIcon
+                          sx={{
+                            fontSize: "24px",
+                            fill: grey[500],
+                            cursor: "pointer",
+                          }}
+                          onClick={handleClearButtonClick}
+                        />
+                      )}
+                      <SearchIcon
+                        sx={{
+                          fontSize: "24px",
+                          stroke: "#9254DE", // SearchIcon에서 sx를 spread하고 있어서 함수를 사용할 수 없었고, 그래서 하드 코딩으로 값을 입력함.
+                          cursor: "pointer",
+                        }}
+                        onClick={handleAutocompleteSubmit}
+                      />
+                    </InputAdornment>
+                  ),
                 }}
               />
             )}

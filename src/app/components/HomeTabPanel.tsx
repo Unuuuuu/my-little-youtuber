@@ -19,7 +19,7 @@ interface Props extends Omit<TabPanelProps, "children"> {}
 export default function HomeTabPanel(props: Props) {
   const { selectedValue, value } = props;
   const { generalTags } = useTagsContext();
-  const { channels } = useChannelsContext();
+  const { channelsSortedByPlayCount } = useChannelsContext();
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.up("md"));
@@ -32,12 +32,11 @@ export default function HomeTabPanel(props: Props) {
   const generalTagsWithChannels = useMemo(() => {
     return generalTags.map((tag) => ({
       ...tag,
-      channels: channels
+      channels: channelsSortedByPlayCount
         .filter((channel) => tag.channelIds.includes(channel.id))
-        .sort((a, b) => b.totalPlayCount - a.totalPlayCount)
         .slice(0, isLg ? 12 : isMd ? 8 : 4),
     }));
-  }, [channels, generalTags, isLg, isMd]);
+  }, [channelsSortedByPlayCount, generalTags, isLg, isMd]);
 
   return (
     <TabPanel value={value} selectedValue={selectedValue}>

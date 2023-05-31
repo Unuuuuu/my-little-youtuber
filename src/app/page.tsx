@@ -59,7 +59,14 @@ async function getChannelsContextValue(): Promise<ChannelsContextValue> {
       };
     }
   );
-  return { channels };
+  const channelsSortedByPlayCount = [...channels].sort(
+    (a, b) => b.totalPlayCount - a.totalPlayCount
+  );
+  const channelsSortedByTitle = [...channels].sort((a, b) =>
+    a.title.localeCompare(b.title)
+  );
+
+  return { channelsSortedByPlayCount, channelsSortedByTitle };
 }
 
 export default async function Page() {

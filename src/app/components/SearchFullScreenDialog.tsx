@@ -25,7 +25,7 @@ export default function SearchFullScreenDialog() {
     inputValue: state.search.inputValue,
   }));
   const dispatch = useAppDispatch();
-  const { channels } = useChannelsContext();
+  const { channelsSortedByTitle } = useChannelsContext();
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -39,11 +39,11 @@ export default function SearchFullScreenDialog() {
 
   const filteredChannels = useMemo(
     () =>
-      filterOptions(channels, {
+      filterOptions(channelsSortedByTitle, {
         inputValue,
         getOptionLabel: (option) => option.title,
       }),
-    [channels, inputValue]
+    [channelsSortedByTitle, inputValue]
   );
 
   const handleClearButtonClick = () => {
@@ -86,7 +86,11 @@ export default function SearchFullScreenDialog() {
               <InputAdornment position="end" sx={{ gap: "12px" }}>
                 {inputValue !== "" && (
                   <MenuCloseIcon
-                    sx={{ fill: grey[500], cursor: "pointer" }}
+                    sx={{
+                      fontSize: "24px",
+                      fill: grey[500],
+                      cursor: "pointer",
+                    }}
                     onClick={handleClearButtonClick}
                   />
                 )}

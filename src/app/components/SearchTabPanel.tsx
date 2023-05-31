@@ -22,7 +22,7 @@ export default function SearchTabPanel(props: Props) {
   const { query } = useAppSelector((state) => ({
     query: state.search.query,
   }));
-  const { channels } = useChannelsContext();
+  const { channelsSortedByTitle } = useChannelsContext();
   const dispatch = useAppDispatch();
 
   const filteredChannels = useMemo(() => {
@@ -30,11 +30,11 @@ export default function SearchTabPanel(props: Props) {
       return [];
     }
 
-    return filterOptions(channels, {
+    return filterOptions(channelsSortedByTitle, {
       inputValue: query,
       getOptionLabel: (option) => option.title,
     });
-  }, [channels, query]);
+  }, [channelsSortedByTitle, query]);
 
   const handleYoutuberAddRequestButtonClick = () => {
     dispatch(youtuberAddRequestSliceActions.open());

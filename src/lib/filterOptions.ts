@@ -1,10 +1,10 @@
 import { FilterOptionsState } from "@mui/material";
 import { getRegExp } from "korean-regexp";
 
-export default function filterOptions<T>(
-  options: T[],
-  state: FilterOptionsState<T>
-): T[] {
+export default function filterOptions(
+  options: ChannelDataWithTotalPlayCount[],
+  state: FilterOptionsState<ChannelDataWithTotalPlayCount>
+): ChannelDataWithTotalPlayCount[] {
   const { getOptionLabel } = state;
   const inputValue = state.inputValue.toLowerCase().trim();
 
@@ -12,9 +12,30 @@ export default function filterOptions<T>(
     return [];
   }
 
-  return options.filter((option) => {
-    const candidate = getOptionLabel(option).toLowerCase();
+  return options
+    .filter((option) => {
+      const candidate = getOptionLabel(option).toLowerCase();
 
-    return candidate.search(getRegExp(inputValue)) !== -1;
-  });
+      return (
+        candidate.search(
+          getRegExp(inputValue, {
+            initialSearch: true,
+            fuzzy: true,
+          })
+        ) !== -1
+      );
+    })
+    .reduce<ChannelDataWithTotalPlayCount[]>((prev, cur) => {
+      if (
+        getOptionLabel(cur)
+          .toLowerCase()
+          .search(
+            getRegExp(inputValue, { initialSearch: true, startsWith: true })
+          ) === -1
+      ) {
+        return [...prev, cur];
+      } else {
+        return [cur, ...prev];
+      }
+    }, []);
 }
