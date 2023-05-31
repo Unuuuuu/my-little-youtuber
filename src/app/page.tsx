@@ -29,7 +29,9 @@ async function getTagsContextValue(): Promise<TagsContextValue> {
     .sort((a, b) => a.priority - b.priority);
   const etcTags = tags.filter(
     (tag): tag is GeneralTagData =>
-      tag.type === "GENERAL" && tag.priority === -1
+      tag.type === "GENERAL" &&
+      tag.priority === -1 &&
+      tag.channelIds.length !== 0
   );
 
   return {
