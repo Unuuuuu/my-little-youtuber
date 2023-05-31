@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import youtuberAddRequestSlice from "./slices/youtuberAddRequestSlice";
 import homeTabsSlice from "./slices/homeTabsSlice";
 import searchSlice from "./slices/searchSlice";
+import gameModeSlice from "./slices/gameModeSlice";
 
 export const store = configureStore({
   reducer: {
     youtuberAddRequest: youtuberAddRequestSlice.reducer,
     homeTabs: homeTabsSlice.reducer,
     search: searchSlice.reducer,
+    gameMode: gameModeSlice.reducer,
   },
 });
 

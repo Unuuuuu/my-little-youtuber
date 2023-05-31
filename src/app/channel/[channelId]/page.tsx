@@ -14,6 +14,7 @@ import {
 import Header from "./components/Header";
 import About from "./components/About";
 import formatter from "@/lib/formatter";
+import GameMode from "./components/GameMode";
 
 export async function generateStaticParams() {
   const querySnapshot = (await getDocs(
@@ -65,6 +66,7 @@ export default async function Page(props: Props) {
     <ChannelContextProvider value={channelContextValue}>
       <Header />
       <About />
+      <GameMode />
     </ChannelContextProvider>
   );
 }

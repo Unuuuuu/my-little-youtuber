@@ -8,6 +8,9 @@ import { grey } from "@mui/material/colors";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/lib/hooks";
 import { homeTabsSliceActions } from "@/lib/slices/homeTabsSlice";
+import Button from "@/app/components/Button";
+import WarningCircleIcon from "@/components/WarningCircleIcon";
+import { gameModeSliceActions } from "@/lib/slices/gameModeSlice";
 
 export default function About() {
   const { channel } = useChannelContext();
@@ -17,6 +20,10 @@ export default function About() {
   const handleTagClick = (tagId: string) => {
     router.push("/");
     dispatch(homeTabsSliceActions.updateValue(tagId));
+  };
+
+  const handlePlayButtonClick = () => {
+    dispatch(gameModeSliceActions.open());
   };
 
   return (
@@ -50,8 +57,7 @@ export default function About() {
         }}
       >
         <Typography variant="subtitle1" sx={{ color: "primary.main" }}>
-          {channel.playCount.general + channel.playCount.timeAttack}회 플레이
-          됐어요!
+          {channel.formattedTotalPlayCount}회 플레이 됐어요!
         </Typography>
       </Box>
       <Image
@@ -100,6 +106,40 @@ export default function About() {
             </Typography>
           </Box>
         ))}
+      </Box>
+      <Button
+        fullWidth
+        variant="contained"
+        sx={{
+          height: "48px",
+          fontSize: "18px",
+          borderRadius: "8px",
+          mb: "16px",
+        }}
+        onClick={handlePlayButtonClick}
+      >
+        게임하기
+      </Button>
+      <Box
+        sx={{
+          display: "flex",
+          gap: "4px",
+          bgcolor: "secondary.main",
+          width: "100%",
+          p: "16px 0px",
+          borderRadius: "8px",
+          justifyContent: "center",
+        }}
+      >
+        <WarningCircleIcon sx={{ fontSize: "16px", stroke: grey[700] }} />
+        <Typography variant="body2" sx={{ color: grey[700] }}>
+          {new Date(channel.updateDate).toLocaleDateString("ko", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}{" "}
+          업데이트
+        </Typography>
       </Box>
     </Box>
   );
