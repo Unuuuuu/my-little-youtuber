@@ -20,8 +20,8 @@ export default function TabPanel(props: Props) {
         maxWidth: "1144px",
         margin: "0 auto",
         minHeight: {
-          sm: "calc(100vh - (48px + 48px + 128px))",
-          md: "calc(100vh - (112px + 60px + 128px))",
+          sm: "calc(100vh - (56px + 48px + 166px))",
+          md: "calc(100vh - (96px + 60px + 166px))",
         },
       }}
     >

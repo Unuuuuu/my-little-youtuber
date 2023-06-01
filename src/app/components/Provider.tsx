@@ -65,6 +65,13 @@ const theme = createTheme({
       lineHeight: "32px",
       color: grey[900],
     },
+    h6: {
+      fontFamily: notoSansKR.style.fontFamily,
+      fontWeight: 700,
+      fontSize: "18px",
+      lineHeight: "22px",
+      color: grey[900],
+    },
     subtitle1: {
       fontFamily: notoSansKR.style.fontFamily,
       fontWeight: 700,
