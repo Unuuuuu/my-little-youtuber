@@ -1,3 +1,4 @@
+import { db } from "@/lib/firebase";
 import {
   DocumentSnapshot,
   QuerySnapshot,
@@ -6,15 +7,18 @@ import {
   getDoc,
   getDocs,
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import {
   ChannelContextProvider,
   ChannelContextValue,
 } from "./components/ChannelContext";
 import Header from "./components/Header";
-import About from "./components/About";
-import formatter from "@/lib/formatter";
-import GameMode from "./components/GameMode";
+import Container from "./components/Container";
+import MainContainer from "./components/MainContainer";
+import Initialize from "./components/Initialize";
+import YoutubePlayerModal from "./components/YoutubePlayerModal";
+import ResultDialog from "./components/ResultDialog";
+import SoundEffect from "./components/SoundEffect";
+import { Metadata } from "next";
 
 export async function generateStaticParams() {
   const querySnapshot = (await getDocs(
@@ -33,21 +37,14 @@ async function getChannelContextValue(
     doc(db, "channels-v2", channelId)
   )) as DocumentSnapshot<ChannelData>;
 
-  const { id, playCount, tags, thumbnail, title, updateDate } =
-    docSnapshot.data()!;
-  const { general, timeAttack } = playCount;
-  const totalPlayCount = general + timeAttack;
+  const { id, title, videos, thumbnail } = docSnapshot.data()!;
 
   return {
     channel: {
       id,
-      playCount,
-      thumbnail,
       title,
-      tags,
-      updateDate,
-      totalPlayCount,
-      formattedTotalPlayCount: formatter.format(totalPlayCount),
+      videos,
+      thumbnail,
     },
   };
 }
@@ -81,7 +78,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: `https://www.mylittleyoutuber.com/channel/${channel.id}`,
+      url: `https://www.mylittleyoutuber.com/channel/${channel.id}/game`,
       images: {
         url: channel.thumbnail.url,
         width: 240,
@@ -93,6 +90,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       title,
       description,
       images: channel.thumbnail.url,
+    },
+    robots: {
+      index: false,
     },
   };
 }
@@ -108,10 +108,17 @@ export default async function Page(props: Props) {
   const channelContextValue = await getChannelContextValue(channelId);
 
   return (
-    <ChannelContextProvider value={channelContextValue}>
-      <Header />
-      <About />
-      <GameMode />
-    </ChannelContextProvider>
+    <>
+      <ChannelContextProvider value={channelContextValue}>
+        <Initialize />
+        <Container>
+          <Header />
+          <MainContainer />
+        </Container>
+      </ChannelContextProvider>
+      <YoutubePlayerModal />
+      <ResultDialog />
+      <SoundEffect />
+    </>
   );
 }

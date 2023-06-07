@@ -100,6 +100,9 @@ interface ChannelDataForChannelPage
   formattedTotalPlayCount: string;
 }
 
+interface ChannelDataForGamePage
+  extends Pick<ChannelData, "id" | "title" | "videos" | "thumbnail"> {}
+
 // interface Window {
 //   adsbygoogle: { [key: string]: unknown }[];
 // }
