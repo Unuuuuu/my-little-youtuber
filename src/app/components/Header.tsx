@@ -95,6 +95,7 @@ export default function Header() {
         borderColor: "divider",
         display: "flex",
         alignItems: "center",
+        zIndex: 10,
       }}
     >
       <Box

@@ -20,6 +20,7 @@ import bronzeMedalImageSrc from "@/assets/ranking-bronze-medal.png";
 import Typography from "@mui/material/Typography";
 import { grey } from "@mui/material/colors";
 import { gmarketSans } from "@/lib/fonts";
+import RankingDisplayAd from "./RankingDisplayAd";
 
 interface Props extends Omit<RankingPanelProps, "children"> {}
 
@@ -216,59 +217,64 @@ export default function TimeAttackRankingTabPanel(props: Props) {
                   </Box>
                 </Box>
                 {scores.slice(3).map((score, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      borderBottom: `1px solid ${grey[200]}`,
-                      height: "60px",
-                    }}
-                  >
+                  <>
                     <Box
+                      key={index}
                       sx={{
                         display: "flex",
-                        width: "50px",
-                        flexShrink: 0,
-                        alignItems: "center",
-                        justifyContent: "center",
+                        borderBottom: `1px solid ${grey[200]}`,
+                        height: "60px",
                       }}
                     >
-                      <Typography
+                      <Box
                         sx={{
-                          color: grey[800],
-                          fontSize: "20px",
-                          lineHeight: "24px",
-                          fontWeight: 700,
-                          fontFamily: gmarketSans.style.fontFamily,
+                          display: "flex",
+                          width: "50px",
+                          flexShrink: 0,
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
                       >
-                        {index + 4}
-                      </Typography>
-                    </Box>
+                        <Typography
+                          sx={{
+                            color: grey[800],
+                            fontSize: "20px",
+                            lineHeight: "24px",
+                            fontWeight: 700,
+                            fontFamily: gmarketSans.style.fontFamily,
+                          }}
+                        >
+                          {index + 4}
+                        </Typography>
+                      </Box>
 
-                    <Box
-                      sx={{
-                        flexGrow: 1,
-                        display: "flex",
-                        alignItems: "center",
-                        p: "0 10px 0 20px",
-                      }}
-                    >
-                      <Typography>{score.nickname}</Typography>
+                      <Box
+                        sx={{
+                          flexGrow: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          p: "0 10px 0 20px",
+                        }}
+                      >
+                        <Typography>{score.nickname}</Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "84px",
+                          flexShrink: 0,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "12px",
+                        }}
+                      >
+                        <Typography variant="subtitle1">
+                          {score.score}
+                        </Typography>
+                        <Typography sx={{ color: grey[500] }}>회</Typography>
+                      </Box>
                     </Box>
-                    <Box
-                      sx={{
-                        width: "84px",
-                        flexShrink: 0,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "12px",
-                      }}
-                    >
-                      <Typography variant="subtitle1">{score.score}</Typography>
-                      <Typography sx={{ color: grey[500] }}>회</Typography>
-                    </Box>
-                  </Box>
+                    {(index + 4) % 20 === 0 && <RankingDisplayAd />}
+                  </>
                 ))}
               </>
             )}

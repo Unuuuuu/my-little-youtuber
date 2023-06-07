@@ -21,6 +21,7 @@ import {
   CollectionReference,
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDocs,
   increment,
@@ -80,10 +81,18 @@ export default function ResultDialog() {
         getDocs(
           query(
             scoresCollectionRef,
-            orderBy("score", "desc")
+            orderBy("score", "desc"),
+            orderBy("createdAt")
           ) as CollectionReference<ScoreData>
         ).then((value) => {
-          const scores = value.docs.map<ScoreData>((doc) => doc.data());
+          const scores = value.docs.map<ScoreData>((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          console.log(
+            "🚀 ~ file: ResultDialog.tsx:87 ~ ).then ~ scores:",
+            scores
+          );
 
           if (scores.length < 100) {
             // 100개 보다 적게 있다면, 추가한다.
@@ -104,8 +113,43 @@ export default function ResultDialog() {
               setState({ status: "rank", rank: targetIndex + 1 });
             }
           } else {
-            // 100개 이상 있다면, 차이만 계산한다.
-            setState({ status: "unrank", diff: scores[99].score - score });
+            // 100개 이상 있다면,
+            // 마지막 것과 차이를 계산한다.
+            const diff = score - scores[99].score;
+            console.log(
+              "🚀 ~ file: ResultDialog.tsx:110 ~ ).then ~ score:",
+              score
+            );
+            console.log(
+              "🚀 ~ file: ResultDialog.tsx:110 ~ ).then ~ diff:",
+              diff
+            );
+            if (diff > 0) {
+              // diff가 0보다 크다면
+              scores.slice(99).forEach((sc) => {
+                deleteDoc(doc(db, "channels-v2", id, path, sc.id));
+              });
+
+              addDoc(scoresCollectionRef, {
+                score,
+                nickname,
+                createdAt: serverTimestamp(),
+              });
+
+              const targetIndex = scores.findIndex(
+                (value) => value.score < score
+              );
+              if (targetIndex === -1) {
+                // 내 점수보다 낮은 점수가 없는 경우
+                setState({ status: "rank", rank: scores.length + 1 });
+              } else {
+                // 내 점수보다 낮은 점수가 있는 경우
+                setState({ status: "rank", rank: targetIndex + 1 });
+              }
+            } else {
+              // diff가 0보다 크지않다면 unrank이다.
+              setState({ status: "unrank", diff: diff * -1 });
+            }
           }
 
           setIsLoading(false);

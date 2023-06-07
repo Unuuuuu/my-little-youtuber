@@ -4,6 +4,7 @@ import TabPanel, { Props as TabPanelProps } from "./TabPanel";
 import { useChannelsContext } from "./ChannelsContext";
 import Typography from "@mui/material/Typography";
 import ChannelList from "./ChannelList";
+import HomeDisplayAd from "./HomeDisplayAd";
 
 interface Props extends Omit<TabPanelProps, "children"> {
   tag: TagData;
@@ -21,6 +22,7 @@ export default function TagTabPanel(props: Props) {
 
   return (
     <TabPanel value={value} selectedValue={selectedValue}>
+      <HomeDisplayAd />
       <Box sx={{ px: "24px", py: "40px" }}>
         <Box>
           <Box

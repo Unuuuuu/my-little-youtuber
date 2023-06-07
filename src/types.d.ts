@@ -1,4 +1,5 @@
 interface ScoreData {
+  id: string;
   nickname: string;
   score: number;
 }
@@ -78,8 +79,8 @@ interface ChannelDataForGamePage
 interface ChannelDataForGamePage
   extends Pick<ChannelData, "id" | "title" | "videos" | "thumbnail"> {}
 
-// interface Window {
-//   adsbygoogle: { [key: string]: unknown }[];
-// }
+interface Window {
+  adsbygoogle: { [key: string]: unknown }[];
+}
 
 type GameMode = "GENERAL" | "TIME_ATTACK";

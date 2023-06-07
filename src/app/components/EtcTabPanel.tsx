@@ -13,6 +13,7 @@ import { useAppDispatch } from "@/lib/hooks";
 import { homeTabsSliceActions } from "@/lib/slices/homeTabsSlice";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import HomeDisplayAd from "./HomeDisplayAd";
 
 interface Props extends Omit<TabPanelProps, "children"> {}
 
@@ -40,6 +41,7 @@ export default function EtcTabPanel(props: Props) {
 
   return (
     <TabPanel value={value} selectedValue={selectedValue}>
+      <HomeDisplayAd />
       <Box
         sx={{
           px: "24px",

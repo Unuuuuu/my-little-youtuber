@@ -14,6 +14,7 @@ import { homeTabsSliceActions } from "@/lib/slices/homeTabsSlice";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Banner from "./Banner";
+import HomeDisplayAd from "./HomeDisplayAd";
 
 interface Props extends Omit<TabPanelProps, "children"> {}
 
@@ -40,53 +41,58 @@ export default function HomeTabPanel(props: Props) {
   }, [channelsSortedByPlayCount, generalTags, isLg, isMd]);
 
   return (
-    <TabPanel value={value} selectedValue={selectedValue}>
-      <Banner />
-      <Box
-        sx={{
-          px: "24px",
-          py: "40px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "40px",
-        }}
-      >
-        {generalTagsWithChannels.map((tag) => (
-          <Box key={tag.id}>
-            <Box
-              sx={{
-                display: {
-                  sm: "flex",
-                  md: "inline-flex",
-                },
-                justifyContent: "space-between",
-                alignItems: "flex-end",
-                mb: "10px",
-                cursor: "pointer",
-              }}
-              onClick={() => handleTagTitleClick(tag.id)}
-            >
-              <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                <Typography sx={{ typography: { sm: "h2", md: "h1" } }}>
-                  {tag.label} 유튜버
-                </Typography>
-                <CaretRightIcon sx={{ fontSize: "24px", stroke: grey[900] }} />
-              </Box>
-              <Typography
-                variant="body2"
+    <>
+      {value === selectedValue && <Banner />}
+      <TabPanel value={value} selectedValue={selectedValue}>
+        <HomeDisplayAd />
+        <Box
+          sx={{
+            px: "24px",
+            py: "40px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "40px",
+          }}
+        >
+          {generalTagsWithChannels.map((tag) => (
+            <Box key={tag.id}>
+              <Box
                 sx={{
-                  color: grey[500],
-                  mb: "2px",
-                  display: { sm: "block", md: "none" },
+                  display: {
+                    sm: "flex",
+                    md: "inline-flex",
+                  },
+                  justifyContent: "space-between",
+                  alignItems: "flex-end",
+                  mb: "10px",
+                  cursor: "pointer",
                 }}
+                onClick={() => handleTagTitleClick(tag.id)}
               >
-                더보기
-              </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                  <Typography sx={{ typography: { sm: "h2", md: "h1" } }}>
+                    {tag.label} 유튜버
+                  </Typography>
+                  <CaretRightIcon
+                    sx={{ fontSize: "24px", stroke: grey[900] }}
+                  />
+                </Box>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: grey[500],
+                    mb: "2px",
+                    display: { sm: "block", md: "none" },
+                  }}
+                >
+                  더보기
+                </Typography>
+              </Box>
+              <ChannelList tag={tag} channels={tag.channels} />
             </Box>
-            <ChannelList tag={tag} channels={tag.channels} />
-          </Box>
-        ))}
-      </Box>
-    </TabPanel>
+          ))}
+        </Box>
+      </TabPanel>
+    </>
   );
 }

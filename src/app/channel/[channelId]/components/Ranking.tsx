@@ -8,6 +8,7 @@ import { grey } from "@mui/material/colors";
 import { useState } from "react";
 import GeneralRankingTabPanel from "./GeneralRankingTabPanel";
 import TimeAttackRankingTabPanel from "./TimeAttackRankingTabPanel";
+import ChannelDisplayAd from "./ChannelDisplayAd";
 
 export default function Ranking() {
   const [value, setValue] = useState<GameMode>("GENERAL");
@@ -18,6 +19,7 @@ export default function Ranking() {
 
   return (
     <>
+      <ChannelDisplayAd />
       <Box
         sx={{
           borderWidth: "1px 0",

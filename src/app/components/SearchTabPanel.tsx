@@ -14,6 +14,7 @@ import Button from "./Button";
 import PlusCircleIcon from "@/components/PlusCircleIcon";
 import { youtuberAddRequestInterfaceSliceActions } from "@/lib/slices/youtuberAddRequestInterfaceSlice";
 import { searchSliceActions } from "@/lib/slices/searchSlice";
+import HomeDisplayAd from "./HomeDisplayAd";
 
 interface Props extends Omit<TabPanelProps, "children"> {}
 
@@ -50,6 +51,7 @@ export default function SearchTabPanel(props: Props) {
 
   return (
     <TabPanel value={value} selectedValue={selectedValue}>
+      <HomeDisplayAd />
       <Box sx={{ px: "24px", py: "40px" }}>
         <Box>
           <Box

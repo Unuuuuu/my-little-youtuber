@@ -38,6 +38,7 @@ export default function HomeTabs() {
             md: 96,
           },
           bgcolor: "tab",
+          zIndex: 10,
         }}
       >
         <Tabs
