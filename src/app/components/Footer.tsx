@@ -7,6 +7,7 @@ import { grey } from "@mui/material/colors";
 export default function Footer() {
   return (
     <Box
+      component={"footer"}
       sx={{
         bgcolor: grey[100],
         p: "42px 0",

@@ -12,7 +12,7 @@ import Image from "next/image";
 import userCirclePlusImageSrc from "../../assets/user-circle-plus-2.png";
 import Button from "./Button";
 import PlusCircleIcon from "@/components/PlusCircleIcon";
-import { youtuberAddRequestSliceActions } from "@/lib/slices/youtuberAddRequestSlice";
+import { youtuberAddRequestInterfaceSliceActions } from "@/lib/slices/youtuberAddRequestInterfaceSlice";
 import { searchSliceActions } from "@/lib/slices/searchSlice";
 
 interface Props extends Omit<TabPanelProps, "children"> {}
@@ -37,7 +37,7 @@ export default function SearchTabPanel(props: Props) {
   }, [channelsSortedByTitle, query]);
 
   const handleYoutuberAddRequestButtonClick = () => {
-    dispatch(youtuberAddRequestSliceActions.open());
+    dispatch(youtuberAddRequestInterfaceSliceActions.open());
   };
 
   useEffect(() => {

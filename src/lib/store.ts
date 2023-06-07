@@ -1,15 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
-import youtuberAddRequestSlice from "./slices/youtuberAddRequestSlice";
+import youtuberAddRequestInterfaceSlice from "./slices/youtuberAddRequestInterfaceSlice";
 import homeTabsSlice from "./slices/homeTabsSlice";
 import searchSlice from "./slices/searchSlice";
-import gameModeSlice from "./slices/gameModeSlice";
+import gameModeInterfaceSlice from "./slices/gameModeInterfaceSlice";
+import gameSlice from "./slices/gameSlice";
+import youtubePlayerModalSlice from "./slices/youtubePlayerModalSlice";
+import resultDialogSlice from "./slices/resultDialogSlice";
 
 export const store = configureStore({
   reducer: {
-    youtuberAddRequest: youtuberAddRequestSlice.reducer,
+    youtuberAddRequestInterface: youtuberAddRequestInterfaceSlice.reducer,
     homeTabs: homeTabsSlice.reducer,
     search: searchSlice.reducer,
-    gameMode: gameModeSlice.reducer,
+    gameModeInterface: gameModeInterfaceSlice.reducer,
+    game: gameSlice.reducer,
+    youtubePlayerModal: youtubePlayerModalSlice.reducer,
+    resultDialog: resultDialogSlice.reducer,
   },
 });
 

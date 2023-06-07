@@ -112,13 +112,15 @@ export default function ChannelList(props: Props) {
                           #{tag.label}
                         </Typography>
                       ))}
-                <Typography
-                  component={"li"}
-                  variant="body2"
-                  sx={{ color: grey[500], fontWeight: 900 }}
-                >
-                  ·
-                </Typography>
+                {(targetTag || channel.tags.length !== 0) && (
+                  <Typography
+                    component={"li"}
+                    variant="body2"
+                    sx={{ color: grey[500], fontWeight: 900 }}
+                  >
+                    ·
+                  </Typography>
+                )}
                 <Typography
                   component={"li"}
                   variant="body2"

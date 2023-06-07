@@ -1,35 +1,7 @@
-// interface Nicknames {
-//   [channelId: string]: string | undefined;
-// }
-
-// interface ScoreData {
-//   userId: string;
-//   nickname: string;
-//   score: number;
-// }
-
-// interface VideoData {
-//   id: string;
-//   title: string;
-//   thumbnail: {
-//     url: string;
-//     blurDataURL: string;
-//   };
-//   viewCount: number;
-// }
-
-// interface ChannelData {
-//   id: string;
-//   scoresSize: number;
-//   subscriberCount: number;
-//   thumbnail: {
-//     blurDataURL: string;
-//     url: string;
-//   };
-//   title: string;
-//   updateTime: string;
-//   videos: VideoData[];
-// }
+interface ScoreData {
+  nickname: string;
+  score: number;
+}
 
 type TagType = "GENERAL" | "DETAIL" | "GROUP";
 
@@ -65,8 +37,6 @@ interface VideoData {
     blurDataURL: string;
   };
   viewCount: number;
-  tags?: string[];
-  categoryId: string;
 }
 
 interface ChannelData {
@@ -86,19 +56,24 @@ interface ChannelData {
   videos: VideoData[];
 }
 
-interface ChannelDataWithTotalPlayCount extends ChannelData {
+interface TotalPlayCount {
   totalPlayCount: number;
   formattedTotalPlayCount: string;
 }
 
+interface ChannelDataWithTotalPlayCount
+  extends Omit<ChannelData, "videos">,
+    TotalPlayCount {}
+
 interface ChannelDataForChannelPage
   extends Pick<
-    ChannelData,
-    "id" | "playCount" | "tags" | "thumbnail" | "title" | "updateDate"
-  > {
-  totalPlayCount: number;
-  formattedTotalPlayCount: string;
-}
+      ChannelData,
+      "id" | "playCount" | "tags" | "thumbnail" | "title" | "updateDate"
+    >,
+    TotalPlayCount {}
+
+interface ChannelDataForGamePage
+  extends Pick<ChannelData, "id" | "title" | "videos"> {}
 
 interface ChannelDataForGamePage
   extends Pick<ChannelData, "id" | "title" | "videos" | "thumbnail"> {}
@@ -106,3 +81,5 @@ interface ChannelDataForGamePage
 // interface Window {
 //   adsbygoogle: { [key: string]: unknown }[];
 // }
+
+type GameMode = "GENERAL" | "TIME_ATTACK";

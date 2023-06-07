@@ -38,6 +38,11 @@ export const metadata: Metadata = {
     description,
     images: "https://www.mylittleyoutuber.com/logo.png",
   },
+  viewport: {
+    initialScale: 1,
+    maximumScale: 1,
+    minimumScale: 1,
+  },
 };
 
 interface Props {

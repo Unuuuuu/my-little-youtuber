@@ -3,7 +3,7 @@
 import Box from "@mui/material/Box";
 import SearchIcon from "../../components/SearchIcon";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { youtuberAddRequestSliceActions } from "@/lib/slices/youtuberAddRequestSlice";
+import { youtuberAddRequestInterfaceSliceActions } from "@/lib/slices/youtuberAddRequestInterfaceSlice";
 import logoWithNameImageSrc from "../../assets/logo-with-name.png";
 import Image from "next/image";
 import Button from "./Button";
@@ -41,7 +41,7 @@ export default function Header() {
   };
 
   const handleYoutuberAddRequestButtonClick = () => {
-    dispatch(youtuberAddRequestSliceActions.open());
+    dispatch(youtuberAddRequestInterfaceSliceActions.open());
   };
 
   const handleAutocompleteChange: UseAutocompleteProps<

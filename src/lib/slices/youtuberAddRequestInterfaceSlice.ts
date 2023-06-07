@@ -3,19 +3,19 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 type CompleteType = "WITH_EMAIL" | "WITHOUT_EMAIL";
 
-interface YoutuberAddRequestState {
+interface YoutuberAddRequestInterfaceState {
   isOpen: boolean;
   isComplete: boolean;
   completeType?: CompleteType;
 }
 
-const initialState: YoutuberAddRequestState = {
+const initialState: YoutuberAddRequestInterfaceState = {
   isOpen: false,
   isComplete: false,
 };
 
-export const youtuberAddRequestSlice = createSlice({
-  name: "youtuberAddRequest",
+export const youtuberAddRequestInterfaceSlice = createSlice({
+  name: "youtuberAddRequestInterface",
   initialState,
   reducers: {
     open: (state) => {
@@ -35,7 +35,7 @@ export const youtuberAddRequestSlice = createSlice({
   },
 });
 
-export const { actions: youtuberAddRequestSliceActions } =
-  youtuberAddRequestSlice;
+export const { actions: youtuberAddRequestInterfaceSliceActions } =
+  youtuberAddRequestInterfaceSlice;
 
-export default youtuberAddRequestSlice;
+export default youtuberAddRequestInterfaceSlice;

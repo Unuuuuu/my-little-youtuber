@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { youtuberAddRequestSliceActions } from "@/lib/slices/youtuberAddRequestSlice";
+import { youtuberAddRequestInterfaceSliceActions } from "@/lib/slices/youtuberAddRequestInterfaceSlice";
 import Button from "./Button";
 import Drawer from "@mui/material/Drawer";
 import Dialog from "@mui/material/Dialog";
@@ -36,11 +36,11 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>;
 
-export default function YoutuberAddRequest() {
+export default function YoutuberAddRequestInterface() {
   const { isOpen, isComplete, completeType } = useAppSelector((state) => ({
-    isOpen: state.youtuberAddRequest.isOpen,
-    isComplete: state.youtuberAddRequest.isComplete,
-    completeType: state.youtuberAddRequest.completeType,
+    isOpen: state.youtuberAddRequestInterface.isOpen,
+    isComplete: state.youtuberAddRequestInterface.isComplete,
+    completeType: state.youtuberAddRequestInterface.completeType,
   }));
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -74,9 +74,13 @@ export default function YoutuberAddRequest() {
       .then(() => {
         reset();
         if (isEmailExist) {
-          dispatch(youtuberAddRequestSliceActions.complete("WITH_EMAIL"));
+          dispatch(
+            youtuberAddRequestInterfaceSliceActions.complete("WITH_EMAIL")
+          );
         } else {
-          dispatch(youtuberAddRequestSliceActions.complete("WITHOUT_EMAIL"));
+          dispatch(
+            youtuberAddRequestInterfaceSliceActions.complete("WITHOUT_EMAIL")
+          );
         }
       })
       .catch((reason) => {
@@ -86,11 +90,11 @@ export default function YoutuberAddRequest() {
   };
 
   const handleClose = () => {
-    dispatch(youtuberAddRequestSliceActions.close());
+    dispatch(youtuberAddRequestInterfaceSliceActions.close());
   };
 
   const handleAddRequestButtonClick = () => {
-    dispatch(youtuberAddRequestSliceActions.reset());
+    dispatch(youtuberAddRequestInterfaceSliceActions.reset());
   };
 
   const headerElement = (

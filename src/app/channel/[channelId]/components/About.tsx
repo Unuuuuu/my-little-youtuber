@@ -10,7 +10,7 @@ import { useAppDispatch } from "@/lib/hooks";
 import { homeTabsSliceActions } from "@/lib/slices/homeTabsSlice";
 import Button from "@/app/components/Button";
 import WarningCircleIcon from "@/components/WarningCircleIcon";
-import { gameModeSliceActions } from "@/lib/slices/gameModeSlice";
+import { gameModeInterfaceSliceActions } from "@/lib/slices/gameModeInterfaceSlice";
 
 export default function About() {
   const { channel } = useChannelContext();
@@ -23,7 +23,7 @@ export default function About() {
   };
 
   const handlePlayButtonClick = () => {
-    dispatch(gameModeSliceActions.open());
+    dispatch(gameModeInterfaceSliceActions.open());
   };
 
   return (
@@ -37,7 +37,7 @@ export default function About() {
     >
       <Box
         sx={{
-          bgcolor: "secondary.main",
+          bgcolor: grey[100],
           borderRadius: "8px",
           p: "12px 22.5px",
           mb: "28px",
@@ -51,12 +51,12 @@ export default function About() {
             transform: "translateX(-50%) rotate(45deg)",
             width: "12px",
             height: "12px",
-            bgcolor: "secondary.main",
+            bgcolor: grey[100],
             borderBottomRightRadius: "2px",
           },
         }}
       >
-        <Typography variant="subtitle1" sx={{ color: "primary.main" }}>
+        <Typography variant="subtitle1">
           {channel.formattedTotalPlayCount}회 플레이 됐어요!
         </Typography>
       </Box>
@@ -124,7 +124,7 @@ export default function About() {
         sx={{
           display: "flex",
           gap: "4px",
-          bgcolor: "secondary.main",
+          bgcolor: grey[100],
           width: "100%",
           p: "16px 0px",
           borderRadius: "8px",

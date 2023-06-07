@@ -7,7 +7,7 @@ export interface Props {
   value: string;
 }
 
-export default function TabPanel(props: Props) {
+export default function RankingTabPanel(props: Props) {
   const { selectedValue, value, children } = props;
 
   if (value !== selectedValue) {
@@ -18,12 +18,7 @@ export default function TabPanel(props: Props) {
     <Box
       role="tabpanel"
       sx={{
-        bgcolor: grey[100],
-        p: "16px 12px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-        borderRadius: "0 0 8px 8px",
+        p: "24px 0",
       }}
     >
       {children}

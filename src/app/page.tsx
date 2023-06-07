@@ -1,7 +1,7 @@
 import Header from "./components/Header";
 import HomeTabs from "./components/HomeTabs";
 import Footer from "./components/Footer";
-import YoutuberAddRequest from "./components/YoutuberAddRequest";
+import YoutuberAddRequestInterface from "./components/YoutuberAddRequestInterface";
 import {
   TagsContextProvider,
   TagsContextValue,
@@ -48,19 +48,20 @@ async function getChannelsContextValue(): Promise<ChannelsContextValue> {
 
   const channels = querySnapshot.docs.map<ChannelDataWithTotalPlayCount>(
     (docSnapshot) => {
-      const data = docSnapshot.data();
+      const { videos, ...rest } = docSnapshot.data();
       const {
         playCount: { general, timeAttack },
-      } = data;
+      } = rest;
       const totalPlayCount = general + timeAttack;
 
       return {
-        ...data,
+        ...rest,
         totalPlayCount,
         formattedTotalPlayCount: formatter.format(totalPlayCount),
       };
     }
   );
+
   const channelsSortedByPlayCount = [...channels].sort(
     (a, b) => b.totalPlayCount - a.totalPlayCount
   );
@@ -85,7 +86,7 @@ export default async function Page() {
         </ChannelsContextProvider>
       </TagsContextProvider>
       <Footer />
-      <YoutuberAddRequest />
+      <YoutuberAddRequestInterface />
     </>
   );
 }

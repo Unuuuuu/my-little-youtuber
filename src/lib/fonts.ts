@@ -2,7 +2,7 @@ import { Noto_Sans_KR } from "next/font/google";
 import localFont from "next/font/local";
 
 export const notoSansKR = Noto_Sans_KR({
-  weight: ["400", "500", "700"],
+  weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
 });
 

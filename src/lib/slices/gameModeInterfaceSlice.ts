@@ -9,7 +9,7 @@ const initialState: GameModeState = {
   isOpen: false,
 };
 
-export const gameModeSlice = createSlice({
+export const gameModeInterfaceSlice = createSlice({
   name: "gameMode",
   initialState,
   reducers: {
@@ -26,6 +26,7 @@ export const gameModeSlice = createSlice({
   },
 });
 
-export const { actions: gameModeSliceActions } = gameModeSlice;
+export const { actions: gameModeInterfaceSliceActions } =
+  gameModeInterfaceSlice;
 
-export default gameModeSlice;
+export default gameModeInterfaceSlice;

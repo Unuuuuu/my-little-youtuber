@@ -13,6 +13,7 @@ import { useAppDispatch } from "@/lib/hooks";
 import { homeTabsSliceActions } from "@/lib/slices/homeTabsSlice";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Banner from "./Banner";
 
 interface Props extends Omit<TabPanelProps, "children"> {}
 
@@ -40,6 +41,7 @@ export default function HomeTabPanel(props: Props) {
 
   return (
     <TabPanel value={value} selectedValue={selectedValue}>
+      <Banner />
       <Box
         sx={{
           px: "24px",

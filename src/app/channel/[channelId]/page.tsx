@@ -12,9 +12,11 @@ import {
   ChannelContextValue,
 } from "./components/ChannelContext";
 import Header from "./components/Header";
-import About from "./components/About";
 import formatter from "@/lib/formatter";
-import GameMode from "./components/GameMode";
+import GameModeInterface from "./components/GameModeInterface";
+import Footer from "@/app/components/Footer";
+import Main from "./components/Main";
+import { Metadata } from "next";
 
 export async function generateStaticParams() {
   const querySnapshot = (await getDocs(
@@ -110,8 +112,9 @@ export default async function Page(props: Props) {
   return (
     <ChannelContextProvider value={channelContextValue}>
       <Header />
-      <About />
-      <GameMode />
+      <Main />
+      <Footer />
+      <GameModeInterface />
     </ChannelContextProvider>
   );
 }

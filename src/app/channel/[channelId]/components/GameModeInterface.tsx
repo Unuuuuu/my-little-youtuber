@@ -14,11 +14,11 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import CloseIcon from "@/components/CloseIcon";
 import TextField from "@/app/components/TextField";
 import Button from "@/app/components/Button";
-import { gameModeSliceActions } from "@/lib/slices/gameModeSlice";
+import { gameModeInterfaceSliceActions } from "@/lib/slices/gameModeInterfaceSlice";
 import Tabs, { TabsProps } from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { useRef, useState } from "react";
-import TabPanel from "./TabPanel";
+import { useEffect, useRef, useState } from "react";
+import GameModeTabPanel from "./GameModeTabPanel";
 import HourglassHighDisableIcon from "@/components/HourglassHighDisableIcon";
 import HourglassHighIcon from "@/components/HourglassHighIcon";
 import YoutubeLogoIcon from "@/components/YoutubeLogoIcon";
@@ -26,6 +26,10 @@ import YoutubeLogoDisableIcon from "@/components/YoutubeLogoDisableIcon";
 import LiveCircleIcon from "@/components/LiveCircleIcon";
 import FireIcon from "@/components/FireIcon";
 import getRandomNickname from "@/lib/getRandomNickname";
+import { useChannelContext } from "./ChannelContext";
+import Link from "next/link";
+import { gameSliceActions } from "@/lib/slices/gameSlice";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   nickname: z.union([
@@ -40,15 +44,19 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>;
 
-export default function GameMode() {
-  const { isOpen } = useAppSelector((state) => ({
-    isOpen: state.gameMode.isOpen,
+export default function GameModeInterface() {
+  const { isOpen, gameMode } = useAppSelector((state) => ({
+    isOpen: state.gameModeInterface.isOpen,
+    gameMode: state.game.gameMode,
   }));
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.up("md"));
-  const [value, setValue] = useState("general");
   const randomNicknameRef = useRef(getRandomNickname());
+  const {
+    channel: { id },
+  } = useChannelContext();
+  const router = useRouter();
 
   const {
     control,
@@ -61,6 +69,12 @@ export default function GameMode() {
     },
   });
 
+  useEffect(() => {
+    return () => {
+      dispatch(gameModeInterfaceSliceActions.close());
+    };
+  }, [dispatch]);
+
   const onSubmit: SubmitHandler<Schema> = (data) => {
     if (isSubmitting) {
       return;
@@ -72,14 +86,17 @@ export default function GameMode() {
     } else {
       nickname = data.nickname;
     }
+
+    router.push(`/channel/${id}/game`);
+    dispatch(gameSliceActions.setNickname(nickname));
   };
 
   const handleClose = () => {
-    dispatch(gameModeSliceActions.close());
+    dispatch(gameModeInterfaceSliceActions.close());
   };
 
-  const handleTabsChange: TabsProps["onChange"] = (_, newValue: string) => {
-    setValue(newValue);
+  const handleTabsChange: TabsProps["onChange"] = (_, newValue: GameMode) => {
+    dispatch(gameSliceActions.updateGameMode(newValue));
   };
 
   const headerElement = (
@@ -115,7 +132,7 @@ export default function GameMode() {
       <Box sx={{ mb: "24px" }}>
         <Box sx={{ position: "relative" }}>
           <Tabs
-            value={value}
+            value={gameMode}
             onChange={handleTabsChange}
             variant="fullWidth"
             sx={{
@@ -126,7 +143,7 @@ export default function GameMode() {
                   color: grey[500],
                 },
               },
-              ".Mui-selected": {
+              ".MuiButtonBase-root.Mui-selected": {
                 color: grey[900],
                 fontWeight: 700,
               },
@@ -138,8 +155,8 @@ export default function GameMode() {
               },
             }}
           >
-            <Tab value="general" label="일반" />
-            <Tab value="timeAttack" label="타임어택" />
+            <Tab value="GENERAL" label="일반" />
+            <Tab value="TIME_ATTACK" label="타임어택" />
           </Tabs>
           <Box
             sx={{
@@ -151,7 +168,7 @@ export default function GameMode() {
             }}
           />
         </Box>
-        <TabPanel value="general" selectedValue={value}>
+        <GameModeTabPanel value="GENERAL" selectedValue={gameMode}>
           <Box sx={{ display: "flex", gap: "8px", alignItems: "center" }}>
             <HourglassHighDisableIcon sx={{ fontSize: "32px" }} />
             <Typography variant="body1">제한시간이 없어요</Typography>
@@ -164,8 +181,8 @@ export default function GameMode() {
             <LiveCircleIcon sx={{ fontSize: "32px" }} />
             <Typography variant="body1">스트리밍 컨텐츠로 추천해요</Typography>
           </Box>
-        </TabPanel>
-        <TabPanel value="timeAttack" selectedValue={value}>
+        </GameModeTabPanel>
+        <GameModeTabPanel value="TIME_ATTACK" selectedValue={gameMode}>
           <Box sx={{ display: "flex", gap: "8px", alignItems: "center" }}>
             <HourglassHighIcon sx={{ fontSize: "32px" }} />
             <Typography variant="body1">10초의 제한시간이 있어요</Typography>
@@ -180,7 +197,7 @@ export default function GameMode() {
               치열한 경쟁을 원한다면 추천해요
             </Typography>
           </Box>
-        </TabPanel>
+        </GameModeTabPanel>
       </Box>
       <Box component={"form"} onSubmit={handleSubmit(onSubmit)} noValidate>
         <Typography variant="subtitle1" sx={{ color: grey[700], mb: "12px" }}>
