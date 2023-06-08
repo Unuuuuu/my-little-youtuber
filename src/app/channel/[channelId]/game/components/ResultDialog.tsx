@@ -89,10 +89,6 @@ export default function ResultDialog() {
             ...doc.data(),
             id: doc.id,
           }));
-          console.log(
-            "🚀 ~ file: ResultDialog.tsx:87 ~ ).then ~ scores:",
-            scores
-          );
 
           if (scores.length < 100) {
             // 100개 보다 적게 있다면, 추가한다.
@@ -116,14 +112,6 @@ export default function ResultDialog() {
             // 100개 이상 있다면,
             // 마지막 것과 차이를 계산한다.
             const diff = score - scores[99].score;
-            console.log(
-              "🚀 ~ file: ResultDialog.tsx:110 ~ ).then ~ score:",
-              score
-            );
-            console.log(
-              "🚀 ~ file: ResultDialog.tsx:110 ~ ).then ~ diff:",
-              diff
-            );
             if (diff > 0) {
               // diff가 0보다 크다면
               scores.slice(99).forEach((sc) => {
