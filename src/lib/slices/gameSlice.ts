@@ -68,6 +68,12 @@ interface GameState {
 
   // TIME_ATTACK MODE
   time: number;
+
+  // result
+  isResultLoading: boolean;
+  resultStatus?: "rank" | "unrank";
+  ranking?: number;
+  diff?: number;
 }
 
 const TIME = 10;
@@ -85,6 +91,9 @@ const initialState: GameState = {
 
   // TIME_ATTACK MODE
   time: TIME,
+
+  // result
+  isResultLoading: true,
 };
 
 export const gameSlice = createSlice({
@@ -93,6 +102,17 @@ export const gameSlice = createSlice({
   reducers: {
     updateGameMode: (state, action: PayloadAction<GameMode>) => {
       state.gameMode = action.payload;
+    },
+    updateResult: (
+      state,
+      action: PayloadAction<
+        Pick<GameState, "resultStatus" | "ranking" | "diff">
+      >
+    ) => {
+      state.resultStatus = action.payload.resultStatus;
+      state.ranking = action.payload.ranking;
+      state.diff = action.payload.diff;
+      state.isResultLoading = false;
     },
     initialize: (state, action: PayloadAction<ChannelDataForGamePage>) => {
       const { id, title, videos } = action.payload;
@@ -115,6 +135,12 @@ export const gameSlice = createSlice({
       state.selectedVideoId = null;
       state.score = 0;
 
+      // result
+      state.isResultLoading = true;
+      state.resultStatus = undefined;
+      state.ranking = undefined;
+      state.diff = undefined;
+
       if (state.gameMode === "TIME_ATTACK") {
         state.time = TIME;
       }
@@ -128,6 +154,12 @@ export const gameSlice = createSlice({
       state.higherRandomVideo = undefined;
       state.selectedVideoId = null;
       state.score = 0;
+
+      // result
+      state.isResultLoading = true;
+      state.resultStatus = undefined;
+      state.ranking = undefined;
+      state.diff = undefined;
 
       if (state.gameMode === "TIME_ATTACK") {
         state.time = TIME;
@@ -147,8 +179,6 @@ export const gameSlice = createSlice({
         gameStatus,
         selectedVideoId,
         higherRandomVideo,
-        gameMode,
-        score,
       } = state;
       if (
         isInitialized === false ||
@@ -213,6 +243,12 @@ export const gameSlice = createSlice({
       state.higherRandomVideo = newHigherRandomVideo;
       state.selectedVideoId = null;
       state.score = 0;
+
+      // result
+      state.isResultLoading = true;
+      state.resultStatus = undefined;
+      state.ranking = undefined;
+      state.diff = undefined;
 
       if (state.gameMode === "TIME_ATTACK") {
         state.time = TIME;

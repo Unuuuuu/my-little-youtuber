@@ -32,6 +32,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import CircularProgress from "@mui/material/CircularProgress";
+import Link from "next/link";
 
 export default function ResultDialog() {
   const {
@@ -42,6 +43,10 @@ export default function ResultDialog() {
     gameMode,
     score,
     nickname,
+    isResultLoading,
+    resultStatus,
+    ranking,
+    diff,
   } = useAppSelector((state) => ({
     id: state.game.id,
     title: state.game.title,
@@ -50,14 +55,12 @@ export default function ResultDialog() {
     gameMode: state.game.gameMode,
     score: state.game.score,
     nickname: state.game.nickname,
+    isResultLoading: state.game.isResultLoading,
+    resultStatus: state.game.resultStatus,
+    ranking: state.game.ranking,
+    diff: state.game.diff,
   }));
   const dispatch = useAppDispatch();
-  const [isLoading, setIsLoading] = useState(true);
-  const [state, setState] = useState<
-    | { status: "rank"; rank: number }
-    | { status: "unrank"; diff: number }
-    | undefined
-  >(undefined);
 
   useEffect(() => {
     if (gameStatus === "FAILED") {
@@ -103,10 +106,20 @@ export default function ResultDialog() {
             );
             if (targetIndex === -1) {
               // 내 점수보다 낮은 점수가 없는 경우
-              setState({ status: "rank", rank: scores.length + 1 });
+              dispatch(
+                gameSliceActions.updateResult({
+                  resultStatus: "rank",
+                  ranking: scores.length + 1,
+                })
+              );
             } else {
               // 내 점수보다 낮은 점수가 있는 경우
-              setState({ status: "rank", rank: targetIndex + 1 });
+              dispatch(
+                gameSliceActions.updateResult({
+                  resultStatus: "rank",
+                  ranking: targetIndex + 1,
+                })
+              );
             }
           } else {
             // 100개 이상 있다면,
@@ -129,21 +142,34 @@ export default function ResultDialog() {
               );
               if (targetIndex === -1) {
                 // 내 점수보다 낮은 점수가 없는 경우
-                setState({ status: "rank", rank: scores.length + 1 });
+                dispatch(
+                  gameSliceActions.updateResult({
+                    resultStatus: "rank",
+                    ranking: scores.length + 1,
+                  })
+                );
               } else {
                 // 내 점수보다 낮은 점수가 있는 경우
-                setState({ status: "rank", rank: targetIndex + 1 });
+                dispatch(
+                  gameSliceActions.updateResult({
+                    resultStatus: "rank",
+                    ranking: targetIndex + 1,
+                  })
+                );
               }
             } else {
               // diff가 0보다 크지않다면 unrank이다.
-              setState({ status: "unrank", diff: diff * -1 });
+              dispatch(
+                gameSliceActions.updateResult({
+                  resultStatus: "unrank",
+                  diff: diff * -1,
+                })
+              );
             }
           }
-
-          setIsLoading(false);
         });
       } else {
-        setIsLoading(false);
+        dispatch(gameSliceActions.updateResult({}));
       }
     }
   }, [dispatch, gameMode, gameStatus, id, nickname, score]);
@@ -153,13 +179,6 @@ export default function ResultDialog() {
       dispatch(resultDialogSliceActions.close());
     };
   }, [dispatch]);
-
-  useEffect(() => {
-    if (gameStatus === "IDLE") {
-      setIsLoading(true);
-      setState(undefined);
-    }
-  }, [gameStatus]);
 
   const handleClose = useCallback(() => {
     dispatch(resultDialogSliceActions.close());
@@ -177,17 +196,17 @@ export default function ResultDialog() {
     title = "앗...";
     medalImageSrc = purpleMedalImageSrc;
   } else {
-    switch (state?.status) {
+    switch (resultStatus) {
       case "rank":
-        if (state.rank === 1) {
+        if (ranking === 1) {
           title = "멋져요!";
           medalImageSrc = goldMedalImageSrc;
           strokeColor = "rgb(119,94,4)";
-        } else if (state.rank === 2) {
+        } else if (ranking === 2) {
           title = "멋져요!";
           medalImageSrc = silverMedalImageSrc;
           strokeColor = "rgb(101,101,102)";
-        } else if (state.rank === 3) {
+        } else if (ranking === 3) {
           title = "멋져요!";
           medalImageSrc = bronzeMedalImageSrc;
           strokeColor = "rgb(117,94,82)";
@@ -222,7 +241,7 @@ export default function ResultDialog() {
         },
       }}
     >
-      {isLoading ? (
+      {isResultLoading ? (
         <Box
           sx={{
             width: "100%",
@@ -269,7 +288,7 @@ export default function ResultDialog() {
               }}
             >
               <Image src={medalImageSrc} alt="medal" fill />
-              {(score === 0 || (state && state.status !== "rank")) && (
+              {(score === 0 || resultStatus !== "rank") && (
                 <Typography
                   sx={{
                     width: "100%",
@@ -287,7 +306,7 @@ export default function ResultDialog() {
                   {score}
                 </Typography>
               )}
-              {score !== 0 && state && state.status === "rank" && (
+              {score !== 0 && resultStatus === "rank" && (
                 <>
                   <Typography
                     sx={{
@@ -303,7 +322,7 @@ export default function ResultDialog() {
                       WebkitTextStroke: `1.5px ${strokeColor}`,
                     }}
                   >
-                    {state.rank}
+                    {ranking}
                   </Typography>
                   <Typography
                     sx={{
@@ -333,7 +352,7 @@ export default function ResultDialog() {
                 <Typography sx={{ textAlign: "center" }}>
                   한 번 더 해볼까요?
                 </Typography>
-              ) : state && state.status === "rank" ? (
+              ) : resultStatus === "rank" ? (
                 <Box>
                   <Typography sx={{ textAlign: "center" }}>
                     {channelTitle} 채널에서
@@ -353,12 +372,12 @@ export default function ResultDialog() {
                           lineHeight: "32px",
                           fontWeight: 900,
                         },
-                        state.rank <= 3 && {
+                        ranking! <= 3 && {
                           color: "primary.main",
                         },
                       ]}
                     >
-                      {state.rank}등
+                      {ranking}등
                     </Typography>
                     <Typography>을 했어요!</Typography>
                   </Box>
@@ -373,7 +392,7 @@ export default function ResultDialog() {
                     }}
                   >
                     <Typography sx={{ color: "primary.main" }}>
-                      {state!.diff + 1}점
+                      {diff! + 1}점
                     </Typography>
                     <Typography>만 더 받으면</Typography>
                   </Box>
@@ -399,15 +418,31 @@ export default function ResultDialog() {
                 </Box>
               )}
             </Box>
-            <Button
-              fullWidth
-              variant="contained"
-              type="submit"
-              sx={{ height: "48px", fontSize: "18px", borderRadius: "8px" }}
-              onClick={handleReplayButtonClick}
-            >
-              다시하기
-            </Button>
+            <Box sx={{ display: "flex", gap: "12px" }}>
+              <Link href={`/channel/${id}`}>
+                <Button
+                  variant="outlined"
+                  color="buttonSecondary"
+                  sx={{
+                    height: "48px",
+                    fontSize: "18px",
+                    borderRadius: "8px",
+                    width: "103px",
+                    flexShrink: 0,
+                  }}
+                >
+                  {resultStatus === "rank" ? "랭킹보기" : "나가기"}
+                </Button>
+              </Link>
+              <Button
+                fullWidth
+                variant="contained"
+                sx={{ height: "48px", fontSize: "18px", borderRadius: "8px" }}
+                onClick={handleReplayButtonClick}
+              >
+                다시하기
+              </Button>
+            </Box>
           </Box>
         </>
       )}

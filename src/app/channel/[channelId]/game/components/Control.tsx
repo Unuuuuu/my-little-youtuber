@@ -11,14 +11,28 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Grow from "@mui/material/Grow";
 import Typography from "@mui/material/Typography";
 import { grey } from "@mui/material/colors";
+import Link from "next/link";
 import { useEffect } from "react";
 
 export default function Control() {
-  const { gameMode, gameStatus, score, time } = useAppSelector((state) => ({
+  const {
+    channelId,
+    gameMode,
+    gameStatus,
+    score,
+    time,
+    isResultLoading,
+    isResultDialogOpen,
+    resultStatus,
+  } = useAppSelector((state) => ({
+    channelId: state.game.id,
     gameMode: state.game.gameMode,
     gameStatus: state.game.gameStatus,
     score: state.game.score,
     time: state.game.time,
+    isResultLoading: state.game.isResultLoading,
+    isResultDialogOpen: state.resultDialog.isOpen,
+    resultStatus: state.game.resultStatus,
   }));
   const dispatch = useAppDispatch();
 
@@ -49,21 +63,17 @@ export default function Control() {
     dispatch(gameSliceActions.reset());
   };
 
-  const openResultDialog = () => {
-    dispatch(resultDialogSliceActions.open());
-  };
-
   return (
-    <Box
-      sx={{
-        position: "absolute",
-        top: { sm: "50%", md: "calc(50% - 24px)" },
-        left: "50%",
-        transform: "translate(-50%,-50%)",
-      }}
-    >
-      {gameStatus !== "FAILED" && (
-        <>
+    <>
+      <Box
+        sx={{
+          position: "absolute",
+          top: { sm: "50%", md: "calc(50% - 24px)" },
+          left: "50%",
+          transform: "translate(-50%,-50%)",
+        }}
+      >
+        <Grow in={gameStatus !== "FAILED"}>
           <Box
             sx={{
               p: "3px 3px 3px 7px",
@@ -149,64 +159,74 @@ export default function Control() {
               </Grow>
             </Box>
           </Box>
-        </>
-      )}
-      {gameStatus === "FAILED" && (
-        <>
-          <Box
-            sx={{
-              p: "3px",
-              display: "flex",
-              gap: "4px",
-              bgcolor: "white",
-              boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.5)",
-              borderRadius: "99px",
-            }}
-          >
-            <ButtonBase
+        </Grow>
+      </Box>
+      {gameStatus === "FAILED" && !isResultLoading && !isResultDialogOpen && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: { sm: "50%", md: "calc(50% - 24px)" },
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <Grow in={true}>
+            <Box
               sx={{
-                width: "110px",
-                height: "56px",
-                borderRadius: "99px 28px 28px 99px",
-                border: `1px solid ${grey[200]}`,
+                p: "3px",
+                display: "flex",
+                gap: "4px",
+                bgcolor: "white",
+                boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.5)",
+                borderRadius: "99px",
               }}
-              onClick={openResultDialog}
             >
-              <Typography
+              <Link href={`/channel/${channelId}`}>
+                <ButtonBase
+                  sx={{
+                    width: "110px",
+                    height: "56px",
+                    borderRadius: "99px 28px 28px 99px",
+                    border: `1px solid ${grey[200]}`,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: gmarketSans.style.fontFamily,
+                      fontSize: "20px",
+                      lineHeight: "24px",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {resultStatus === "rank" ? "랭킹보기" : "나가기"}
+                  </Typography>
+                </ButtonBase>
+              </Link>
+              <ButtonBase
                 sx={{
-                  fontFamily: gmarketSans.style.fontFamily,
-                  fontSize: "20px",
-                  lineHeight: "24px",
-                  fontWeight: 500,
+                  width: "110px",
+                  height: "56px",
+                  borderRadius: "28px 99px 99px 28px",
+                  bgcolor: "primary.main",
                 }}
+                onClick={handleReplayButtonClick}
               >
-                결과보기
-              </Typography>
-            </ButtonBase>
-            <ButtonBase
-              sx={{
-                width: "110px",
-                height: "56px",
-                borderRadius: "28px 99px 99px 28px",
-                bgcolor: "primary.main",
-              }}
-              onClick={handleReplayButtonClick}
-            >
-              <Typography
-                sx={{
-                  fontFamily: gmarketSans.style.fontFamily,
-                  fontSize: "20px",
-                  lineHeight: "24px",
-                  fontWeight: 500,
-                  color: "white",
-                }}
-              >
-                다시하기
-              </Typography>
-            </ButtonBase>
-          </Box>
-        </>
+                <Typography
+                  sx={{
+                    fontFamily: gmarketSans.style.fontFamily,
+                    fontSize: "20px",
+                    lineHeight: "24px",
+                    fontWeight: 500,
+                    color: "white",
+                  }}
+                >
+                  다시하기
+                </Typography>
+              </ButtonBase>
+            </Box>
+          </Grow>
+        </Box>
       )}
-    </Box>
+    </>
   );
 }
