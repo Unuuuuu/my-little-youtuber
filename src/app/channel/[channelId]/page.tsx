@@ -83,18 +83,21 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
+      type: "website",
+      locale: "ko_KR",
       url: `https://www.mylittleyoutuber.com/channel/${channel.id}`,
+      siteName: "나의 작은 유튜버",
       images: {
-        url: channel.thumbnail.url,
-        width: 240,
-        height: 240,
+        url: "https://www.mylittleyoutuber.com/logo-1200x630.png",
+        width: 1200,
+        height: 630,
       },
     },
     twitter: {
       card: "summary",
       title,
       description,
-      images: channel.thumbnail.url,
+      images: "https://www.mylittleyoutuber.com/logo-1200x630.png",
     },
   };
 }

@@ -27,16 +27,16 @@ export const metadata: Metadata = {
     url: "https://www.mylittleyoutuber.com",
     siteName: "나의 작은 유튜버",
     images: {
-      url: "https://www.mylittleyoutuber.com/logo.png",
-      width: 512,
-      height: 512,
+      url: "https://www.mylittleyoutuber.com/logo-1200x630.png",
+      width: 1200,
+      height: 630,
     },
   },
   twitter: {
     card: "summary",
     title,
     description,
-    images: "https://www.mylittleyoutuber.com/logo.png",
+    images: "https://www.mylittleyoutuber.com/logo-1200x630.png",
   },
   viewport: {
     initialScale: 1,
