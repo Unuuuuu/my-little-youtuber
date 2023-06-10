@@ -134,7 +134,12 @@ export default function Videos() {
                     },
                     flexShrink: 0,
                   },
-                  index === 1 && { p: "12px 0 16px" },
+                  index === 1 && {
+                    p: {
+                      sm: "12px 0 16px",
+                      md: "12px 0 16px",
+                    },
+                  },
                 ]}
               >
                 <Typography noWrap variant="body1" sx={{ textAlign: "center" }}>
