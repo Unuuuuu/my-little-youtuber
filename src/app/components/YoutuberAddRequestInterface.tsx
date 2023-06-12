@@ -136,7 +136,6 @@ export default function YoutuberAddRequestInterface() {
           alt="user circle plus"
           width={100}
           height={100}
-          placeholder="blur"
         />
       </Box>
       <Box component={"form"} onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -228,23 +227,11 @@ export default function YoutuberAddRequestInterface() {
       >
         {completeType === "WITH_EMAIL" ? (
           <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <Image
-              src={emailImageSrc}
-              alt="email"
-              width={80}
-              height={80}
-              placeholder="blur"
-            />
+            <Image src={emailImageSrc} alt="email" width={80} height={80} />
           </Box>
         ) : (
           <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <Image
-              src={checkImageSrc}
-              alt="email"
-              width={80}
-              height={80}
-              placeholder="blur"
-            />
+            <Image src={checkImageSrc} alt="email" width={80} height={80} />
           </Box>
         )}
       </Box>

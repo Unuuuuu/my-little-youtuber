@@ -103,7 +103,6 @@ export default function SearchTabPanel(props: Props) {
                 alt="user circle plus"
                 width={150}
                 height={150}
-                placeholder="blur"
                 style={{ marginBottom: "8px" }}
               />
               <Typography variant="h4" sx={{ color: grey[500], mb: "16px" }}>
