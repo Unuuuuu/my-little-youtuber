@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs, { TabsProps } from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 import { useState } from "react";
 import GeneralRankingTabPanel from "./GeneralRankingTabPanel";
 import TimeAttackRankingTabPanel from "./TimeAttackRankingTabPanel";

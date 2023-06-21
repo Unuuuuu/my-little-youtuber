@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import ChannelList from "./ChannelList";
 import filterOptions from "@/lib/filterOptions";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 import { gmarketSans } from "@/lib/fonts";
 import Image from "next/image";
 import userCirclePlusImageSrc from "../../assets/user-circle-plus-2.png";

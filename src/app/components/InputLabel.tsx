@@ -5,7 +5,7 @@ import {
   InputLabelProps,
 } from "@mui/material/InputLabel";
 import { useFormControlContext } from "./FormControl";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 import { z } from "zod";
 
 export default function InputLabel(props: InputLabelProps) {

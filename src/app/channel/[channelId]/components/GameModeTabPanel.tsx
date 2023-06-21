@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 
 export interface Props {
   children?: React.ReactNode;

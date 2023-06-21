@@ -8,7 +8,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useCallback, useMemo } from "react";
 import filterOptions from "@/lib/filterOptions";
 import Typography from "@mui/material/Typography";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 import TextField from "./TextField";
 import { TextFieldProps } from "@mui/material/TextField";
 import CaretLeftIcon from "@/components/CaretLeftIcon";

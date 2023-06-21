@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useChannelContext } from "./ChannelContext";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/lib/hooks";
 import { homeTabsSliceActions } from "@/lib/slices/homeTabsSlice";

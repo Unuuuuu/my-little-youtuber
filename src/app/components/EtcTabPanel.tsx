@@ -5,7 +5,7 @@ import TabPanel, { Props as TabPanelProps } from "./TabPanel";
 import { useChannelsContext } from "./ChannelsContext";
 import { useTagsContext } from "./TagsContext";
 import Typography from "@mui/material/Typography";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 import CaretRightIcon from "../../components/CaretRightIcon";
 import ChannelList from "./ChannelList";
 import { useMemo } from "react";

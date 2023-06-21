@@ -6,7 +6,7 @@ import GlobalStyles from "@mui/material/GlobalStyles";
 import { gmarketSans, notoSansKR } from "@/lib/fonts";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "@/lib/store";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 
 const theme = createTheme({
   palette: {

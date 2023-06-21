@@ -18,7 +18,7 @@ import goldMedalImageSrc from "@/assets/ranking-gold-medal.png";
 import silverMedalImageSrc from "@/assets/ranking-silver-medal.png";
 import bronzeMedalImageSrc from "@/assets/ranking-bronze-medal.png";
 import Typography from "@mui/material/Typography";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 import { gmarketSans } from "@/lib/fonts";
 import RankingDisplayAd from "./RankingDisplayAd";
 

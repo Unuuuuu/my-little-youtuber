@@ -7,7 +7,7 @@ import Image from "next/image";
 import userCirclePlusImageSrc from "../../assets/user-circle-plus.png";
 import emailImageSrc from "../../assets/email.png";
 import checkImageSrc from "../../assets/check.png";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";

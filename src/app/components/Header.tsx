@@ -8,7 +8,7 @@ import logoWithNameImageSrc from "../../assets/logo-with-name.png";
 import Image from "next/image";
 import Button from "./Button";
 import PlusCircleIcon from "@/components/PlusCircleIcon";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 import TextField from "@mui/material/TextField";
 import { searchSliceActions } from "@/lib/slices/searchSlice";
 import { useRouter } from "next/navigation";

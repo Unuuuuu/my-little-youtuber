@@ -4,7 +4,7 @@ import Tabs, { TabsProps } from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { useTagsContext } from "./TagsContext";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 import HomeTabPanel from "./HomeTabPanel";
 import TagTabPanel from "./TagTabPanel";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";

@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import ButtonBase from "@mui/material/ButtonBase";
 import Grow from "@mui/material/Grow";
 import Typography from "@mui/material/Typography";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 import Link from "next/link";
 import { useEffect } from "react";
 

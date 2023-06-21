@@ -5,7 +5,7 @@ import { useChannelContext } from "./ChannelContext";
 import Typography from "@mui/material/Typography";
 import CaretLeftIcon from "@/components/CaretLeftIcon";
 import Link from "next/link";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 
 export default function Header() {
   const {

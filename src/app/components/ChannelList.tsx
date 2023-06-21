@@ -3,7 +3,7 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 import Image from "next/image";
 import Link from "next/link";
 import { useTagsContext } from "./TagsContext";

@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@/components/CloseIcon";
-import { grey } from "@mui/material/colors";
+import { grey } from "@/lib/colors";
 import { resultDialogSliceActions } from "@/lib/slices/resultDialogSlice";
 import Image, { StaticImageData } from "next/image";
 import goldMedalImageSrc from "@/assets/gold-medal.png";
