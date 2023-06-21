@@ -55,6 +55,7 @@ export default function HomeTabs() {
               md: "60px",
             },
             ".MuiTab-root": {
+              fontSize: "16px",
               p: {
                 sm: 0,
                 md: "0 16px",
