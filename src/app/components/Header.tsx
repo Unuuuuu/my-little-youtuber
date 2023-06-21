@@ -21,6 +21,8 @@ import { UseAutocompleteProps } from "@mui/material/useAutocomplete";
 import { useRef } from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 import { BaseSyntheticEvent } from "react";
+import ButtonBase from "@mui/material/ButtonBase";
+import Typography from "@mui/material/Typography";
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -163,6 +165,18 @@ export default function Header() {
                   ...params.InputProps,
                   sx: {
                     height: "48px",
+                    ".MuiOutlinedInput-notchedOutline": {
+                      borderWidth: "2px",
+                      borderColor: "primary.main",
+                      borderRadius: "8px",
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "primary.main",
+                    },
+                    ".MuiOutlinedInput-input::-webkit-input-placeholder": {
+                      opacity: 1,
+                      color: grey[500],
+                    },
                   },
                   endAdornment: (
                     <InputAdornment position="end" sx={{ gap: "12px" }}>
@@ -191,19 +205,27 @@ export default function Header() {
             )}
           />
         </Box>
-        <Button
-          variant="outlined"
-          color="buttonSecondary"
-          startIcon={<PlusCircleIcon sx={{ stroke: grey[700] }} />}
+        <ButtonBase
           sx={{
             display: { sm: "none", md: "inline-flex" },
             flexShrink: 0,
-            height: "48px",
+            border: "1px solid",
+            borderColor: "divider",
+            borderRadius: "8px",
+            p: "7px 13px 7px 9px",
           }}
           onClick={handleYoutuberAddRequestButtonClick}
         >
-          유튜버 추가 요청
-        </Button>
+          <PlusCircleIcon sx={{ fontSize: "32px", stroke: grey[700] }} />
+          <Typography
+            component={"span"}
+            noWrap
+            variant="subtitle2"
+            sx={{ color: grey[700] }}
+          >
+            유튜버 추가 요청
+          </Typography>
+        </ButtonBase>
         <Box
           sx={{
             display: {
