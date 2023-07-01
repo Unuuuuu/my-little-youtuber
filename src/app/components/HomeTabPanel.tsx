@@ -161,10 +161,10 @@ export default function HomeTabPanel(props: Props) {
         <Box
           sx={{
             px: "24px",
-            py: "40px",
+            py: "64px",
             display: "flex",
             flexDirection: "column",
-            gap: "40px",
+            gap: "64px",
           }}
         >
           <Box>

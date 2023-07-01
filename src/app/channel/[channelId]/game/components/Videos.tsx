@@ -214,7 +214,10 @@ export default function Videos() {
                             }}
                             sx={{
                               color: "white",
-                              fontSize: "40px",
+                              fontSize: {
+                                sm: "40px",
+                                md: "48px",
+                              },
                               lineHeight: "28px",
                               fontWeight: 300,
                             }}

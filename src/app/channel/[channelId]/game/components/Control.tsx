@@ -76,18 +76,31 @@ export default function Control() {
         <Grow in={gameStatus !== "FAILED"}>
           <Box
             sx={{
-              p: "3px 3px 3px 7px",
+              p: {
+                sm: "3px 3px 3px 7px",
+                md: "7px 3px 3px 3px",
+              },
               display: "flex",
               gap: "6px",
               bgcolor: "white",
               boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.5)",
               borderRadius: "99px",
+              flexDirection: {
+                sm: "row",
+                md: "column",
+              },
             }}
           >
             <Box
               sx={{
-                width: "64px",
-                height: "56px",
+                width: {
+                  sm: "64px",
+                  md: "56px",
+                },
+                height: {
+                  sm: "56px",
+                  md: "64px",
+                },
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -178,7 +191,14 @@ export default function Control() {
                 gap: "4px",
                 bgcolor: "white",
                 boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.5)",
-                borderRadius: "99px",
+                borderRadius: {
+                  sm: "99px",
+                  md: "32px",
+                },
+                flexDirection: {
+                  sm: "row",
+                  md: "column",
+                },
               }}
             >
               <Link href={`/channel/${channelId}`}>
@@ -186,7 +206,10 @@ export default function Control() {
                   sx={{
                     width: "110px",
                     height: "56px",
-                    borderRadius: "99px 28px 28px 99px",
+                    borderRadius: {
+                      sm: "99px 28px 28px 99px",
+                      md: "28px 28px 8px 8px",
+                    },
                     border: `1px solid ${grey[200]}`,
                   }}
                 >
@@ -206,7 +229,10 @@ export default function Control() {
                 sx={{
                   width: "110px",
                   height: "56px",
-                  borderRadius: "28px 99px 99px 28px",
+                  borderRadius: {
+                    sm: "28px 99px 99px 28px",
+                    md: "8px 8px 28px 28px",
+                  },
                   bgcolor: "primary.main",
                 }}
                 onClick={handleReplayButtonClick}

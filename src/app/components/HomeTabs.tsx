@@ -67,6 +67,7 @@ export default function HomeTabs() {
               },
 
               "&:not(.Mui-selected)": {
+                fontWeight: 400,
                 color: grey[700],
               },
             },

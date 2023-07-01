@@ -111,14 +111,16 @@ export default function About() {
         fullWidth
         variant="contained"
         sx={{
-          height: "48px",
+          height: "56px",
           fontSize: "18px",
           borderRadius: "8px",
           mb: "16px",
         }}
         onClick={handlePlayButtonClick}
       >
-        게임하기
+        <Typography variant="h4" sx={{ color: "white" }}>
+          게임하기
+        </Typography>
       </Button>
       <Box
         sx={{

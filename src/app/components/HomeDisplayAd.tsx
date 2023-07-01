@@ -14,7 +14,15 @@ export default function HomeDisplayAd() {
   }, []);
 
   return (
-    <Box sx={{ position: "relative", zIndex: 1 }}>
+    <Box
+      sx={{
+        position: "relative",
+        zIndex: 1,
+        "& ins.adsbygoogle[data-ad-status='unfilled']": {
+          display: "none !important",
+        },
+      }}
+    >
       <Script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4440044743501222"

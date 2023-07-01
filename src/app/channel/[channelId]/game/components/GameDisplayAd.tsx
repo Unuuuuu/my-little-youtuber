@@ -14,7 +14,14 @@ export default function GameDisplayAd() {
   }, []);
 
   return (
-    <Box sx={{ flexShrink: 0 }}>
+    <Box
+      sx={{
+        flexShrink: 0,
+        "& ins.adsbygoogle[data-ad-status='unfilled']": {
+          display: "none !important",
+        },
+      }}
+    >
       <Script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4440044743501222"

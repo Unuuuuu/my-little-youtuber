@@ -52,7 +52,7 @@ export default function SearchTabPanel(props: Props) {
   return (
     <TabPanel value={value} selectedValue={selectedValue}>
       <HomeDisplayAd />
-      <Box sx={{ px: "24px", py: "40px" }}>
+      <Box sx={{ px: "24px", py: "64px" }}>
         <Box>
           <Box
             sx={{

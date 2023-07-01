@@ -83,6 +83,19 @@ export default function SearchFullScreenDialog() {
           placeholder="검색어를 입력해주세요."
           value={inputValue}
           onChange={handleTextFieldChange}
+          sx={{
+            ".MuiInputBase-root": {
+              borderRadius: "8px",
+            },
+            ".MuiOutlinedInput-root:not(.Mui-error).Mui-focused .MuiOutlinedInput-notchedOutline":
+              {
+                borderColor: "primary.main",
+                borderWidth: "2px",
+              },
+            ".MuiOutlinedInput-root:not(.Mui-error).Mui-focused #search": {
+              stroke: "#9254DE", // SearchIcon에서 sx를 spread하고 있어서 함수를 사용할 수 없었고, 그래서 하드 코딩으로 값을 입력함.
+            },
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end" sx={{ gap: "12px" }}>
@@ -97,9 +110,10 @@ export default function SearchFullScreenDialog() {
                   />
                 )}
                 <SearchIcon
+                  id="search"
                   sx={{
                     fontSize: "24px",
-                    stroke: "#9254DE", // SearchIcon에서 sx를 spread하고 있어서 함수를 사용할 수 없었고, 그래서 하드 코딩으로 값을 입력함.
+                    stroke: grey[500],
                   }}
                 />
               </InputAdornment>

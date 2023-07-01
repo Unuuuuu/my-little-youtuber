@@ -153,7 +153,7 @@ export default function YoutuberAddRequestInterface() {
                 helperText="요청할 채널명을 입력해주세요."
                 label="채널명"
                 required
-                sx={{ mb: "8px" }}
+                sx={{ mb: "10px" }}
                 error={isError}
               />
             );
@@ -185,9 +185,11 @@ export default function YoutuberAddRequestInterface() {
           fullWidth
           variant="contained"
           type="submit"
-          sx={{ height: "48px", fontSize: "18px", borderRadius: "8px" }}
+          sx={{ height: "56px", fontSize: "18px", borderRadius: "8px" }}
         >
-          요청하기
+          <Typography variant="h6" sx={{ color: "white" }}>
+            요청하기
+          </Typography>
         </Button>
       </Box>
     </Box>
@@ -241,17 +243,19 @@ export default function YoutuberAddRequestInterface() {
           variant="outlined"
           onClick={handleAddRequestButtonClick}
           color="buttonSecondary"
-          sx={{ height: "48px", fontSize: "18px", borderRadius: "8px" }}
+          sx={{ height: "56px", fontSize: "18px", borderRadius: "8px" }}
         >
-          더 요청하기
+          <Typography variant="h6">더 요청하기</Typography>
         </Button>
         <Button
           fullWidth
           variant="contained"
           onClick={handleClose}
-          sx={{ height: "48px", fontSize: "18px", borderRadius: "8px" }}
+          sx={{ height: "56px", fontSize: "18px", borderRadius: "8px" }}
         >
-          닫기
+          <Typography variant="h6" sx={{ color: "white" }}>
+            닫기
+          </Typography>
         </Button>
       </Box>
     </Box>
