@@ -1,11 +1,9 @@
 "use client";
 
-import ArrowCounterClockwiseIcon from "@/components/ArrowCounterClockwiseIcon";
 import NextIcon from "@/components/NextIcon";
 import { gmarketSans } from "@/lib/fonts";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { gameSliceActions } from "@/lib/slices/gameSlice";
-import { resultDialogSliceActions } from "@/lib/slices/resultDialogSlice";
 import Box from "@mui/material/Box";
 import ButtonBase from "@mui/material/ButtonBase";
 import Grow from "@mui/material/Grow";
@@ -13,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import { grey } from "@/lib/colors";
 import Link from "next/link";
 import { useEffect } from "react";
+import VsSvgIcon from "@/components/VsSvgIcon";
 
 export default function Control() {
   const {
@@ -137,21 +136,25 @@ export default function Control() {
                   border: `1px solid ${grey[200]}`,
                 }}
               >
-                <Typography
-                  sx={[
-                    {
-                      fontFamily: gmarketSans.style.fontFamily,
-                      fontSize: "24px",
-                      lineHeight: "24px",
-                      fontWeight: 700,
-                    },
-                    time <= 3 && {
-                      color: "error.main",
-                    },
-                  ]}
-                >
-                  {gameMode === "GENERAL" ? "VS" : time}
-                </Typography>
+                {gameMode === "GENERAL" ? (
+                  <VsSvgIcon sx={{ width: 37, height: 21 }} />
+                ) : (
+                  <Typography
+                    sx={[
+                      {
+                        fontFamily: gmarketSans.style.fontFamily,
+                        fontSize: "24px",
+                        lineHeight: "24px",
+                        fontWeight: 700,
+                      },
+                      time <= 3 && {
+                        color: "error.main",
+                      },
+                    ]}
+                  >
+                    {time}
+                  </Typography>
+                )}
               </Box>
               <Grow in={gameStatus === "SUCCEEDED"}>
                 <ButtonBase

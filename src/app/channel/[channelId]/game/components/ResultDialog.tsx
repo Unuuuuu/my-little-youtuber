@@ -260,8 +260,8 @@ export default function ResultDialog() {
               stroke: grey[700],
               fontSize: "28px",
               position: "absolute",
-              right: 12,
-              top: 12,
+              right: 16,
+              top: 18,
               cursor: "pointer",
             }}
             onClick={handleClose}
@@ -424,23 +424,27 @@ export default function ResultDialog() {
                   variant="outlined"
                   color="buttonSecondary"
                   sx={{
-                    height: "48px",
+                    height: "56px",
                     fontSize: "18px",
                     borderRadius: "8px",
                     width: "103px",
                     flexShrink: 0,
                   }}
                 >
-                  {resultStatus === "rank" ? "랭킹보기" : "나가기"}
+                  <Typography variant="h6">
+                    {resultStatus === "rank" ? "랭킹보기" : "나가기"}
+                  </Typography>
                 </Button>
               </Link>
               <Button
                 fullWidth
                 variant="contained"
-                sx={{ height: "48px", fontSize: "18px", borderRadius: "8px" }}
+                sx={{ height: "56px", fontSize: "18px", borderRadius: "8px" }}
                 onClick={handleReplayButtonClick}
               >
-                다시하기
+                <Typography variant="h6" sx={{ color: "white" }}>
+                  다시하기
+                </Typography>
               </Button>
             </Box>
           </Box>
